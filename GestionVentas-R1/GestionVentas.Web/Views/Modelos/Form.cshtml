@@ -1,0 +1,42 @@
+﻿@model ModeloDTO
+
+@{
+    //ViewData["Title"] = "Agregar";
+    string accionCrud = (string)ViewData["accionCRUD"];
+}
+
+@{
+    /*
+        POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
+    */
+}
+<h1>@accionCrud</h1>
+
+<div class="container">
+    <form method="post" asp-action="agregarmodelo" asp-controller="modelos" id="formModelos">
+        <div class="form-group">
+            <label asp-for="Nombre"></label>
+            <input asp-for="Nombre" class="form-control" placeholder="Nombre" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Apellido"></label>
+            <input asp-for="Apellido" class="form-control" placeholder="Apellido" />
+            <span asp-validation-for="Apellido" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DNI"></label>
+            <input asp-for="DNI" class="form-control" placeholder="DNI" />
+            <span asp-validation-for="DNI" class="text-danger"></span>
+        </div>
+
+        <input type="submit" value="Agregar" class=" form-control btn-success ">
+    </form>
+
+</div>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
