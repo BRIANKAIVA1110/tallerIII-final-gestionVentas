@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>

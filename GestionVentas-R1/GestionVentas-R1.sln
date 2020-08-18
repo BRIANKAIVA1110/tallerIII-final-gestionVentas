@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Web", "GestionVentas.Web\GestionVentas.Web.csproj", "{2D48AFAD-7FF7-4335-99C6-6719EC0C7357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Web", "GestionVentas.Web\GestionVentas.Web.csproj", "{2D48AFAD-7FF7-4335-99C6-6719EC0C7357}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.DataTransferObjects", "GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj", "{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Infraestructura", "GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj", "{15B64E5C-CC77-4479-BE76-907A3A3028A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Domain", "GestionVentas.Domain\GestionVentas.Domain.csproj", "{F406A73C-3324-4C6D-9DB0-26D8E22982C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Services", "GestionVentas.Services\GestionVentas.Services.csproj", "{8F556022-A233-4E6B-9349-840D87A1AB11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Test", "GestionVentas.Test\GestionVentas.Test.csproj", "{EBA0E858-2628-4DF5-8B51-41E372D7D82D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{2D48AFAD-7FF7-4335-99C6-6719EC0C7357}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D48AFAD-7FF7-4335-99C6-6719EC0C7357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D48AFAD-7FF7-4335-99C6-6719EC0C7357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B64E5C-CC77-4479-BE76-907A3A3028A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B64E5C-CC77-4479-BE76-907A3A3028A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B64E5C-CC77-4479-BE76-907A3A3028A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B64E5C-CC77-4479-BE76-907A3A3028A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F406A73C-3324-4C6D-9DB0-26D8E22982C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F406A73C-3324-4C6D-9DB0-26D8E22982C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F406A73C-3324-4C6D-9DB0-26D8E22982C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F406A73C-3324-4C6D-9DB0-26D8E22982C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F556022-A233-4E6B-9349-840D87A1AB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F556022-A233-4E6B-9349-840D87A1AB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F556022-A233-4E6B-9349-840D87A1AB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F556022-A233-4E6B-9349-840D87A1AB11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
