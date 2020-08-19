@@ -5,7 +5,7 @@
 @{
     //ViewData["Title"] = "Agregar";
     string accionCrud = ViewData["accionCRUD"].ToString();
-
+    
 }
 
 @{
@@ -13,23 +13,29 @@
     POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
 */
 }
-<h1>@accionCrud</h1>
+<h1>@accionCrud.ToLower()</h1>
 
-<div class="container">    
+<div class="container">
+    @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="modelos" id="formModelos">
         <div class="form-group">
             <label asp-for="Codigo"></label>
-            <input asp-for="Codigo" class="form-control" placeholder="Nombre" />
+            <input asp-for="Codigo" class="form-control" placeholder="Codigo" />
             <span asp-validation-for="Codigo" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Descripcion"></label>
-            <input asp-for="Descripcion" class="form-control" placeholder="Apellido" />
+            <input asp-for="Descripcion" class="form-control" placeholder="Descripcion" />
             <span asp-validation-for="Descripcion" class="text-danger"></span>
         </div>
 
-        <input type="submit" value="Agregar" class=" form-control btn-success ">
+        <div class="form-group">
+            <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0 ">
+            <a asp-action="index" asp-controller="modelos" class="btn form-control-sm btn-primary text-decoration-none text-center">Cancelar</a>
+        </div>
     </form>
+    @*<button asp-action="index" asp-controller="modelos" class=" form-control btn-primary">Cancelar</button>*@
+    
 
 </div>
 

@@ -53,7 +53,7 @@
                                 <th>
                                     <a asp-action="eliminar" asp-controller="modelos" asp-route-id=@item.Id >Eliminar</a> 
                                     <a asp-action="form" asp-controller="modelos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id >Modificar</a> 
-                                    <a asp-action="detalles" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a> 
+                                    <a asp-action="detalle" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a> 
                                 </th>
                                 <th>@contRegistros</th>
                                 <td>@item.Codigo</td>

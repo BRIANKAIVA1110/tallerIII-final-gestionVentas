@@ -1,0 +1,19 @@
+﻿@using GestionVentas.Web.Enum
+
+@model ModeloDTO
+@{
+    ViewData["Title"] = "Detalle";
+}
+
+<h1>Detalle</h1>
+
+<b><label asp-for="Codigo" class="control-label"></label>:</b>
+@Html.DisplayNameFor(x => x.Codigo)
+<br />
+<b><label asp-for="Descripcion" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.Descripcion)
+
+<hr />
+<a asp-action="index" asp-controller="modelos" class="btn btn-dark form-control-sm ">Volver </a>
+<a asp-action="form" asp-controller="modelos" asp-route-Id=@Model.Id asp-route-accionCRUD=@AccionesCRUD.MODIFICAR class="btn btn-primary form-control-sm ">Modificar</a>
+
