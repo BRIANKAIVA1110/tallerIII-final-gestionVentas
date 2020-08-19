@@ -32,9 +32,19 @@ namespace GestionVentas.Web.Controllers
 
             return RedirectToAction("index");
         }
+        public IActionResult Detalle(int Id) {
+            ModeloDTO objResult = this._modeloService.getModelo((int)Id);
+            return View(objResult);
+        }
 
-        [Route("Modelos/Form")]
-        [Route("Modelos/Form/{Id}")]
+        /// <summary>
+        /// action renderiza formulario para las acciones agregar || modificar, "reutilizacion"
+        /// </summary>
+        /// <param name="accionCRUD"> AGREGAR || MODIFICAR </param>
+        /// <param name="Id"> null || Id </param>
+        /// <returns></returns>
+        //[Route("Modelos/Form")]
+        [Route("Modelos/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id) {
             if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR)) {
 
