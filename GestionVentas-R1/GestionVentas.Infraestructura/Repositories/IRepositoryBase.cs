@@ -9,7 +9,7 @@ namespace GestionVentas.Infraestructura.Repositories
         int Add(T p_entity);
         int Delete(T p_entity);
         T ExecuteQuery(DbContext context);
-        IEnumerable<T> Get(T p_entity);
+        IEnumerable<T> Get();
         T GetById(int p_id);
         int Update(T p_entity);
     }

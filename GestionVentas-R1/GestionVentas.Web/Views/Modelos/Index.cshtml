@@ -1,8 +1,12 @@
-﻿@model ModeloDTO
+﻿@using GestionVentas.Web.Enum;
+
+@model List<ModeloDTO>
 
 @{
     ViewData["Title"] = "Index";
     string tituloVista = "Modelos";
+
+  
 }
 
 <h1>@tituloVista</h1>
@@ -12,7 +16,7 @@
             <div class="col-lg-7 col-md-7 col-sm-12">
                 <ul class="nav ">
                     <li class="nav-item ">
-                        <a class="nav-link  btn-dark" asp-area="" asp-controller="Modelos" asp-action="form">Agregar</a>
+                        <a class="nav-link  btn-dark" asp-area="" asp-controller="Modelos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR >Agregar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn-dark" href="#">Exportar</a>
@@ -29,75 +33,38 @@
     </div>
     <div class="container-fluid">
         <h6 class="m-2">Registros: </h6>
-        <div class="container-fluid overflow-auto border">
-            <table class="table table-light table-hover">
-                <thead>
+        <div class="container-fluid overflow-auto ">
+            <table class="table table-light table-hover  border-dark small">
+                <thead class=" thead-dark">
                     <tr>
-                        <th>""</th>
+                        <th>Acciones</th>
                         <th>#</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
+                        <th>Codigo</th>
+                        <th>Descripcion</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th><input type="checkbox" /></th>
-                        <th>1</th>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                    </tr>
-                    <tr>
-                        <th><input type="checkbox" /></th>
-                        <th>2</th>
-                        <td>Mary</td>
-                        <td>Moe</td>
-                        <td>mary@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                    </tr>
-                    <tr>
-                        <th><input type="checkbox" /></th>
-                        <th>3</th>
-                        <td>July</td>
-                        <td>Dooley</td>
-                        <td>july@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                    </tr>
+                    @{
+                        int contRegistros = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <th>
+                                    <a asp-action="eliminar" asp-controller="modelos" asp-route-id=@item.Id >Eliminar</a> 
+                                    <a asp-action="form" asp-controller="modelos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id >Modificar</a> 
+                                    <a asp-action="detalles" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a> 
+                                </th>
+                                <th>@contRegistros</th>
+                                <td>@item.Codigo</td>
+                                <td>@item.Descripcion</td>
+                            </tr>
+
+
+                            contRegistros = contRegistros + 1;
+                        }
+
+                    }
                 </tbody>
             </table>
         </div>

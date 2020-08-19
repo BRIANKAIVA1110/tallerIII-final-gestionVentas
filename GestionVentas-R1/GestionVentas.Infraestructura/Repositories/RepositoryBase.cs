@@ -60,5 +60,6 @@ namespace GestionVentas.Infraestructura.Repositories
             throw new NotImplementedException();
         }
 
+       
     }
 }
