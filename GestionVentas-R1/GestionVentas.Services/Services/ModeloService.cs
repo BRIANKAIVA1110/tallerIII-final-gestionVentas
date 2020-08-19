@@ -8,30 +8,33 @@ using System.Text;
 
 namespace GestionVentas.Services.Services
 {
-    public class ModeloService
+    public class ModeloService : IModeloService
     {
         private readonly IModeloRepository _modeloRepository;
-        public ModeloService(IModeloRepository modeloRepository) {
+        public ModeloService(IModeloRepository modeloRepository)
+        {
             this._modeloRepository = modeloRepository;
 
         }
 
 
-        public int AgregarModelo(ModeloDTO p_modeloDTO) {
+        public int AgregarModelo(ModeloDTO p_modeloDTO)
+        {
 
             int result = this._modeloRepository.Add(new Modelo
-                        {
-                            Codigo = p_modeloDTO.Codigo,
-                            Descripcion = p_modeloDTO.Descripcion
-                        });
+            {
+                Codigo = p_modeloDTO.Codigo,
+                Descripcion = p_modeloDTO.Descripcion
+            });
 
             return result;
         }
 
-
-        public IEnumerable<ModeloDTO> getModelos() {
+        public IEnumerable<ModeloDTO> getModelos()
+        {
             var result = this._modeloRepository.Get()
-                .Select( x => new ModeloDTO { 
+                .Select(x => new ModeloDTO
+                {
                     Id = x.Id,
                     Codigo = x.Codigo,
                     Descripcion = x.Descripcion
@@ -40,7 +43,8 @@ namespace GestionVentas.Services.Services
             return result;
         }
 
-        public ModeloDTO getModelo(int p_id) {
+        public ModeloDTO getModelo(int p_id)
+        {
             Modelo objEntity = this._modeloRepository.GetById(p_id);
             ModeloDTO objResult = new ModeloDTO
             {

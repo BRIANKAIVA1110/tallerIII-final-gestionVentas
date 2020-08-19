@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj" />
+    <ProjectReference Include="..\GestionVentas.Services\GestionVentas.Services.csproj" />
   </ItemGroup>
 
 </Project>
