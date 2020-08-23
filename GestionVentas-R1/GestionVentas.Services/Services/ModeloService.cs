@@ -17,7 +17,6 @@ namespace GestionVentas.Services.Services
 
         }
 
-
         public int AgregarModelo(ModeloDTO p_modeloDTO)
         {
 
@@ -26,6 +25,27 @@ namespace GestionVentas.Services.Services
                 Codigo = p_modeloDTO.Codigo,
                 Descripcion = p_modeloDTO.Descripcion
             });
+
+            return result;
+        }
+
+        public int ModificarModelo(ModeloDTO p_modeloDTO) {
+
+            Modelo objEntity = this._modeloRepository.GetById(p_modeloDTO.Id);
+
+            objEntity.Codigo = p_modeloDTO.Codigo;
+            objEntity.Descripcion = p_modeloDTO.Descripcion;
+
+            int result = this._modeloRepository.Update(objEntity);
+
+            return result;
+        }
+
+        public int EliminarModelo(int p_id) {
+
+            Modelo objEntity = this._modeloRepository.GetById(p_id);
+
+            int result = this._modeloRepository.Delete(objEntity);
 
             return result;
         }

@@ -20,22 +20,31 @@ namespace GestionVentas.Web.Controllers
 
 
         public IActionResult Index() {
+
             var result = this._modeloService.getModelos().ToList();
+
             return View(result);
         }
 
         [HttpPost]
         public IActionResult Agregar(ModeloDTO p_modelo) {
+
+            this._modeloService.AgregarModelo(p_modelo);
+
             return RedirectToAction("index");
         }
         public IActionResult Modificar(ModeloDTO p_modelo) {
 
+            this._modeloService.ModificarModelo(p_modelo);
+
             return RedirectToAction("index");
         }
         public IActionResult Detalle(int Id) {
+
             ModeloDTO objResult = this._modeloService.getModelo((int)Id);
             return View(objResult);
         }
+
 
         /// <summary>
         /// action renderiza formulario para las acciones agregar || modificar, "reutilizacion"

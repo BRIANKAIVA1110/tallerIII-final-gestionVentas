@@ -19,6 +19,11 @@
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="modelos" id="formModelos">
         <div class="form-group">
+            <label asp-for="Id" style="display:none;"></label>
+            <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />
+            @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
+        </div>
+        <div class="form-group">
             <label asp-for="Codigo"></label>
             <input asp-for="Codigo" class="form-control" placeholder="Codigo" />
             <span asp-validation-for="Codigo" class="text-danger"></span>
