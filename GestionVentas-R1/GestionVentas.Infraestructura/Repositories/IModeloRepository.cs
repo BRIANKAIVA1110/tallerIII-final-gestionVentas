@@ -8,6 +8,7 @@ namespace GestionVentas.Infraestructura.Repositories
     public interface IModeloRepository
     {
         int Add(Modelo p_entity);
+
         int Delete(Modelo p_entity);
         Modelo ExecuteQuery(DbContext context);
         IEnumerable<Modelo> Get();
