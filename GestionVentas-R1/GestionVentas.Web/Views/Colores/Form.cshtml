@@ -1,11 +1,12 @@
-﻿@using GestionVentas.Web.Enum
-@model ModeloDTO
+﻿
+@using GestionVentas.Web.Enum
+@model ColorDTO
 
 
 @{
     //ViewData["Title"] = "Agregar";
     string accionCrud = ViewData["accionCRUD"].ToString();
-    
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
@@ -13,11 +14,11 @@
     POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
 */
 }
-<h1>Modelos > @accionCrud.ToLower()</h1>
+<h1>Colores > @accionCrud.ToLower()</h1>
 
 <div class="container">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
-    <form method="post" asp-action=@accionCrud asp-controller="modelos" id="formHTTP">
+    <form method="post" asp-action=@accionCrud asp-controller="colores" id="formHTTP">
         <div class="form-group">
             <label asp-for="Id" style="display:none;"></label>
             <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />
@@ -36,16 +37,18 @@
 
         <div class="form-group">
             <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0 ">
-            <a asp-action="index" asp-controller="modelos" class="btn form-control-sm btn-primary text-decoration-none text-center">Cancelar</a>
+            <a asp-action="index" asp-controller="colores" class="btn form-control-sm btn-primary text-decoration-none text-center">Cancelar</a>
         </div>
     </form>
     @*<button asp-action="index" asp-controller="modelos" class=" form-control btn-primary">Cancelar</button>*@
-    
+
 
 </div>
 
 @section scripts{
     <partial name="_ValidationScriptsPartial" />
 }
+
+
 
 
