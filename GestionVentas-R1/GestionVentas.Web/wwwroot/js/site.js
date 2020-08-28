@@ -15,7 +15,7 @@ $(document).ready(function () {
     /*
      *  FORMULARIO AGREGAR / MODIFICAR MODELOS 
      */
-    $("#formModelos").submit((event) => {
+    $("#formHTTP").submit((event) => {
         //event.preventDefault();
 
     });

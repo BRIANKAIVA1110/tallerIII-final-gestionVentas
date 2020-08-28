@@ -12,6 +12,8 @@ namespace GestionVentas.Infraestructura.Extensions
         public static void AddCustomRepositoryConfiguration(this IServiceCollection services) {
 
             services.AddTransient<IModeloRepository, ModeloRepository>();
+            services.AddTransient<IColorRepository, ColorRepository>();
+            services.AddTransient<IArticuloRepository, ArticuloRepository>();
         
         }
     }

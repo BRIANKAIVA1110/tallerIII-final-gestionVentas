@@ -1,10 +1,12 @@
-﻿@using GestionVentas.Web.Enum;
+﻿
+@using GestionVentas.Web.Enum;
 
-@model List<ModeloDTO>
+@model List<ArticuloDTO>
 
 @{
     ViewData["Title"] = "Index";
-    string tituloVista = "Modelos";
+    string tituloVista = "Articulos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     string p_query = "";
 
 }
@@ -16,7 +18,7 @@
             <div class="col-lg-7 col-md-7 col-sm-12">
                 <ul class="nav ">
                     <li class="nav-item ">
-                        <a class="nav-link  btn-dark" asp-area="" asp-controller="Modelos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR>Agregar</a>
+                        <a class="nav-link  btn-dark" asp-area="" asp-controller="articulos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR>Agregar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn-dark" href="#">Exportar</a>
@@ -24,10 +26,10 @@
                 </ul>
             </div>
             <div class="col-lg-5 col-md-5 col-sm-12 d-lg-inline-flex d-md-inline-flex justify-content-end ">
-                <form class="form-inline" asp-action="buscar" asp-controller="modelos" method="get">
+                <form class="form-inline" asp-action="buscar" asp-controller="articulos" method="get">
 
                     @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
-                    <input class="form-control mr-sm-2" placeholder="Buscar..." name="p_query" >
+                    <input class="form-control mr-sm-2" placeholder="Buscar..." name="p_query">
                     <button class="btn btn-success " type="submit">Buscar</button>
                 </form>
             </div>
@@ -53,9 +55,9 @@
                         {
                             <tr>
                                 <th>
-                                    <a asp-action="eliminar" asp-controller="modelos" asp-route-id=@item.Id>Eliminar</a>
-                                    <a asp-action="form" asp-controller="modelos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id>Modificar</a>
-                                    <a asp-action="detalle" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a>
+                                    <a asp-action="eliminar" asp-controller="articulos" asp-route-id=@item.Id>Eliminar</a>
+                                    <a asp-action="form" asp-controller="articulos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id>Modificar</a>
+                                    <a asp-action="detalle" asp-controller="articulos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a>
                                 </th>
                                 <th>@contRegistros</th>
                                 <td>@item.Codigo</td>
@@ -71,14 +73,14 @@
             </table>
         </div>
         @*<div class="container d-flex justify-content-center">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </div>*@
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </div>*@
     </div>
 </div>
 

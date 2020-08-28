@@ -11,6 +11,8 @@ namespace GestionVentas.Services.Extensions
 
         public static void AddCustomServiceConfiguration(this IServiceCollection services) {
             services.AddTransient<IModeloService, ModeloService>();
+            services.AddTransient<IColorService, ColorService>();
+            services.AddTransient<IArticuloService, ArticuloService>();
         }
     }
 }

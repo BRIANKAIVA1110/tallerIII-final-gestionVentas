@@ -7,57 +7,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace GestionVentas.Web.Controllers
 {
-    public class ModelosController : Controller
+    public class ColoresController:Controller
     {
-        private readonly IModeloService _modeloService;
+        private readonly IColorService _colorService;
 
-        public ModelosController(IModeloService modeloService) {
-            this._modeloService = modeloService;
+        public ColoresController(IColorService colorService) {
+            this._colorService = colorService;
         }
 
+        public IActionResult Index()
+        {
 
-        public IActionResult Index() {
-
-            var result = this._modeloService.getModelos().ToList();
+            var result = this._colorService.getColores().ToList();
 
             return View(result);
+
         }
 
         [HttpPost]
-        public IActionResult Agregar(ModeloDTO p_modelo) {
+        public IActionResult Agregar(ColorDTO p_color)
+        {
 
-            this._modeloService.AgregarModelo(p_modelo);
-
-            return RedirectToAction("index");
-        }
-        public IActionResult Modificar(ModeloDTO p_modelo) {
-
-            this._modeloService.ModificarModelo(p_modelo);
+            this._colorService.AgregarColor(p_color);
 
             return RedirectToAction("index");
         }
-        public IActionResult Detalle(int Id) {
 
-            ModeloDTO objResult = this._modeloService.getModelo((int)Id);
+
+        public IActionResult Modificar(ColorDTO p_color)
+        {
+
+            this._colorService.ModificarColor(p_color);
+
+            return RedirectToAction("index");
+        }
+
+        public IActionResult Detalle(int Id)
+        {
+
+            ColorDTO objResult = this._colorService.getColor((int)Id);
             return View(objResult);
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
             //ver diferencias: contains vs like method
-            var result = this._modeloService.getModelos()
+            var result = this._colorService.getColores()
                 .Where(x => x.Codigo.Contains(p_query) || x.Descripcion.Contains(p_query))
                 .ToList();
 
             return View("index", result);
         }
 
-        public IActionResult Eliminar(int Id) {
+        public IActionResult Eliminar(int Id)
+        {
 
-            var result = this._modeloService.EliminarModelo(Id);
+            var result = this._colorService.EliminarColor(Id);
 
             return RedirectToAction("index");
         }
@@ -68,10 +75,12 @@ namespace GestionVentas.Web.Controllers
         /// <param name="accionCRUD"> AGREGAR || MODIFICAR </param>
         /// <param name="Id"> null || Id </param>
         /// <returns></returns>
-        //[Route("Modelos/Form")]
-        [Route("Modelos/Form/{Id?}")]
-        public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id) {
-            if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR)) {
+        //[Route("Color/Form")]
+        [Route("Color/Form/{Id?}")]
+        public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
+        {
+            if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+            {
 
                 ViewData["accionCRUD"] = accionCRUD;
                 if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
@@ -79,13 +88,12 @@ namespace GestionVentas.Web.Controllers
 
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    ModeloDTO objResult = this._modeloService.getModelo((int)Id);
+                    ColorDTO objResult = this._colorService.getColor((int)Id);
                     return View(objResult);
                 }
 
             }
             return RedirectToAction("ERROR", "HOME");
         }
-        
     }
 }
