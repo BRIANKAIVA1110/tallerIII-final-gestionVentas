@@ -15,4 +15,9 @@
     <ProjectReference Include="..\GestionVentas.Services\GestionVentas.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Articulos\" />
+    <Folder Include="Models\Clientes\" />
+  </ItemGroup>
+
 </Project>
