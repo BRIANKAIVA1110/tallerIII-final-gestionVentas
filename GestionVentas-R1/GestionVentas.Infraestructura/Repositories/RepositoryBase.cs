@@ -1,4 +1,5 @@
-﻿using GestionVentas.Domain.Interfaces;
+﻿using GestionVentas.Domain.Entities;
+using GestionVentas.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
@@ -11,7 +12,7 @@ namespace GestionVentas.Infraestructura.Repositories
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class, IEntity
     {
         private readonly ApplicationContext _applicationContext;
-        private readonly DbSet<T> _entity;
+        public readonly DbSet<T> _entity;
         public RepositoryBase(ApplicationContext applicationContext)
         {
             this._applicationContext = applicationContext;

@@ -1,7 +1,10 @@
-﻿using GestionVentas.DataTransferObjects.EntityDTO;
+﻿using AutoMapper;
+using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
+using GestionVentas.Web.Models.ViewModels.Articulos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,49 +15,93 @@ namespace GestionVentas.Web.Controllers
     public class ArticulosController:Controller
     {
         private readonly IArticuloService _articuloService;
-        public ArticulosController(IArticuloService articuloService) 
+        private readonly IColorService _colorService;
+        private readonly IModeloService _modeloService;
+        private readonly IMapper _mapper;
+        public ArticulosController(IArticuloService articuloService, IColorService colorService, IModeloService modeloService, IMapper mapper) 
         {
             this._articuloService = articuloService;
+            this._colorService = colorService;
+            this._modeloService = modeloService;
+            this._mapper = mapper;
         }
 
         public IActionResult Index()
         {
 
-            var result = this._articuloService.getArticulos().ToList();
+            List<ArticuloDTO> listArticuloDTO = this._articuloService.getArticulos().ToList();
+            List<ArticuloViewModel> listArticuloViewModels = listArticuloDTO.Select(x=> this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
 
-            return View(result);
+            return View(listArticuloViewModels);
         }
 
         [HttpPost]
-        public IActionResult Agregar(ArticuloDTO p_articuloDTO)
+        public IActionResult Agregar(ArticuloViewModel p_articuloVM)
         {
+            //this._articuloService.AgregarArticulo(p_articuloDTO);
+            if (!ModelState.IsValid)
+                return View("error");
+            else {
+                var articuloDTO = this._mapper.Map<ArticuloViewModel,ArticuloDTO>(p_articuloVM);
+                int result = this._articuloService.AgregarArticulo(articuloDTO);
+                if(result>0)
+                    return RedirectToAction("index");
+                else
+                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+            }
 
-            this._articuloService.AgregarArticulo(p_articuloDTO);
-
-            return RedirectToAction("index");
+            
         }
-        public IActionResult Modificar(ArticuloDTO p_articuloDTO)
+        public IActionResult Modificar(ArticuloViewModel p_articuloVM)
         {
-
-            this._articuloService.ModificarArticulo(p_articuloDTO);
-
-            return RedirectToAction("index");
+            if (!ModelState.IsValid)
+                return View("error");
+            else
+            {
+                ArticuloDTO articuloDTO = this._mapper.Map<ArticuloViewModel, ArticuloDTO>(p_articuloVM);
+                int result = this._articuloService.ModificarArticulo(articuloDTO);
+                if (result > 0)
+                    return RedirectToAction("index");
+                else
+                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+            }
         }
         public IActionResult Detalle(int Id)
         {
 
-            ArticuloDTO objResult = this._articuloService.getArticulo((int)Id);
-            return View(objResult);
+            ArticuloDTO articuloDTO  = this._articuloService.getArticulo((int)Id);
+            if (articuloDTO != null)
+            {
+                ArticuloViewModel articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
+                return View(articuloViewModel);
+            }
+            else{
+                return View("index");//deberia mostrar un msg de exepcion.. "no se encontro registro, etc"
+            }
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
             //ver diferencias: contains vs like method
-            var result = this._articuloService.getArticulos()
-                .Where(x => x.Codigo.Contains(p_query) || x.Descripcion.Contains(p_query))
+            if (p_query != null)
+            {
+                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                .Where(x => x.Codigo.Contains(p_query) || 
+                    x.Descripcion.Contains(p_query) ||
+                    x.ModeloDescripcion.Contains(p_query) || 
+                    x.ColorDescripcion.Contains(p_query))
+                .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
                 .ToList();
 
-            return View("index", result);
+                return View("index", listArticuloViewModel);
+            }
+            else {
+                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
+                .ToList();
+                return View("index", listArticuloViewModel);
+            }
+            
         }
 
         public IActionResult Eliminar(int Id)
@@ -75,17 +122,41 @@ namespace GestionVentas.Web.Controllers
         [Route("Articulos/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
         {
+
             if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
             {
-
                 ViewData["accionCRUD"] = accionCRUD;
-                if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
-                    return View();
 
+                ArticuloViewModel articuloViewModel = new ArticuloViewModel();
+
+                List<SelectListItem> modelos = this._modeloService.getModelos()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = $"{x.Codigo} - {x.Descripcion}"
+                }).ToList();
+
+                List<SelectListItem> colores = this._colorService.getColores()
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Codigo} - {x.Descripcion}"
+                    }).ToList();
+
+                if (accionCRUD.Equals(AccionesCRUD.AGREGAR)) {
+
+                    articuloViewModel.Colores = colores;
+                    articuloViewModel.Modelos = modelos;
+
+                    return View(articuloViewModel);
+                }
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    ArticuloDTO objResult = this._articuloService.getArticulo((int)Id);
-                    return View(objResult);
+                    ArticuloDTO articuloDTO = this._articuloService.getArticulo((int)Id);
+                    articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
+                    articuloViewModel.Colores = colores;
+                    articuloViewModel.Modelos = modelos;
+                    return View(articuloViewModel);
                 }
 
             }

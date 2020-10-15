@@ -1,7 +1,7 @@
 ﻿
 
 @using GestionVentas.Web.Enum
-@model ArticuloDTO
+@model GestionVentas.Web.Models.ViewModels.Articulos.ArticuloViewModel
 
 
 @{
@@ -12,72 +12,97 @@
 }
 
 @{
-/*
-    POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
-*/
+    /*
+        POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
+    */
 }
 <h1>Articulo > @accionCrud.ToLower()</h1>
 
-<div class="container">
+<div class="container p-5">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="articulos" id="formHTTP">
         <div class="form-group">
             <label asp-for="Id" style="display:none;"></label>
-            <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />
+            <input asp-for="Id" class="form-control form-control-sm" placeholder="" style="display:none;" />
             @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
         </div>
-        <div class="form-group">
-            <label asp-for="Codigo"></label>
-            <input asp-for="Codigo" class="form-control" placeholder="Codigo" />
-            <span asp-validation-for="Codigo" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Descripcion"></label>
-            <input asp-for="Descripcion" class="form-control" placeholder="Descripcion" />
-            <span asp-validation-for="Descripcion" class="text-danger"></span>
-        </div>
 
-        <div class="form-group">
-            <label for="modelos">Seleccione modelo: </label>
-            <select class="form-control " id="modelos">
-                <option selected>modelos......</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-
-            </select>
+        <div class="form-group row">
+            <label asp-for="Codigo" class="col-form-label col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Codigo" class="form-control form-control-sm" placeholder="Codigo" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Descripcion" class="col-form-label col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Descripcion" class="form-control form-control-sm" placeholder="Descripcion" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="color">Seleccione color: </label>
-            <select class="form-control " id="color">
-                <option selected>colores......</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
+        <!-- #region AlternativaDropDown -->
+        <!--<div class="form-group row">
+        <label  for="modelos">Seleccione modelo: </label>-->
+            @*se obtiene el value del dropdownlist en la propiedad "ModeloId" de la siguiente manera especificando en el primer parametro*@
+            <!--
+            @{/*Html.DropDownList("ModeloId", Model.Modelos, new { @class = "form-control form-control-sm " })*/}
+
+        </div>-->
+        <!-- #endregion -->
+
+
+
+        @*alternativa sin htmlHelper*@
+
+        <div class="form-group row">
+            <label class="col-form-label col-form-label-sm col-sm-2">Modelo</label>
+            <div class="col-sm-10">
+                <select asp-for="ModeloId" asp-items="Model.Modelos" class="form-control form-control-sm">
+                    @if (!accionCrud.ToUpper().Equals("MODIFICAR"))
+                    {
+                        <option selected value="0">Seleccione Modelo....</option>
+                    }
+                    else
+                    {
+                        <option selected value=@Model.ModeloId>@Model.ModeloDescripcion</option>
+                    }
+                </select>
+            </div>
+            
         </div>
 
+        <div class="form-group row">
+            <label class="col-form-label col-form-label-sm col-sm-2">Color</label>
+            <div class="col-sm-10">
+                <select asp-for="ColorId" asp-items="Model.Colores" class="form-control form-control-sm">
+                    @if (!accionCrud.ToUpper().Equals("MODIFICAR"))
+                    {
+                        <option selected value="0">Seleccione Color....</option>
+                    }
+                    else
+                    {
+                        <option selected value=@Model.ColorId>@Model.ColorDescripcion</option>
+                    }
 
-        <div class="form-group">
-            <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0 ">
-            <a asp-action="index" asp-controller="articulos" class="btn form-control-sm btn-primary text-decoration-none text-center">Cancelar</a>
+                </select>
+            </div>
+            
+        </div>
+
+        <div class="form-group d-flex justify-content-end">
+            <input type="submit" value="Agregar" class="btn btn-success form  form-control-sm border-0  m-1">
+            <a asp-action="index" asp-controller="articulos" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
         </div>
     </form>
     @*<button asp-action="index" asp-controller="modelos" class=" form-control btn-primary">Cancelar</button>*@
 
 
 </div>
-
+@*esto es utilizado para agregar contenido en secciones; contenido como vista parcial... se indica la vista parcial con el atributo name*@
+@*en este caso se agrega la vista parcial "_ValidationScriptsPartial.cshtml", el cual solo contine script definidos.. ver definicion en directorio
+shared*@
 @section scripts{
     <partial name="_ValidationScriptsPartial" />
 }

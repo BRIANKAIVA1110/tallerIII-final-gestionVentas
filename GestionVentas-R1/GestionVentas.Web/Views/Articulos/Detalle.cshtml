@@ -1,7 +1,7 @@
 ﻿
 @using GestionVentas.Web.Enum
 
-@model ArticuloDTO
+@model GestionVentas.Web.Models.ViewModels.Articulos.ArticuloViewModel
 @{
     ViewData["Title"] = "Detalle";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,6 +14,14 @@
 <br />
 <b><label asp-for="Descripcion" class="control-label"></label>:</b>
 @Html.DisplayFor(x => x.Descripcion)
+<br />
+<b><label asp-for="ModeloDescripcion" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.ModeloDescripcion)
+<br />
+<b><label asp-for="ColorDescripcion" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.ColorDescripcion)
+<br />
+
 
 <hr />
 <a asp-action="index" asp-controller="articulos" class="btn btn-dark form-control-sm ">Volver </a>
