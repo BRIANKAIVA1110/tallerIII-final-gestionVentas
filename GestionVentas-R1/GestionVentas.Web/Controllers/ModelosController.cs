@@ -1,6 +1,8 @@
-﻿using GestionVentas.DataTransferObjects.EntityDTO;
+﻿using AutoMapper;
+using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
+using GestionVentas.Web.Models.ViewModels.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,23 +15,26 @@ namespace GestionVentas.Web.Controllers
     public class ModelosController : Controller
     {
         private readonly IModeloService _modeloService;
+        private readonly IMapper _mapper;
 
-        public ModelosController(IModeloService modeloService) {
+        public ModelosController(IMapper mapper,IModeloService modeloService) {
             this._modeloService = modeloService;
+            this._mapper = mapper;
         }
 
 
         public IActionResult Index() {
 
             var result = this._modeloService.getModelos().ToList();
-
-            return View(result);
+            var resultToView = this._mapper.Map<ModeloViewModel>(result);
+            return View(resultToView);
         }
 
         [HttpPost]
-        public IActionResult Agregar(ModeloDTO p_modelo) {
+        public IActionResult Agregar(ModeloViewModel p_modelo) {
 
-            this._modeloService.AgregarModelo(p_modelo);
+            var objDTO = this._mapper.Map<ModeloDTO>(p_modelo);
+            this._modeloService.AgregarModelo(objDTO);
 
             return RedirectToAction("index");
         }

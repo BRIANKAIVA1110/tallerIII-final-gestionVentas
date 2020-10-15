@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using AutoMapper;
 using GestionVentas.Infraestructura.Extensions;
 using GestionVentas.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +32,7 @@ namespace GestionVentas.Web
             services.AddCustomEFConfiguration();
             services.AddCustomRepositoryConfiguration();
             services.AddCustomServiceConfiguration();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

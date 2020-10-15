@@ -16,6 +16,8 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Codigo).IsRequired();
             builder.Property(x => x.Descripcion).IsRequired();
+            builder.HasOne(x => x.Modelo).WithMany().HasForeignKey("modeloId");
+            builder.HasOne(x => x.Color).WithMany().HasForeignKey("colorId");
 
         }
     }

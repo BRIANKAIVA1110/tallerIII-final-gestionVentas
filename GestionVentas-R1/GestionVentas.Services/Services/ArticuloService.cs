@@ -11,33 +11,44 @@ namespace GestionVentas.Services.Services
     public class ArticuloService: IArticuloService
     {
         private readonly IArticuloRepository _articuloRepository;
-        public ArticuloService(IArticuloRepository articuloRepository)
+        private readonly IModeloRepository _modeloRepository;
+        private readonly IColorRepository _colorRepository;
+        public ArticuloService(IArticuloRepository articuloRepository, IColorRepository colorRepository, IModeloRepository modeloRepository)
         {
             this._articuloRepository = articuloRepository;
+            this._modeloRepository = modeloRepository;
+            this._colorRepository= colorRepository;
 
         }
 
         public int AgregarArticulo(ArticuloDTO p_articuloDTO)
         {
 
-            int result = this._articuloRepository.Add(new Articulo
-            {
-                Codigo = p_articuloDTO.Codigo,
-                Descripcion = p_articuloDTO.Descripcion
-            });
+            Articulo eArticulo = new Articulo();
+            eArticulo.Color = this._colorRepository.GetById(p_articuloDTO.ColorId);
+            eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
+            eArticulo.Codigo = p_articuloDTO.Codigo;
+            eArticulo.Descripcion = p_articuloDTO.Descripcion;
 
+            int result = this._articuloRepository.Add(eArticulo);
             return result;
         }
 
         public int ModificarArticulo(ArticuloDTO p_articuloDTO)
         {
 
-            Articulo objEntity = this._articuloRepository.GetById(p_articuloDTO.Id);
+            Articulo eArticulo = this._articuloRepository.GetById(p_articuloDTO.Id);
 
-            objEntity.Codigo = p_articuloDTO.Codigo;
-            objEntity.Descripcion = p_articuloDTO.Descripcion;
+            if(eArticulo.Color.Id != p_articuloDTO.ColorId)
+                eArticulo.Color = this._colorRepository.GetById(p_articuloDTO.ColorId);
 
-            int result = this._articuloRepository.Update(objEntity);
+            if (eArticulo.Modelo.Id != p_articuloDTO.ModeloId)
+                eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
+
+            eArticulo.Codigo = p_articuloDTO.Codigo;
+            eArticulo.Descripcion = p_articuloDTO.Descripcion;
+
+            int result = this._articuloRepository.Update(eArticulo);
 
             return result;
         }
@@ -54,29 +65,38 @@ namespace GestionVentas.Services.Services
 
         public IEnumerable<ArticuloDTO> getArticulos()
         {
-            var result = this._articuloRepository.Get()
+            var listArticuloDTO = this._articuloRepository.Get()
                 .Select(x => new ArticuloDTO
                 {
                     Id = x.Id,
                     Codigo = x.Codigo,
-                    Descripcion = x.Descripcion
+                    Descripcion = x.Descripcion,
+                    ModeloId = x.Modelo.Id,
+                    ColorId = x.Color.Id,
+                    ModeloDescripcion = $"{x.Modelo.Codigo} - {x.Modelo.Descripcion}",
+                    ColorDescripcion = $"{x.Color.Codigo} - {x.Color.Descripcion}"
                 });
 
-            return result;
+            return listArticuloDTO;
         }
 
 
         public ArticuloDTO getArticulo(int p_id)
         {
-            Articulo objEntity = this._articuloRepository.GetById(p_id);
-            ArticuloDTO objResult = new ArticuloDTO
+            Articulo eArticulo = this._articuloRepository.GetById(p_id);
+            ArticuloDTO articuloDto = new ArticuloDTO
             {
-                Id = objEntity.Id,
-                Codigo = objEntity.Codigo,
-                Descripcion = objEntity.Descripcion
+                Id = eArticulo.Id,
+                Codigo = eArticulo.Codigo,
+                Descripcion = eArticulo.Descripcion,
+                ModeloId = eArticulo.Modelo.Id,
+                ColorId  = eArticulo.Color.Id,
+                ModeloDescripcion = $"{eArticulo.Modelo.Codigo} - {eArticulo.Modelo.Descripcion}",
+                ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}"
+
             };
 
-            return objResult;
+            return articuloDto;
         }
     }
 }

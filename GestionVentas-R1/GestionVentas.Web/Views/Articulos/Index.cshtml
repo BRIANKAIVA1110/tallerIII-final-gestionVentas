@@ -1,7 +1,7 @@
 ﻿
 @using GestionVentas.Web.Enum;
 
-@model List<ArticuloDTO>
+@model List<GestionVentas.Web.Models.ViewModels.Articulos.ArticuloViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,7 +18,7 @@
             <div class="col-lg-7 col-md-7 col-sm-12">
                 <ul class="nav ">
                     <li class="nav-item ">
-                        <a class="nav-link  btn-dark" asp-area="" asp-controller="articulos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR>Agregar</a>
+                        <a class="nav-link  btn-success" asp-area="" asp-controller="articulos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR>Agregar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn-dark" href="#">Exportar</a>
@@ -29,8 +29,8 @@
                 <form class="form-inline" asp-action="buscar" asp-controller="articulos" method="get">
 
                     @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
-                    <input class="form-control mr-sm-2" placeholder="Buscar..." name="p_query">
-                    <button class="btn btn-success " type="submit">Buscar</button>
+                    <input class="form-control form-control-sm " placeholder="Buscar..." name="p_query">
+                    <button class="btn btn-info form-control-sm " type="submit">Buscar</button>
                 </form>
             </div>
         </div>
@@ -45,6 +45,8 @@
                         <th>#</th>
                         <th>Codigo</th>
                         <th>Descripcion</th>
+                        <th>Modelo</th>
+                        <th>Color</th>
 
                     </tr>
                 </thead>
@@ -53,16 +55,18 @@
                         int contRegistros = 1;
                         foreach (var item in Model)
                         {
-                            <tr>
-                                <th>
-                                    <a asp-action="eliminar" asp-controller="articulos" asp-route-id=@item.Id>Eliminar</a>
-                                    <a asp-action="form" asp-controller="articulos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id>Modificar</a>
-                                    <a asp-action="detalle" asp-controller="articulos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a>
-                                </th>
-                                <th>@contRegistros</th>
-                                <td>@item.Codigo</td>
-                                <td>@item.Descripcion</td>
-                            </tr>
+                                        <tr>
+                                            <th>
+                                                <a asp-action="eliminar" asp-controller="articulos" asp-route-id=@item.Id>Eliminar</a>
+                                                <a asp-action="form" asp-controller="articulos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id>Modificar</a>
+                                                <a asp-action="detalle" asp-controller="articulos" asp-route-id=@item.Id class="text-decoration-none">Detalles</a>
+                                            </th>
+                                            <th>@contRegistros</th>
+                                            <td>@item.Codigo</td>
+                                            <td>@item.Descripcion</td>
+                                            <td>@item.ModeloDescripcion</td>
+                                            <td>@item.ColorDescripcion</td>
+                                        </tr>
 
 
                             contRegistros = contRegistros + 1;
@@ -72,15 +76,7 @@
                 </tbody>
             </table>
         </div>
-        @*<div class="container d-flex justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </div>*@
+      
     </div>
 </div>
 
