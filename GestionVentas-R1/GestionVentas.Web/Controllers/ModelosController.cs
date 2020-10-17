@@ -2,7 +2,7 @@
 using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
-using GestionVentas.Web.Models.ViewModels.Modelos;
+using GestionVentas.Web.Models.ViewModels.Articulos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,39 +25,78 @@ namespace GestionVentas.Web.Controllers
 
         public IActionResult Index() {
 
-            var result = this._modeloService.getModelos().ToList();
-            var resultToView = this._mapper.Map<ModeloViewModel>(result);
-            return View(resultToView);
+            List<ModeloViewModel> listmodeloViewModel = this._modeloService.getModelos()
+                .Select(x => this._mapper.Map<ModeloDTO, ModeloViewModel>(x))
+                .ToList();
+
+            return View(listmodeloViewModel);
         }
 
         [HttpPost]
-        public IActionResult Agregar(ModeloViewModel p_modelo) {
+        public IActionResult Agregar(ModeloViewModel p_modeloVM) {
 
-            var objDTO = this._mapper.Map<ModeloDTO>(p_modelo);
-            this._modeloService.AgregarModelo(objDTO);
-
-            return RedirectToAction("index");
+            if (!ModelState.IsValid)
+                return View("error");
+            else
+            {
+                ModeloDTO modeloDTO = this._mapper.Map<ModeloViewModel, ModeloDTO>(p_modeloVM);
+                int result = this._modeloService.AgregarModelo(modeloDTO);
+                if (result > 0)
+                    return RedirectToAction("index");
+                else
+                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+            }
         }
-        public IActionResult Modificar(ModeloDTO p_modelo) {
+        public IActionResult Modificar(ModeloViewModel p_modeloVM) {
 
-            this._modeloService.ModificarModelo(p_modelo);
+            if (!ModelState.IsValid)
+                return View("error");
+            else {
+                ModeloDTO modeloDTO = this._mapper.Map<ModeloViewModel, ModeloDTO>(p_modeloVM);
+                int result = this._modeloService.ModificarModelo(modeloDTO);
 
-            return RedirectToAction("index");
+                if (result > 0)
+                    return RedirectToAction("index");
+                else
+                    return View("form");
+            }
+            
         }
         public IActionResult Detalle(int Id) {
-
-            ModeloDTO objResult = this._modeloService.getModelo((int)Id);
-            return View(objResult);
+            
+            ModeloDTO modeloDTO = this._modeloService.getModelo((int)Id);
+            if (modeloDTO != null)
+            {
+                ModeloViewModel modeloViewModel = this._mapper.Map<ModeloDTO, ModeloViewModel>(modeloDTO);
+                return View(modeloViewModel);
+            }
+            else {
+                return View("index"); //deberia mostrar un msg de notificacion
+            }
+            
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
             //ver diferencias: contains vs like method
-            var result = this._modeloService.getModelos()
-                .Where(x => x.Codigo.Contains(p_query) || x.Descripcion.Contains(p_query))
+            if (p_query != null)
+            {
+                List<ModeloViewModel> listmodeloViewModel = this._modeloService.getModelos()
+                .Where(x => x.Codigo.Contains(p_query) ||
+                    x.Descripcion.Contains(p_query))
+                .Select(x => this._mapper.Map<ModeloDTO, ModeloViewModel>(x))
                 .ToList();
 
-            return View("index", result);
+                return View("index", listmodeloViewModel);
+            }
+            else
+            {
+                List<ModeloViewModel> listmodeloViewModel = this._modeloService.getModelos()
+                .Select(x => this._mapper.Map<ModeloDTO, ModeloViewModel>(x))
+                .ToList();
+                return View("index", listmodeloViewModel);
+            }
+           
         }
 
         public IActionResult Eliminar(int Id) {
@@ -84,8 +123,9 @@ namespace GestionVentas.Web.Controllers
 
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    ModeloDTO objResult = this._modeloService.getModelo((int)Id);
-                    return View(objResult);
+                    ModeloDTO modeloDTO = this._modeloService.getModelo((int)Id);
+                    ModeloViewModel modeloViewModel = this._mapper.Map<ModeloViewModel>(modeloDTO);
+                    return View(modeloViewModel);
                 }
 
             }

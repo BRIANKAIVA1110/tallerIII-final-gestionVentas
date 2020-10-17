@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace GestionVentas.Web.Models.ViewModels.Modelos
+namespace GestionVentas.Web.Models.ViewModels.Articulos
 {
     public class ModeloViewModel
     {

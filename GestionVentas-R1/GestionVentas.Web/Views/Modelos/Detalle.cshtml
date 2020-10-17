@@ -1,6 +1,6 @@
 ﻿@using GestionVentas.Web.Enum
 
-@model ModeloDTO
+@model GestionVentas.Web.Models.ViewModels.Articulos.ModeloViewModel
 @{
     ViewData["Title"] = "Detalle";
 }
@@ -14,6 +14,7 @@
 @Html.DisplayFor(x => x.Descripcion)
 
 <hr />
-<a asp-action="index" asp-controller="modelos" class="btn btn-dark form-control-sm ">Volver </a>
-<a asp-action="form" asp-controller="modelos" asp-route-Id=@Model.Id asp-route-accionCRUD=@AccionesCRUD.MODIFICAR class="btn btn-primary form-control-sm ">Modificar</a>
+<a asp-action="index" asp-controller="modelos" class="btn btn-dark form-control-sm "><i class="fa fa-arrow-left" aria-hidden="true"></i>Volver </a>
+<a asp-action="form" asp-controller="modelos" asp-route-Id=@Model.Id asp-route-accionCRUD=@AccionesCRUD.MODIFICAR class="btn btn-primary form-control-sm "><i class="fa fa-pencil" aria-hidden="true"></i>Modificar</a>
+<a asp-action="eliminar" asp-controller="modelos" asp-route-Id=@Model.Id class="btn btn-danger form-control-sm "><i class="fa fa-trash" aria-hidden="true"></i></i>Eliminar</a>
 
