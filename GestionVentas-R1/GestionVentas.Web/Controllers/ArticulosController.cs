@@ -29,8 +29,8 @@ namespace GestionVentas.Web.Controllers
         public IActionResult Index()
         {
 
-            List<ArticuloDTO> listArticuloDTO = this._articuloService.getArticulos().ToList();
-            List<ArticuloViewModel> listArticuloViewModels = listArticuloDTO.Select(x=> this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
+            List<ArticuloViewModel> listArticuloViewModels = this._articuloService.getArticulos()
+                .Select(x=> this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
 
             return View(listArticuloViewModels);
         }

@@ -14,7 +14,7 @@ namespace GestionVentas.Infraestructura.Repositories
 
         public override Articulo GetById(int p_id)
         {
-            Articulo result = this._entity.Include(x => x.Modelo).Include(x => x.Color).FirstOrDefault();
+            Articulo result = this._entity.Include(x => x.Modelo).Include(x => x.Color).FirstOrDefault(x=> x.Id == p_id);
 
             return result;
         }

@@ -1,6 +1,8 @@
-﻿using GestionVentas.DataTransferObjects.EntityDTO;
+﻿using AutoMapper;
+using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
+using GestionVentas.Web.Models.ViewModels.Articulos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,53 +14,92 @@ namespace GestionVentas.Web.Controllers
     public class ColoresController:Controller
     {
         private readonly IColorService _colorService;
+        private readonly IMapper _mapper;
 
-        public ColoresController(IColorService colorService) {
+        public ColoresController(IColorService colorService, IMapper mapper) {
             this._colorService = colorService;
+            this._mapper = mapper;
         }
 
         public IActionResult Index()
         {
 
-            var result = this._colorService.getColores().ToList();
+            List<ColorViewModel> colorViewModels= this._colorService.getColores()
+                .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
 
-            return View(result);
+            return View(colorViewModels);
 
         }
 
         [HttpPost]
-        public IActionResult Agregar(ColorDTO p_color)
+        public IActionResult Agregar(ColorViewModel p_colorVM)
         {
-
-            this._colorService.AgregarColor(p_color);
-
-            return RedirectToAction("index");
+            if (!ModelState.IsValid)
+                return View("error");
+            else
+            {
+                ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
+                int result = this._colorService.AgregarColor(colorDTO);
+                if (result > 0)
+                    return RedirectToAction("index");
+                else
+                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+            }
         }
 
 
-        public IActionResult Modificar(ColorDTO p_color)
+        public IActionResult Modificar(ColorViewModel p_colorVM)
         {
+            if (!ModelState.IsValid)
+                return View("error");
+            else
+            {
+                ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
+                int result = this._colorService.ModificarColor(colorDTO);
 
-            this._colorService.ModificarColor(p_color);
-
-            return RedirectToAction("index");
+                if (result > 0)
+                    return RedirectToAction("index");
+                else
+                    return View("form");
+            }
         }
 
         public IActionResult Detalle(int Id)
         {
-
-            ColorDTO objResult = this._colorService.getColor((int)Id);
-            return View(objResult);
+            ColorDTO colorDTO = this._colorService.getColor((int)Id);
+            if (colorDTO != null)
+            {
+                ColorViewModel colorViewModel = this._mapper.Map<ColorDTO, ColorViewModel>(colorDTO);
+                return View(colorViewModel);
+            }
+            else
+            {
+                return View("index"); //deberia mostrar un msg de notificacion
+            }
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
             //ver diferencias: contains vs like method
-            var result = this._colorService.getColores()
-                .Where(x => x.Codigo.Contains(p_query) || x.Descripcion.Contains(p_query))
+            if (p_query != null)
+            {
+                List<ColorViewModel> listColorViewModel = this._colorService.getColores()
+                .Where(x => x.Codigo.Contains(p_query) ||
+                    x.Descripcion.Contains(p_query))
+                .Select(x => this._mapper.Map<ColorViewModel>(x))
                 .ToList();
 
-            return View("index", result);
+                return View("index", listColorViewModel);
+            }
+            else
+            {
+                List<ColorViewModel> listColorViewModel = this._colorService.getColores()
+                .Select(x => this._mapper.Map<ColorViewModel>(x))
+                .ToList();
+                return View("index", listColorViewModel);
+            }
+            
+            
         }
 
         public IActionResult Eliminar(int Id)
@@ -88,8 +129,9 @@ namespace GestionVentas.Web.Controllers
 
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    ColorDTO objResult = this._colorService.getColor((int)Id);
-                    return View(objResult);
+                    ColorDTO colorDTO = this._colorService.getColor((int)Id);
+                    ColorViewModel colorViewModel = this._mapper.Map<ColorViewModel>(colorDTO);
+                    return View(colorViewModel);
                 }
 
             }

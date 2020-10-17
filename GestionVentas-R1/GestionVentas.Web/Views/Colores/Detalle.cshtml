@@ -1,7 +1,7 @@
 ﻿
 @using GestionVentas.Web.Enum
 
-@model ColorDTO
+@model GestionVentas.Web.Models.ViewModels.Articulos.ColorViewModel
 @{
     ViewData["Title"] = "Detalle";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -18,6 +18,7 @@
 <hr />
 <a asp-action="index" asp-controller="colores" class="btn btn-dark form-control-sm ">Volver </a>
 <a asp-action="form" asp-controller="colores" asp-route-Id=@Model.Id asp-route-accionCRUD=@AccionesCRUD.MODIFICAR class="btn btn-primary form-control-sm ">Modificar</a>
+<a asp-action="eliminar" asp-controller="colores" asp-route-Id=@Model.Id class="btn btn-danger form-control-sm ">Eliminar</a>
 
 
 

@@ -13,6 +13,7 @@ namespace GestionVentas.Services.Extensions
             services.AddTransient<IModeloService, ModeloService>();
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<IArticuloService, ArticuloService>();
+            services.AddTransient<IStockArticuloService, StockArticuloService>();
         }
     }
 }
