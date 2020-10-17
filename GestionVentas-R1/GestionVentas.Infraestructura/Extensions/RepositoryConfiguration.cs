@@ -15,6 +15,7 @@ namespace GestionVentas.Infraestructura.Extensions
             services.AddTransient<IColorRepository, ColorRepository>();
             services.AddTransient<IArticuloRepository, ArticuloRepository>();
             services.AddTransient<IStockArticuloRepository, StockArticuloRepository>();
+            services.AddTransient<IMarcaRepository, MarcaRepository>();
         }
     }
 }

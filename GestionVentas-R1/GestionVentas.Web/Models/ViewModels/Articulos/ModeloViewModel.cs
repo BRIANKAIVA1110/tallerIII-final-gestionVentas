@@ -11,9 +11,10 @@ namespace GestionVentas.Web.Models.ViewModels.Articulos
     public class ModeloViewModel
     {
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
-        [MinLength(length: 4, ErrorMessage = "Debe ingresar un codigo de 4 caracteres")]
+        [MinLength(length: 1, ErrorMessage = "Debe ingresar datos para este campo")]
+        [MaxLength(length: 4, ErrorMessage = "Debe ingresar un codigo entre de 4 caracteres")]
         public string Codigo { get; set; }
         [Required]
         [MinLength(length: 1,ErrorMessage = "Debe ingresar datos para este campo")]

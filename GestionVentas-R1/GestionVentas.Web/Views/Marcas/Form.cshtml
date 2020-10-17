@@ -1,0 +1,53 @@
+﻿@using GestionVentas.Web.Enum
+@model GestionVentas.Web.Models.ViewModels.Articulos.MarcaViewModel
+
+
+@{
+    //ViewData["Title"] = "Agregar";
+    string accionCrud = ViewData["accionCRUD"].ToString();
+
+}
+
+
+<h1>Marcas > @accionCrud.ToLower()</h1>
+
+<div class="container">
+    @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
+    <form method="post" asp-action=@accionCrud asp-controller="marcas" id="formHTTP">
+        <div class="form-group">
+            <label asp-for="Id" style="display:none;"></label>
+            <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />
+            @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
+        </div>
+        <div class="form-group row">
+            <label asp-for="Codigo" class="col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Codigo" class="form-control form-control-sm" placeholder="Codigo" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label asp-for="Descripcion" class="col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Descripcion" class="form-control form-control-sm" placeholder="Descripcion" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="form-group d-flex justify-content-end">
+            <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0  m-1">
+            <a asp-action="index" asp-controller="marcas" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
+        </div>
+    </form>
+    
+
+
+</div>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

@@ -9,7 +9,7 @@ namespace GestionVentas.Web.Models.ViewModels.Articulos
 {
     public class ArticuloViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
         [MinLength(1, ErrorMessage = "Este campo es obligatorio")]
         public string Codigo { get; set; }

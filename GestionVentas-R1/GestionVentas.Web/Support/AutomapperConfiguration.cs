@@ -22,6 +22,7 @@ namespace GestionVentas.Web.Support
             CreateMap<ModeloViewModel, ModeloDTO>().ReverseMap();
             CreateMap<ColorViewModel, ColorDTO>().ReverseMap();
             CreateMap<StockViewModel, StockArticuloDTO>().ReverseMap();
+            CreateMap<MarcaViewModel, MarcaDTO>().ReverseMap();
         }
     }
 }

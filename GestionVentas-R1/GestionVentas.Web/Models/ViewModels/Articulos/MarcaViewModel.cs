@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Models.ViewModels.Articulos
 {
-    public class ColorViewModel
+    public class MarcaViewModel
     {
+        
         public int? Id { get; set; }
         [Required]
         [MinLength(length: 1, ErrorMessage = "Debe ingresar datos para este campo")]
