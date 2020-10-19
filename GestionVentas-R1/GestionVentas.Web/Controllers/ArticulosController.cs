@@ -17,12 +17,16 @@ namespace GestionVentas.Web.Controllers
         private readonly IArticuloService _articuloService;
         private readonly IColorService _colorService;
         private readonly IModeloService _modeloService;
+        private readonly IMarcaService _marcaService;
+        private readonly ICategoriaService _categoriaService;
         private readonly IMapper _mapper;
-        public ArticulosController(IArticuloService articuloService, IColorService colorService, IModeloService modeloService, IMapper mapper) 
+        public ArticulosController(IArticuloService articuloService, IColorService colorService, IModeloService modeloService, IMarcaService marcaService, ICategoriaService categoriaService, IMapper mapper) 
         {
             this._articuloService = articuloService;
             this._colorService = colorService;
             this._modeloService = modeloService;
+            this._marcaService = marcaService;
+            this._categoriaService = categoriaService;
             this._mapper = mapper;
         }
 
@@ -143,10 +147,26 @@ namespace GestionVentas.Web.Controllers
                         Text = $"{x.Codigo} - {x.Descripcion}"
                     }).ToList();
 
+                List<SelectListItem> marcas = this._marcaService.getMarcas()
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Codigo} - {x.Descripcion}"
+                    }).ToList();
+
+                List<SelectListItem> categorias = this._categoriaService.getCategorias()
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Codigo} - {x.Descripcion}"
+                    }).ToList();
+
                 if (accionCRUD.Equals(AccionesCRUD.AGREGAR)) {
 
                     articuloViewModel.Colores = colores;
                     articuloViewModel.Modelos = modelos;
+                    articuloViewModel.Marcas = marcas;
+                    articuloViewModel.Categorias = categorias;
 
                     return View(articuloViewModel);
                 }
@@ -156,6 +176,8 @@ namespace GestionVentas.Web.Controllers
                     articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
                     articuloViewModel.Colores = colores;
                     articuloViewModel.Modelos = modelos;
+                    articuloViewModel.Marcas = marcas;
+                    articuloViewModel.Categorias = categorias;
                     return View(articuloViewModel);
                 }
 

@@ -5,14 +5,10 @@ using System.Text;
 
 namespace GestionVentas.Domain.Entities
 {
-    public class Articulo: IEntity
+    public class Categoria:IEntity
     {
         public int Id { get; set; }
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
-        public Modelo Modelo { get; set; }
-        public Color Color {get; set; }
-        public Marca Marca { get; set; }
-        public Categoria Categoria {get; set; }
     }
 }

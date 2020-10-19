@@ -44,16 +44,13 @@
 
         <!-- #region AlternativaDropDown -->
         <!--<div class="form-group row">
-        <label  for="modelos">Seleccione modelo: </label>-->
-            @*se obtiene el value del dropdownlist en la propiedad "ModeloId" de la siguiente manera especificando en el primer parametro*@
-            <!--
-            @{/*Html.DropDownList("ModeloId", Model.Modelos, new { @class = "form-control form-control-sm " })*/}
+    <label  for="modelos">Seleccione modelo: </label>-->
+        @*se obtiene el value del dropdownlist en la propiedad "ModeloId" de la siguiente manera especificando en el primer parametro*@
+        <!--
+        @{/*Html.DropDownList("ModeloId", Model.Modelos, new { @class = "form-control form-control-sm " })*/}
 
-        </div>-->
+    </div>-->
         <!-- #endregion -->
-
-
-
         @*alternativa sin htmlHelper*@
 
         <div class="form-group row">
@@ -70,7 +67,7 @@
                     }
                 </select>
             </div>
-            
+
         </div>
 
         <div class="form-group row">
@@ -88,7 +85,41 @@
 
                 </select>
             </div>
-            
+
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-form-label-sm col-sm-2">Color</label>
+            <div class="col-sm-10">
+                <select asp-for="MarcaId" asp-items="Model.Marcas" class="form-control form-control-sm">
+                    @if (!accionCrud.ToUpper().Equals("MODIFICAR"))
+                    {
+                        <option selected value="0">Seleccione Marca...</option>
+                    }
+                    else
+                    {
+                        <option selected value=@Model.MarcaId>@Model.MarcaDescripcion</option>
+                    }
+
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-form-label-sm col-sm-2">Color</label>
+            <div class="col-sm-10">
+                <select asp-for="CategoriaId" asp-items="Model.Categorias" class="form-control form-control-sm">
+                    @if (!accionCrud.ToUpper().Equals("MODIFICAR"))
+                    {
+                        <option selected value="0">Seleccione Categoria...</option>
+                    }
+                    else
+                    {
+                        <option selected value=@Model.CategoriaId>@Model.CategoriaDescripcion</option>
+                    }
+
+                </select>
+            </div>
+
         </div>
 
         <div class="form-group d-flex justify-content-end">

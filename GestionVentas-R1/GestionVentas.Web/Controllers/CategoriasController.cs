@@ -9,37 +9,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace GestionVentas.Web.Controllers
 {
-    public class MarcasController: Controller
+    public class CategoriasController : Controller
     {
-        private readonly IMarcaService _marcaService;
+        private readonly ICategoriaService _categoriaService;
         private readonly IMapper _mapper;
-        public MarcasController(IMarcaService marcaService, IMapper mapper) {
-            this._marcaService = marcaService;
+
+        public CategoriasController(ICategoriaService categoriaService, IMapper mapper)
+        {
+            this._categoriaService = categoriaService;
             this._mapper = mapper;
         }
-
 
         public IActionResult Index()
         {
 
-            List<MarcaViewModel> marcaViewModel = this._marcaService.getMarcas()
-                .Select(x => this._mapper.Map<MarcaViewModel>(x)).ToList();
+            List<CategoriaViewModel> categoriaViewModel = this._categoriaService.getCategorias()
+                .Select(x => this._mapper.Map<CategoriaViewModel>(x)).ToList();
 
-            return View(marcaViewModel);
+            return View(categoriaViewModel);
 
         }
 
         [HttpPost]
-        public IActionResult Agregar(MarcaViewModel p_marcaVM)
+        public IActionResult Agregar(CategoriaViewModel p_categoriaVM)
         {
             if (!ModelState.IsValid)
                 return View("error");
             else
             {
-                MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
-                int result = this._marcaService.AgregarMarca(marcaDTO);
+                CategoriaDTO categoriaDTO = this._mapper.Map<CategoriaDTO>(p_categoriaVM);
+                int result = this._categoriaService.AgregarCategoria(categoriaDTO);
                 if (result > 0)
                     return RedirectToAction("index");
                 else
@@ -48,14 +50,14 @@ namespace GestionVentas.Web.Controllers
         }
 
 
-        public IActionResult Modificar(MarcaViewModel p_marcaVM)
+        public IActionResult Modificar(CategoriaViewModel p_categoriaVM)
         {
             if (!ModelState.IsValid)
                 return View("error");
             else
             {
-                MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
-                int result = this._marcaService.ModificarMarca(marcaDTO);
+                CategoriaDTO categoriaDTO = this._mapper.Map<CategoriaDTO>(p_categoriaVM);
+                int result = this._categoriaService.ModificarCategoria(categoriaDTO);
 
                 if (result > 0)
                     return RedirectToAction("index");
@@ -66,11 +68,11 @@ namespace GestionVentas.Web.Controllers
 
         public IActionResult Detalle(int Id)
         {
-            MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
-            if (marcaDTO != null)
+            CategoriaDTO categoriaDTO = this._categoriaService.getCategoria((int)Id);
+            if (categoriaDTO != null)
             {
-                MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
-                return View(marcaViewModel);
+                CategoriaViewModel categoriaViewModel = this._mapper.Map<CategoriaDTO, CategoriaViewModel>(categoriaDTO);
+                return View(categoriaViewModel);
             }
             else
             {
@@ -83,28 +85,27 @@ namespace GestionVentas.Web.Controllers
             //ver diferencias: contains vs like method
             if (p_query != null)
             {
-                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
+                List<CategoriaViewModel> listCategoriaViewModel = this._categoriaService.getCategorias()
                 .Where(x => x.Codigo.Contains(p_query) ||
                     x.Descripcion.Contains(p_query))
-                .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                .Select(x => this._mapper.Map<CategoriaViewModel>(x))
                 .ToList();
 
-                return View("index", listmarcaViewModel);
+                return View("index", listCategoriaViewModel);
             }
             else
             {
-                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
-                .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                List<CategoriaViewModel> listCategoriaViewModel = this._categoriaService.getCategorias()
+                .Select(x => this._mapper.Map<CategoriaViewModel>(x))
                 .ToList();
-                return View("index", listmarcaViewModel);
+                return View("index", listCategoriaViewModel);
             }
-
         }
 
         public IActionResult Eliminar(int Id)
         {
 
-            var result = this._marcaService.getMarca(Id);
+            var result = this._categoriaService.EliminarCategoria(Id);
 
             return RedirectToAction("index");
         }
@@ -115,8 +116,8 @@ namespace GestionVentas.Web.Controllers
         /// <param name="accionCRUD"> AGREGAR || MODIFICAR </param>
         /// <param name="Id"> null || Id </param>
         /// <returns></returns>
-        //[Route("marca/Form")]
-        [Route("marca/Form/{Id?}")]
+        //[Route("Categoria/Form")]
+        [Route("Categoria/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
         {
             if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
@@ -128,9 +129,9 @@ namespace GestionVentas.Web.Controllers
 
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
-                    MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
-                    return View(marcaViewModel);
+                    CategoriaDTO categoriaDTO = this._categoriaService.getCategoria((int)Id);
+                    CategoriaViewModel categoriaViewModel = this._mapper.Map<CategoriaViewModel>(categoriaDTO);
+                    return View(categoriaViewModel);
                 }
 
             }

@@ -18,6 +18,8 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
             builder.Property(x => x.Descripcion).IsRequired();
             builder.HasOne(x => x.Modelo).WithMany().HasForeignKey("modeloId");
             builder.HasOne(x => x.Color).WithMany().HasForeignKey("colorId");
+            builder.HasOne(x => x.Marca).WithMany().HasForeignKey("marcaId");
+            builder.HasOne(x => x.Categoria).WithMany().HasForeignKey("categoriaId");
 
         }
     }

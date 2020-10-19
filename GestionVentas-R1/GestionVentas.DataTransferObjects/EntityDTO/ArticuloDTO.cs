@@ -14,7 +14,11 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
         public string ModeloDescripcion { get; set; }
         public int ColorId { get; set; }
         public string ColorDescripcion { get; set; }
+        public int MarcaId { get; set; }
+        public string MarcaDescripcion { get; set; }
+        public int CategoriaId { get; set; }
+        public string CategoriaDescripcion { get; set; }
 
-       
+
     }
 }
