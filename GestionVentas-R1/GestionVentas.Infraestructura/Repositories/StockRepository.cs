@@ -14,6 +14,10 @@ namespace GestionVentas.Infraestructura.Repositories
         public override StockArticulo GetById(int p_id)
         {
             StockArticulo stockArticulo = this._entity.Include(x => x.Articulo)
+                .Include(x=> x.Articulo.Modelo)
+                .Include(x => x.Articulo.Marca)
+                .Include(x => x.Articulo.Color)
+                .Include(x => x.Articulo.Categoria)
                 .FirstOrDefault(x => x.Id == p_id);
 
             return stockArticulo;

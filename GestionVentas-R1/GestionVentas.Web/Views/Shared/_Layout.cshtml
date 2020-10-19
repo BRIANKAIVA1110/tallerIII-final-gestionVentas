@@ -34,13 +34,14 @@
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index"><i class="fa fa-pencil" aria-hidden="true"></i>Modelos</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Colores" asp-action="Index">Colores</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Marcas" asp-action="Index">Marcas</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Articulos" asp-action="Index">Articulos</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Clientes</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index">Clientes</a>
+                                <a class="dropdown-item nav-link text-dark text-sm-right" asp-area="" asp-controller="Modelos" asp-action="Index">Gestion Clientes</a>
 
                             </div>
                         </li>
@@ -51,7 +52,22 @@
 
                             </div>
                         </li>
-
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Ventas</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Pedidos</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Facturas</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Reportes</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Articulos</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Clientes</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Ventas</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Stock</a>
+                            </div>
+                        </li>
                     </ul>
 
                 </div>

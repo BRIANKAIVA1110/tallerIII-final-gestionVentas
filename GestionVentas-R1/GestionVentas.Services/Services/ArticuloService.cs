@@ -13,12 +13,15 @@ namespace GestionVentas.Services.Services
         private readonly IArticuloRepository _articuloRepository;
         private readonly IModeloRepository _modeloRepository;
         private readonly IColorRepository _colorRepository;
-        public ArticuloService(IArticuloRepository articuloRepository, IColorRepository colorRepository, IModeloRepository modeloRepository)
+        private readonly IMarcaRepository _marcaRepository;
+        private readonly ICategoriaRepository _categoriaRepository;
+        public ArticuloService(IArticuloRepository articuloRepository, IColorRepository colorRepository, IModeloRepository modeloRepository, ICategoriaRepository categoriaRepository, IMarcaRepository marcaRepository)
         {
             this._articuloRepository = articuloRepository;
             this._modeloRepository = modeloRepository;
             this._colorRepository= colorRepository;
-
+            this._marcaRepository = marcaRepository;
+            this._categoriaRepository = categoriaRepository;
         }
 
         public int AgregarArticulo(ArticuloDTO p_articuloDTO)
@@ -27,6 +30,8 @@ namespace GestionVentas.Services.Services
             Articulo eArticulo = new Articulo();
             eArticulo.Color = this._colorRepository.GetById(p_articuloDTO.ColorId);
             eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
+            eArticulo.Marca = this._marcaRepository.GetById(p_articuloDTO.MarcaId);
+            eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
             eArticulo.Codigo = p_articuloDTO.Codigo;
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
 
@@ -44,6 +49,12 @@ namespace GestionVentas.Services.Services
 
             if (eArticulo.Modelo.Id != p_articuloDTO.ModeloId)
                 eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
+
+            if (eArticulo.Marca.Id != p_articuloDTO.MarcaId)
+                eArticulo.Marca = this._marcaRepository.GetById(p_articuloDTO.MarcaId);
+
+            if (eArticulo.Categoria.Id != p_articuloDTO.CategoriaId)
+                eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
 
             eArticulo.Codigo = p_articuloDTO.Codigo;
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
@@ -73,8 +84,10 @@ namespace GestionVentas.Services.Services
                     Descripcion = x.Descripcion,
                     ModeloId = x.Modelo.Id,
                     ColorId = x.Color.Id,
-                    ModeloDescripcion = $"{x.Modelo.Codigo} - {x.Modelo.Descripcion}",
-                    ColorDescripcion = $"{x.Color.Codigo} - {x.Color.Descripcion}"
+                    ModeloDescripcion = x.Modelo!=null? $"{x.Modelo.Codigo} - {x.Modelo.Descripcion}" : "",
+                    ColorDescripcion = x.Color!=null? $"{x.Color.Codigo} - {x.Color.Descripcion}" : "",
+                    MarcaDescripcion = x.Marca!=null? $"{x.Marca.Codigo} - {x.Marca.Descripcion}": "",
+                    CategoriaDescripcion = x.Categoria!=null? $"{x.Categoria.Codigo} - {x.Categoria.Descripcion}": "",
                 });
 
             return listArticuloDTO;
@@ -91,8 +104,12 @@ namespace GestionVentas.Services.Services
                 Descripcion = eArticulo.Descripcion,
                 ModeloId = eArticulo.Modelo.Id,
                 ColorId  = eArticulo.Color.Id,
+                MarcaId = eArticulo.Marca.Id,
+                CategoriaId = eArticulo.Categoria.Id,
                 ModeloDescripcion = $"{eArticulo.Modelo.Codigo} - {eArticulo.Modelo.Descripcion}",
-                ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}"
+                ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}",
+                MarcaDescripcion = $"{eArticulo.Marca.Codigo} - {eArticulo.Marca.Descripcion}",
+                CategoriaDescripcion = $"{eArticulo.Categoria.Codigo} - {eArticulo.Categoria.Descripcion}"
 
             };
 

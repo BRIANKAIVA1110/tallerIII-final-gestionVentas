@@ -14,6 +14,7 @@ namespace GestionVentas.Web.Support
     {
         public AutomapperConfiguration() {
             ModuloArticuloConfiguracion();
+            ModuloStockConfiguration();
         }
 
         public void ModuloArticuloConfiguracion() {
@@ -21,8 +22,11 @@ namespace GestionVentas.Web.Support
             CreateMap<ArticuloViewModel, ArticuloDTO>().ReverseMap();
             CreateMap<ModeloViewModel, ModeloDTO>().ReverseMap();
             CreateMap<ColorViewModel, ColorDTO>().ReverseMap();
-            CreateMap<StockViewModel, StockArticuloDTO>().ReverseMap();
             CreateMap<MarcaViewModel, MarcaDTO>().ReverseMap();
+            CreateMap<CategoriaViewModel, CategoriaDTO>().ReverseMap();
+        }
+        public void ModuloStockConfiguration() {
+            CreateMap<StockViewModel, StockArticuloDTO>().ReverseMap();
         }
     }
 }
