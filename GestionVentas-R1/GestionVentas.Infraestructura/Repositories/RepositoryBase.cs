@@ -1,10 +1,13 @@
 ﻿using GestionVentas.Domain.Entities;
 using GestionVentas.Domain.Interfaces;
+using GestionVentas.Infraestructura.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GestionVentas.Infraestructura.Repositories
@@ -13,10 +16,12 @@ namespace GestionVentas.Infraestructura.Repositories
     {
         private readonly ApplicationContext _applicationContext;
         public readonly DbSet<T> _entity;
-        public RepositoryBase(ApplicationContext applicationContext)
+        private readonly IDbConnection _connection;
+        public RepositoryBase(ApplicationContext applicationContext, IDbConnection connection)
         {
             this._applicationContext = applicationContext;
             this._entity = applicationContext.Set<T>();
+            this._connection = connection;
         }
 
 
@@ -56,11 +61,11 @@ namespace GestionVentas.Infraestructura.Repositories
             return result;
         }
 
-        public virtual T ExecuteQuery(DbContext context)
-        {
-            throw new NotImplementedException();
-        }
-
        
+
+        public W ExecuteQuery<W>(IQuery<W> p_query) where W : class
+        {
+            return p_query.Execute(this._connection);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
     {
         public void Configure(EntityTypeBuilder<StockArticulo> builder)
         {
-            builder.ToTable("stockArticulo");
+            builder.ToTable("stockArticulos");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Cantidad).IsRequired();
             builder.HasOne(x => x.Articulo).WithMany().HasForeignKey("ArticuloId");

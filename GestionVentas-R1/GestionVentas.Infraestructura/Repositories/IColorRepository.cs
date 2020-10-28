@@ -6,14 +6,8 @@ using System.Text;
 
 namespace GestionVentas.Infraestructura.Repositories
 {
-    public interface IColorRepository
+    public interface IColorRepository: IRepositoryBase<Color>
     {
-        int Add(Color p_entity);
-
-        int Delete(Color p_entity);
-        Color ExecuteQuery(DbContext context);
-        IEnumerable<Color> Get();
-        Color GetById(int p_id);
-        int Update(Color p_entity);
+        
     }
 }

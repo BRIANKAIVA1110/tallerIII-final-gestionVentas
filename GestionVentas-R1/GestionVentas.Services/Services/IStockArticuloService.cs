@@ -11,5 +11,7 @@ namespace GestionVentas.Services.Services
         int EliminarStockArticulo(int p_id);
         StockArticuloDTO getStockArticulo(int p_id);
         IEnumerable<StockArticuloDTO> getStockArticulos();
+
+        IEnumerable<ArticuloDTO> ObtenerArticulosSinAsignacionStock();
     }
 }
