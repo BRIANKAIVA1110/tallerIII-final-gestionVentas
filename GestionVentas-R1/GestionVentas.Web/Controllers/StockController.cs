@@ -126,18 +126,18 @@ namespace GestionVentas.Web.Controllers
                 ViewData["accionCRUD"] = accionCRUD;
 
                 StockViewModel stockArticuloViewModel = new StockViewModel();
-                List<SelectListItem> articulos = this._stockArticuloService.getStockArticulos()
+                List<SelectListItem> articulosSinAsignacionStock = this._stockArticuloService.ObtenerArticulosSinAsignacionStock()
                     .Select(x => new SelectListItem
                     {
                         Value = x.Id.ToString(),
-                        Text = x.ArticuloDescripcion
+                        Text = $"{x.ModeloDescripcion} - {x.ColorDescripcion} - {x.MarcaDescripcion} - {x.CategoriaDescripcion}"
                     }).ToList();
 
 
                 if (accionCRUD.Equals(AccionesCRUD.AGREGAR)) {
                     
-                    stockArticuloViewModel.Articulos = articulos;
-                    return View();
+                    stockArticuloViewModel.Articulos = articulosSinAsignacionStock;
+                    return View(stockArticuloViewModel);
                 }
 
                 if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))

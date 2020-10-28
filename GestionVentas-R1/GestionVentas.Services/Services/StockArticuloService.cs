@@ -1,5 +1,6 @@
 ﻿using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.DataAccess.Queries;
 using GestionVentas.Infraestructura.Repositories;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,14 @@ namespace GestionVentas.Services.Services
             };
 
             return objResult;
+        }
+
+        public virtual IEnumerable<ArticuloDTO> ObtenerArticulosSinAsignacionStock()
+        {
+
+            IEnumerable<ArticuloDTO> result = this._stockArticuloRepository.ExecuteQuery(new ObtenerArticulosSinAsignacionStock());
+
+            return result;
         }
     }
 }

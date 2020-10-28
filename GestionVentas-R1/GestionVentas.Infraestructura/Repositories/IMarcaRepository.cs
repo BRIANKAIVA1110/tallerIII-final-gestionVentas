@@ -6,13 +6,8 @@ using System.Text;
 
 namespace GestionVentas.Infraestructura.Repositories
 {
-    public interface IMarcaRepository
+    public interface IMarcaRepository :IRepositoryBase<Marca>
     {
-        int Add(Marca p_entity);
-        int Delete(Marca p_entity);
-        Marca ExecuteQuery(DbContext context);
-        IEnumerable<Marca> Get();
-        Marca GetById(int p_id);
-        int Update(Marca p_entity);
+        
     }
 }

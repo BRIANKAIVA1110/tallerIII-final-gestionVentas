@@ -7,14 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionVentas.Infraestructura.Repositories
 {
-    public interface IArticuloRepository
+    public interface IArticuloRepository:IRepositoryBase<Articulo>
     {
-        int Add(Articulo p_entity);
-
-        int Delete(Articulo p_entity);
-        Articulo ExecuteQuery(DbContext context);
-        IEnumerable<Articulo> Get();
-        Articulo GetById(int p_id);
-        int Update(Articulo p_entity);
+        
     }
 }

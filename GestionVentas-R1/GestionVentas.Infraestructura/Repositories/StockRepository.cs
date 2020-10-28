@@ -1,7 +1,10 @@
-﻿using GestionVentas.Domain.Entities;
+﻿using GestionVentas.DataTransferObjects.EntityDTO;
+using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.DataAccess.Queries;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -9,7 +12,7 @@ namespace GestionVentas.Infraestructura.Repositories
 {
     public class StockArticuloRepository:RepositoryBase<StockArticulo>, IStockArticuloRepository
     {
-        public StockArticuloRepository(ApplicationContext applicationContext) : base(applicationContext) { }
+        public StockArticuloRepository(ApplicationContext applicationContext, IDbConnection connection) : base(applicationContext, connection) { }
 
         public override StockArticulo GetById(int p_id)
         {
@@ -31,6 +34,6 @@ namespace GestionVentas.Infraestructura.Repositories
 
             return listStockArticulo;
         }
-
+       
     }
 }

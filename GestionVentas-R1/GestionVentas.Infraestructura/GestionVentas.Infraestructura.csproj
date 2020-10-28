@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.21" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj" />
     <ProjectReference Include="..\GestionVentas.Domain\GestionVentas.Domain.csproj" />
   </ItemGroup>
 

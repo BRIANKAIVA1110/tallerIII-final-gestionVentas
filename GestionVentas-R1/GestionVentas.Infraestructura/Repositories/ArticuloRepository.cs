@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace GestionVentas.Infraestructura.Repositories
 {
     public class ArticuloRepository:RepositoryBase<Articulo>, IArticuloRepository
     {
-        public ArticuloRepository(ApplicationContext applicationContext) : base(applicationContext) { }
+        public ArticuloRepository(ApplicationContext applicationContext, IDbConnection connection) : base(applicationContext, connection) { }
 
 
         public override Articulo GetById(int p_id)

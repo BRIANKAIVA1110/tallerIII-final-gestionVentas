@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Dapper;
+using System.Data;
 
 namespace GestionVentas.Infraestructura.Interfaces
 {
-    public interface IQueryResult
+    public interface IQuery<T> where T:class
     {
-        IEnumerable<object> Execute(DbContext context);
+        T Execute(IDbConnection connection);
     }
 }
