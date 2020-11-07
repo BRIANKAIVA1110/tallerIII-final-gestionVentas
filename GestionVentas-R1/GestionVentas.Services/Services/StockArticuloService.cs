@@ -84,6 +84,7 @@ namespace GestionVentas.Services.Services
                 $"{objEntity.Articulo.Marca.Descripcion} - " +
                 $"{objEntity.Articulo.Categoria.Descripcion}",
 
+                Cantidad = objEntity.Cantidad
             };
 
             return objResult;
