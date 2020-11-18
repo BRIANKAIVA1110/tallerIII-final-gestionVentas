@@ -8,7 +8,7 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
     public class ArticuloDTO
     {
         public int Id { get; set; }
-        public string Codigo { get; set; }
+        public string CodigoBarras { get; set; }
         public string Descripcion { get; set; }
         public int ModeloId { get; set; }
         public string ModeloDescripcion { get; set; }

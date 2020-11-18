@@ -78,7 +78,7 @@ namespace GestionVentas.Services.Services
                 Id = objEntity.Id,
                 ArticuloId = objEntity.Articulo.Id,
 
-                ArticuloDescripcion = $"{objEntity.Articulo.Codigo} - " +
+                ArticuloDescripcion = $"{objEntity.Articulo.CodigoBarras} - " +
                 $"{objEntity.Articulo.Modelo.Descripcion} - " +
                 $"{objEntity.Articulo.Color.Descripcion} - " +
                 $"{objEntity.Articulo.Marca.Descripcion} - " +

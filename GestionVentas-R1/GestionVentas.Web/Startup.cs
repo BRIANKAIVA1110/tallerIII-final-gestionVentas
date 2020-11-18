@@ -33,6 +33,7 @@ namespace GestionVentas.Web
             services.AddCustomRepositoryConfiguration();
             services.AddCustomServiceConfiguration();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +53,7 @@ namespace GestionVentas.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

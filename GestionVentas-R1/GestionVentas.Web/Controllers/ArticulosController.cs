@@ -90,7 +90,7 @@ namespace GestionVentas.Web.Controllers
             if (p_query != null)
             {
                 List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
-                .Where(x => x.Codigo.Contains(p_query) || 
+                .Where(x => x.CodigoBarras.Contains(p_query) || 
                     x.Descripcion.Contains(p_query) ||
                     x.ModeloDescripcion.Contains(p_query) || 
                     x.ColorDescripcion.Contains(p_query))
