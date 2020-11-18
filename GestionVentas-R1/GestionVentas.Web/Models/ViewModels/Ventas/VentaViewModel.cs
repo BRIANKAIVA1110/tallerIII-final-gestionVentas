@@ -8,6 +8,20 @@ namespace GestionVentas.Web.Models.ViewModels.Ventas
 {
     public class VentaViewModel
     {
-        public List<ArticuloDTO> CarroArticulos { get; set; }
+        public CarroCompras CarroArticulos { get; set; }
+    }
+
+
+    public class CarroCompras {
+
+        public List<ArticuloDTO> Articulos { get; set; }
+
+        public decimal Cantidad { get; set; }
+
+
+        public CarroCompras() {
+            this.Articulos = new List<ArticuloDTO>();
+        }
+
     }
 }

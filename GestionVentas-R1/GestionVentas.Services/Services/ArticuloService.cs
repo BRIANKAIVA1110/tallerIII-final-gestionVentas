@@ -32,7 +32,7 @@ namespace GestionVentas.Services.Services
             eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
             eArticulo.Marca = this._marcaRepository.GetById(p_articuloDTO.MarcaId);
             eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
-            eArticulo.Codigo = p_articuloDTO.Codigo;
+            eArticulo.CodigoBarras = p_articuloDTO.CodigoBarras;
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
 
             int result = this._articuloRepository.Add(eArticulo);
@@ -56,7 +56,7 @@ namespace GestionVentas.Services.Services
             if (eArticulo.Categoria.Id != p_articuloDTO.CategoriaId)
                 eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
 
-            eArticulo.Codigo = p_articuloDTO.Codigo;
+            eArticulo.CodigoBarras = p_articuloDTO.CodigoBarras;
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
 
             int result = this._articuloRepository.Update(eArticulo);
@@ -80,7 +80,7 @@ namespace GestionVentas.Services.Services
                 .Select(x => new ArticuloDTO
                 {
                     Id = x.Id,
-                    Codigo = x.Codigo,
+                    CodigoBarras = x.CodigoBarras,
                     Descripcion = x.Descripcion,
                     ModeloId = x.Modelo.Id,
                     ColorId = x.Color.Id,
@@ -100,7 +100,7 @@ namespace GestionVentas.Services.Services
             ArticuloDTO articuloDto = new ArticuloDTO
             {
                 Id = eArticulo.Id,
-                Codigo = eArticulo.Codigo,
+                CodigoBarras = eArticulo.CodigoBarras,
                 Descripcion = eArticulo.Descripcion,
                 ModeloId = eArticulo.Modelo.Id,
                 ColorId  = eArticulo.Color.Id,
