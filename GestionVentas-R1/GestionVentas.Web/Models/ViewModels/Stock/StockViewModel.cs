@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using GestionVentas.Web.Attributes;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,8 @@ namespace GestionVentas.Web.Models.ViewModels.Stock
         public int Id { get; set; }
         public int ArticuloId { get; set; }
         public string ArticuloDescripcion { get; set; }
-        public decimal Cantidad { get; set; }
+        [IsDecimal]
+        public string Cantidad { get; set; }
 
         public List<SelectListItem> Articulos { get; set; }
     }

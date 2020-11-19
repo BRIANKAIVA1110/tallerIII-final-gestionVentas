@@ -15,12 +15,13 @@ namespace GestionVentas.Web.Controllers
     {
 
         private readonly IArticuloService _articuloService;
+        private readonly IVentaService _ventaService;
         private readonly IMapper _mapper;
-        public VentasController( IMapper mapper, IArticuloService articuloService) {
+        public VentasController( IMapper mapper, IArticuloService articuloService, IVentaService ventaService) {
 
             this._mapper = mapper;
             this._articuloService = articuloService;
-        
+            this._ventaService = ventaService;
         }
 
 
@@ -34,41 +35,49 @@ namespace GestionVentas.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult AgregarArticulo([FromQuery]int IdArticulo)
+        public IActionResult AgregarArticulo([FromQuery]string p_codigoBarras, [FromQuery] int cantidadUnideades)
         {
 
             //que pasaa si no existe, gestionar esto con un condicional.
-            ArticuloDTO articuloDTO = this._articuloService.getArticulo(IdArticulo);
+            ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
 
 
             if (SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart") == null)
             {
                 CarroCompras cart = new CarroCompras();
-                cart.Articulos.Add(new ArticuloDTO
+                cart.Articulos.Add(new CarroItemDTO
                 { 
                    Id = articuloDTO.Id,
                    Descripcion = articuloDTO.Descripcion,
                    CategoriaDescripcion = articuloDTO.CategoriaDescripcion,
                    ModeloDescripcion = articuloDTO.ModeloDescripcion,
-                   ColorDescripcion = articuloDTO.ColorDescripcion
-                   
+                   ColorDescripcion = articuloDTO.ColorDescripcion,
+                   Precio = articuloDTO.Precio,
+                   CantidadUnidades = cantidadUnideades,
+                   Total = cantidadUnideades * articuloDTO.Precio,
+
                 });
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
             else
             {
                 CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
-                int index = isExist(IdArticulo);
+                int index = isExist(articuloDTO.Id);
                 if (index != -1)
                 {
                     //cart.CarroArticulos[index].ca++;
                 }
                 else
                 {
-                    cart.Articulos.Add(new ArticuloDTO { 
+                    cart.Articulos.Add(new CarroItemDTO
+                    { 
                         Id = articuloDTO.Id, 
                         Descripcion = articuloDTO.Descripcion,
-                        ModeloDescripcion = articuloDTO.ModeloDescripcion
+                        ModeloDescripcion = articuloDTO.ModeloDescripcion,
+                        ColorDescripcion = articuloDTO.ColorDescripcion,
+                        Precio = articuloDTO.Precio,
+                        CantidadUnidades = cantidadUnideades,
+                        Total = cantidadUnideades * articuloDTO.Precio,
                     });
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -76,14 +85,35 @@ namespace GestionVentas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("EliminarArticulo/{IdArticulo}")]
-        public IActionResult Remove(int IdArticulo)
+        public IActionResult EliminarArticulo([FromQuery]int IdArticulo)
         {
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
             int index = isExist(IdArticulo);
             cart.Articulos.RemoveAt(index);
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult venderArticulos() {
+
+            CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            if (cart.Articulos.Count != 0)
+            {
+                var result = this._ventaService.GenerarVenta(cart.Articulos);
+                if (result > 0)
+                {
+                    cart = null;
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                    return RedirectToAction("index");
+                }
+                else {
+                    return RedirectToAction("index");
+                }
+            }
+            else {
+                return RedirectToAction("index");
+            }
+            
         }
 
         private int isExist(int IdArticulo)

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-10-2020 a las 21:54:44
+-- Tiempo de generación: 19-11-2020 a las 04:53:07
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.11
 
@@ -29,21 +29,25 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `articulos` (
   `Id` int(11) NOT NULL,
-  `Codigo` varchar(4) NOT NULL,
   `Descripcion` varchar(250) NOT NULL,
   `modeloId` int(11) NOT NULL,
   `colorId` int(11) NOT NULL,
   `MarcaId` int(11) NOT NULL,
-  `CategoriaId` int(11) NOT NULL
+  `CategoriaId` int(11) NOT NULL,
+  `CodigoBarras` varchar(250) NOT NULL DEFAULT '',
+  `precio` decimal(9,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `articulos`
 --
 
-INSERT INTO `articulos` (`Id`, `Codigo`, `Descripcion`, `modeloId`, `colorId`, `MarcaId`, `CategoriaId`) VALUES
-(1, '0001', 'pepe', 2, 1, 6, 4),
-(2, '0002', 'pepe2', 3, 3, 6, 4);
+INSERT INTO `articulos` (`Id`, `Descripcion`, `modeloId`, `colorId`, `MarcaId`, `CategoriaId`, `CodigoBarras`, `precio`) VALUES
+(1, 'pepe', 2, 1, 6, 4, '0002000100060004', '191.00'),
+(2, 'pepe2', 3, 3, 6, 4, '0003000200060004', '190.00'),
+(3, 'Naranja', 2, 1, 1, 1, '0002000100010001', '1.00'),
+(4, 'sadasdsad', 2, 6, 6, 4, '0002000500060004', '1.12'),
+(6, 'daslkdasldk', 2, 11, 6, 4, '0002000900060004', '1.22');
 
 -- --------------------------------------------------------
 
@@ -93,6 +97,29 @@ INSERT INTO `colores` (`Id`, `Codigo`, `Descripcion`) VALUES
 (8, '0007', 'Gris'),
 (9, '0008', 'Celeste'),
 (11, '0009', 'Naranja');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalleventas`
+--
+
+CREATE TABLE `detalleventas` (
+  `Id` int(11) NOT NULL,
+  `ArticuloId` int(11) DEFAULT NULL,
+  `CantidadUnidades` decimal(9,2) DEFAULT NULL,
+  `VentaId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detalleventas`
+--
+
+INSERT INTO `detalleventas` (`Id`, `ArticuloId`, `CantidadUnidades`, `VentaId`) VALUES
+(1, 3, '1.00', 1),
+(2, 2, '3.00', 1),
+(3, 1, '2.00', 2),
+(4, 3, '3.00', 2);
 
 -- --------------------------------------------------------
 
@@ -159,7 +186,28 @@ CREATE TABLE `stockarticulos` (
 --
 
 INSERT INTO `stockarticulos` (`Id`, `ArticuloId`, `Cantidad`) VALUES
-(1, 1, '20.00');
+(1, 1, '2000.00'),
+(3, 2, '40.00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas`
+--
+
+CREATE TABLE `ventas` (
+  `Id` int(11) NOT NULL,
+  `TotalFinal` decimal(9,2) DEFAULT NULL,
+  `FechaVenta` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`Id`, `TotalFinal`, `FechaVenta`) VALUES
+(1, '571.00', '2020-11-19'),
+(2, '385.00', '2020-11-19');
 
 --
 -- Índices para tablas volcadas
@@ -170,7 +218,7 @@ INSERT INTO `stockarticulos` (`Id`, `ArticuloId`, `Cantidad`) VALUES
 --
 ALTER TABLE `articulos`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `unique_articulos_codigo` (`Codigo`),
+  ADD UNIQUE KEY `unique_codigobarra` (`CodigoBarras`),
   ADD KEY `fk_articulos_colores_colorId` (`modeloId`),
   ADD KEY `fk_articulos_modelos_modeloId` (`colorId`),
   ADD KEY `fk_articulos_marcas` (`MarcaId`),
@@ -188,6 +236,14 @@ ALTER TABLE `categorias`
 ALTER TABLE `colores`
   ADD PRIMARY KEY (`Id`),
   ADD UNIQUE KEY `unique_colores_codigo` (`Codigo`);
+
+--
+-- Indices de la tabla `detalleventas`
+--
+ALTER TABLE `detalleventas`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `fk_detallesVentas_ventas` (`VentaId`),
+  ADD KEY `fk_detallesVentas_articulos` (`ArticuloId`);
 
 --
 -- Indices de la tabla `marcas`
@@ -210,6 +266,12 @@ ALTER TABLE `stockarticulos`
   ADD KEY `fk_stockArticulo_articulos` (`ArticuloId`);
 
 --
+-- Indices de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -217,7 +279,7 @@ ALTER TABLE `stockarticulos`
 -- AUTO_INCREMENT de la tabla `articulos`
 --
 ALTER TABLE `articulos`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -230,6 +292,12 @@ ALTER TABLE `categorias`
 --
 ALTER TABLE `colores`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `detalleventas`
+--
+ALTER TABLE `detalleventas`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
@@ -247,6 +315,12 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de la tabla `stockarticulos`
 --
 ALTER TABLE `stockarticulos`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `ventas`
+--
+ALTER TABLE `ventas`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -261,6 +335,13 @@ ALTER TABLE `articulos`
   ADD CONSTRAINT `fk_articulos_colores_colorId` FOREIGN KEY (`modeloId`) REFERENCES `modelos` (`Id`),
   ADD CONSTRAINT `fk_articulos_marcas` FOREIGN KEY (`MarcaId`) REFERENCES `marcas` (`Id`),
   ADD CONSTRAINT `fk_articulos_modelos_modeloId` FOREIGN KEY (`colorId`) REFERENCES `colores` (`Id`);
+
+--
+-- Filtros para la tabla `detalleventas`
+--
+ALTER TABLE `detalleventas`
+  ADD CONSTRAINT `fk_detallesVentas_articulos` FOREIGN KEY (`ArticuloId`) REFERENCES `articulos` (`Id`),
+  ADD CONSTRAINT `fk_detallesVentas_ventas` FOREIGN KEY (`VentaId`) REFERENCES `ventas` (`Id`);
 
 --
 -- Filtros para la tabla `stockarticulos`

@@ -14,14 +14,16 @@ namespace GestionVentas.Web.Models.ViewModels.Ventas
 
     public class CarroCompras {
 
-        public List<ArticuloDTO> Articulos { get; set; }
+        public List<CarroItemDTO> Articulos { get; set; }
 
         public decimal Cantidad { get; set; }
 
 
         public CarroCompras() {
-            this.Articulos = new List<ArticuloDTO>();
+            this.Articulos = new List<CarroItemDTO>();
         }
 
     }
+
+   
 }

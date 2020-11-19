@@ -17,5 +17,7 @@ namespace GestionVentas.Infraestructura
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Assembly.Load("GestionVenta.Infraestructura.DataAccess.Mapping")
 
         }
+
+        
     }
 }
