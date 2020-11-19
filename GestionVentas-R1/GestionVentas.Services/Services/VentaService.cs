@@ -2,6 +2,7 @@
 using GestionVentas.Domain.Entities;
 using GestionVentas.Infraestructura.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,11 @@ namespace GestionVentas.Services.Services
             this._ventaRepository = ventaRepository;
         }
         
-        public int AgregarVenta(VentaDTO p_colorDTO)
+        public int GenerarVenta(List<CarroItemDTO> itemsVenta)
         {
-            throw new NotImplementedException();
+            this._ventaRepository.ProcesarVenta(itemsVenta);
+
+            return 1;
         }
 
         public int EliminarVenta(int p_id)

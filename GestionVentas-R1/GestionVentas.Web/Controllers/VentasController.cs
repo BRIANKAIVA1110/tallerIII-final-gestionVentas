@@ -15,12 +15,13 @@ namespace GestionVentas.Web.Controllers
     {
 
         private readonly IArticuloService _articuloService;
+        private readonly IVentaService _ventaService;
         private readonly IMapper _mapper;
-        public VentasController( IMapper mapper, IArticuloService articuloService) {
+        public VentasController( IMapper mapper, IArticuloService articuloService, IVentaService ventaService) {
 
             this._mapper = mapper;
             this._articuloService = articuloService;
-        
+            this._ventaService = ventaService;
         }
 
 
@@ -44,7 +45,7 @@ namespace GestionVentas.Web.Controllers
             if (SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart") == null)
             {
                 CarroCompras cart = new CarroCompras();
-                cart.Articulos.Add(new CarroItem
+                cart.Articulos.Add(new CarroItemDTO
                 { 
                    Id = articuloDTO.Id,
                    Descripcion = articuloDTO.Descripcion,
@@ -68,7 +69,8 @@ namespace GestionVentas.Web.Controllers
                 }
                 else
                 {
-                    cart.Articulos.Add(new CarroItem { 
+                    cart.Articulos.Add(new CarroItemDTO
+                    { 
                         Id = articuloDTO.Id, 
                         Descripcion = articuloDTO.Descripcion,
                         ModeloDescripcion = articuloDTO.ModeloDescripcion,
@@ -93,7 +95,25 @@ namespace GestionVentas.Web.Controllers
         }
 
         public IActionResult venderArticulos() {
-            return View();
+
+            CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            if (cart.Articulos.Count != 0)
+            {
+                var result = this._ventaService.GenerarVenta(cart.Articulos);
+                if (result > 0)
+                {
+                    cart = null;
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                    return RedirectToAction("index");
+                }
+                else {
+                    return RedirectToAction("index");
+                }
+            }
+            else {
+                return RedirectToAction("index");
+            }
+            
         }
 
         private int isExist(int IdArticulo)
