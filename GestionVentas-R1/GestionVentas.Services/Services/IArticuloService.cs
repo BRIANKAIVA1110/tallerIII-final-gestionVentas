@@ -12,5 +12,6 @@ namespace GestionVentas.Services.Services
         int EliminarArticulo(int p_id);
         ArticuloDTO getArticulo(int p_id);
         IEnumerable<ArticuloDTO> getArticulos();
+        ArticuloDTO ObtenerArticuloPorCodigoBarras(string p_codigoBarras);
     }
 }

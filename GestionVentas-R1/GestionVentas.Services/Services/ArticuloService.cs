@@ -8,7 +8,7 @@ using System.Text;
 
 namespace GestionVentas.Services.Services
 {
-    public class ArticuloService: IArticuloService
+    public class ArticuloService : IArticuloService
     {
         private readonly IArticuloRepository _articuloRepository;
         private readonly IModeloRepository _modeloRepository;
@@ -19,7 +19,7 @@ namespace GestionVentas.Services.Services
         {
             this._articuloRepository = articuloRepository;
             this._modeloRepository = modeloRepository;
-            this._colorRepository= colorRepository;
+            this._colorRepository = colorRepository;
             this._marcaRepository = marcaRepository;
             this._categoriaRepository = categoriaRepository;
         }
@@ -32,13 +32,45 @@ namespace GestionVentas.Services.Services
             eArticulo.Modelo = this._modeloRepository.GetById(p_articuloDTO.ModeloId);
             eArticulo.Marca = this._marcaRepository.GetById(p_articuloDTO.MarcaId);
             eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
-            eArticulo.CodigoBarras = p_articuloDTO.CodigoBarras;
+            eArticulo.CodigoBarras = GenerarCodigoBarras(eArticulo.Modelo.Codigo, eArticulo.Color.Codigo, eArticulo.Marca.Codigo, eArticulo.Categoria.Codigo);
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
-
+            eArticulo.Precio = p_articuloDTO.Precio;
             int result = this._articuloRepository.Add(eArticulo);
             return result;
         }
 
+        private string GenerarCodigoBarras(string codModelo, string codColor, string codMarca, string codCategoria) {
+            if (codModelo != null && codColor != null && codMarca != null && codCategoria != null)
+                return $"{codModelo}{codColor}{codMarca}{codCategoria}";
+            else
+                throw new Exception("ocurrio un error al generar el codigo de barras para el articulo");
+        }
+
+
+        public ArticuloDTO ObtenerArticuloPorCodigoBarras(string p_codigoBarras) {
+
+            Articulo eArticulo = this._articuloRepository.Get().Where(x => x.CodigoBarras == p_codigoBarras).FirstOrDefault();
+
+            ArticuloDTO articuloDto = new ArticuloDTO
+            {
+                Id = eArticulo.Id,
+                CodigoBarras = eArticulo.CodigoBarras,
+                Descripcion = eArticulo.Descripcion,
+                ModeloId = eArticulo.Modelo.Id,
+                ColorId = eArticulo.Color.Id,
+                MarcaId = eArticulo.Marca.Id,
+                CategoriaId = eArticulo.Categoria.Id,
+                ModeloDescripcion = $"{eArticulo.Modelo.Codigo} - {eArticulo.Modelo.Descripcion}",
+                ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}",
+                MarcaDescripcion = $"{eArticulo.Marca.Codigo} - {eArticulo.Marca.Descripcion}",
+                CategoriaDescripcion = $"{eArticulo.Categoria.Codigo} - {eArticulo.Categoria.Descripcion}",
+                Precio = eArticulo.Precio,
+
+            };
+
+            return articuloDto;
+
+        }
         public int ModificarArticulo(ArticuloDTO p_articuloDTO)
         {
 
@@ -56,8 +88,9 @@ namespace GestionVentas.Services.Services
             if (eArticulo.Categoria.Id != p_articuloDTO.CategoriaId)
                 eArticulo.Categoria = this._categoriaRepository.GetById(p_articuloDTO.CategoriaId);
 
-            eArticulo.CodigoBarras = p_articuloDTO.CodigoBarras;
+            eArticulo.CodigoBarras = GenerarCodigoBarras(eArticulo.Modelo.Codigo, eArticulo.Color.Codigo, eArticulo.Marca.Codigo, eArticulo.Categoria.Codigo);
             eArticulo.Descripcion = p_articuloDTO.Descripcion;
+            eArticulo.Precio = p_articuloDTO.Precio;
 
             int result = this._articuloRepository.Update(eArticulo);
 
@@ -88,6 +121,7 @@ namespace GestionVentas.Services.Services
                     ColorDescripcion = x.Color!=null? $"{x.Color.Codigo} - {x.Color.Descripcion}" : "",
                     MarcaDescripcion = x.Marca!=null? $"{x.Marca.Codigo} - {x.Marca.Descripcion}": "",
                     CategoriaDescripcion = x.Categoria!=null? $"{x.Categoria.Codigo} - {x.Categoria.Descripcion}": "",
+                    Precio = x.Precio,
                 });
 
             return listArticuloDTO;
@@ -109,7 +143,8 @@ namespace GestionVentas.Services.Services
                 ModeloDescripcion = $"{eArticulo.Modelo.Codigo} - {eArticulo.Modelo.Descripcion}",
                 ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}",
                 MarcaDescripcion = $"{eArticulo.Marca.Codigo} - {eArticulo.Marca.Descripcion}",
-                CategoriaDescripcion = $"{eArticulo.Categoria.Codigo} - {eArticulo.Categoria.Descripcion}"
+                CategoriaDescripcion = $"{eArticulo.Categoria.Codigo} - {eArticulo.Categoria.Descripcion}",
+                Precio = eArticulo.Precio,
 
             };
 

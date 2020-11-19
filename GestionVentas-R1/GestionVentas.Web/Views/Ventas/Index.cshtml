@@ -12,14 +12,19 @@
         <div class="row">
             @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
             @*<input class="form-control form-control-sm " placeholder="Buscar..." name="p_query">*@
-            <div class="col-5 form-group  ">
+            <div class="col-8 form-group  ">
                 <div class="col-sm-10 d-flex">
                     <i class="fa fa-barcode m-2" aria-hidden="true"></i>
-                    <input class="form-control  m-1" placeholder="Codigo barras" name="IdArticulo" />
+                    <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" />
+                    <spam class="text-danger"></spam>
+                </div>
+                <div class="col-sm-10 d-flex">
+                    <i class="fa fa-barcode m-2" aria-hidden="true"></i>
+                    <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1"/>
                     <spam class="text-danger"></spam>
                 </div>
             </div>
-            <div class="col-5 form-group  ">
+            <div class="col-4 form-group  ">
                 <button class="btn btn-info " type="submit"><i class="fa fa-search" aria-hidden="true"></i>AGREGAR</button>
             </div>
             
@@ -31,6 +36,7 @@
         <table class="table table-light table-hover  border-dark table-sm small">
             <thead class=" thead-dark">
                 <tr>
+                    <th>Acciones</th>
                     <th>#</th>
                     <th>Articulo</th>
                     <th>Precio</th>
@@ -41,30 +47,41 @@
             <tbody class="table-bordered">
                 @{
                     int contRegistros = 1;
+                    decimal totalFinal = 0;
                     if(Model.CarroArticulos!=null)
                         foreach (var item in Model.CarroArticulos.Articulos)
                         {
                             <tr>
-                                @*<th>
-                                    <a asp-action="eliminar" asp-controller="articulos" asp-route-id=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
-                                    <a asp-action="form" asp-controller="articulos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
-                                    <a asp-action="detalle" asp-controller="articulos" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
-                                </th>*@
+                                <th>
+                                    <a asp-action="EliminarArticulo" asp-controller="ventas" asp-route-IdArticulo=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                </th>
                                 <th>@contRegistros</th>
                                 <td>@item.ModeloDescripcion</td>
-                                <td>@item.Descripcion</td>
-                                <td><input type="text" value="1" /></td>
-                                <td>@item.ColorDescripcion</td>
+                                <td>@item.Precio</td>
+                                <td>@item.CantidadUnidades</td>
+                                <td>@item.Total</td>
                                 
                             </tr>
 
-
+                            totalFinal = totalFinal + item.Total;
                             contRegistros = contRegistros + 1;
                         }
+
+                        <tr>
+                            <th class="bg-dark text-white"></th>
+                            <th class="bg-dark text-white"></th>
+                            <th class="bg-dark text-white"></th>
+                            <th class="bg-dark text-white"></th>
+                            <th class="bg-dark text-white"></th>
+                            <th class="bg-dark text-white">TOTAL FINAL: $@totalFinal</th>
+                        </tr>
 
                 }
             </tbody>
         </table>
+        <div class="d-flex justify-content-end">
+            <a asp-action="venderArticulos" asp-controller="ventas"  class="bg-success p-1 border text-decoration-none text-white"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</a>
+        </div>
     </div>
     
 </div>
