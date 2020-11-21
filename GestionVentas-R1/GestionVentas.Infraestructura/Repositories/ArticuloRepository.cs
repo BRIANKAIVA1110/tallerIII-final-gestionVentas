@@ -15,24 +15,42 @@ namespace GestionVentas.Infraestructura.Repositories
 
         public override Articulo GetById(int p_id)
         {
-            Articulo result = this._entity.Include(x => x.Modelo)
-                .Include(x => x.Color)
-                .Include(x => x.Marca)
-                .Include(x => x.Categoria)
-                .FirstOrDefault(x=> x.Id == p_id);
+            try
+            {
+                Articulo result = this._entity.Include(x => x.Modelo)
+               .Include(x => x.Color)
+               .Include(x => x.Marca)
+               .Include(x => x.Categoria)
+               .FirstOrDefault(x => x.Id == p_id);
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+           
         }
 
         public override IEnumerable<Articulo> Get()
         {
-            IEnumerable<Articulo> listResult = this._entity.Include(x => x.Modelo)
+            try
+            {
+                IEnumerable<Articulo> listResult = this._entity.Include(x => x.Modelo)
                 .Include(x => x.Color)
                 .Include(x => x.Marca)
                 .Include(x => x.Categoria)
                 .ToList();
 
-            return listResult;
+                return listResult;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
     }
 }

@@ -10,12 +10,18 @@
 }
 
 @{
-/*
-    POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
-*/
+    /*
+        POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
+    */
 }
 <h1>Colores > @accionCrud.ToLower()</h1>
 
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Exeption: </strong> @ViewBag.error
+    </div>
+}
 <div class="container">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="colores" id="formHTTP">
@@ -30,7 +36,7 @@
                 <input asp-for="Codigo" class="form-control" placeholder="Codigo" />
                 <span asp-validation-for="Codigo" class="text-danger"></span>
             </div>
-            
+
         </div>
         <div class="form-group row">
             <label asp-for="Descripcion" class="col-form-label-sm col-sm-2"></label>
@@ -39,11 +45,11 @@
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
         </div>
-            <div class="form-group d-flex justify-content-end">
-                <input type="submit" value="Agregar" class="btn btn-success form-control-sm m-1">
-                <a asp-action="index" asp-controller="colores" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
-            </div>
-</form>
+        <div class="form-group d-flex justify-content-end">
+            <input type="submit" value="Agregar" class="btn btn-success form-control-sm m-1">
+            <a asp-action="index" asp-controller="colores" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
+        </div>
+    </form>
     @*<button asp-action="index" asp-controller="modelos" class=" form-control btn-primary">Cancelar</button>*@
 
 

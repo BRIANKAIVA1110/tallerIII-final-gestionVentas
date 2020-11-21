@@ -17,42 +17,68 @@ namespace GestionVentas.Services.Services
 
         public int AgregarColor(ColorDTO p_colorDTO)
         {
-
-            int result = this._colorRepository.Add(new Color
+            try
             {
-                Codigo = p_colorDTO.Codigo,
-                Descripcion = p_colorDTO.Descripcion
-            });
+                int result = this._colorRepository.Add(new Color
+                {
+                    Codigo = p_colorDTO.Codigo,
+                    Descripcion = p_colorDTO.Descripcion
+                });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+           
         }
 
         public int ModificarColor(ColorDTO p_colorDTO)
         {
+            try
+            {
+                Color objEntity = this._colorRepository.GetById(p_colorDTO.Id);
 
-            Color objEntity = this._colorRepository.GetById(p_colorDTO.Id);
+                objEntity.Codigo = p_colorDTO.Codigo;
+                objEntity.Descripcion = p_colorDTO.Descripcion;
 
-            objEntity.Codigo = p_colorDTO.Codigo;
-            objEntity.Descripcion = p_colorDTO.Descripcion;
+                int result = this._colorRepository.Update(objEntity);
 
-            int result = this._colorRepository.Update(objEntity);
+                return result;
+            }
+            catch (Exception ex)
+            {
 
-            return result;
+                throw ex;
+            }
+          
         }
 
         public int EliminarColor(int p_id)
         {
+            try
+            {
+                Color objEntity = this._colorRepository.GetById(p_id);
 
-            Color objEntity = this._colorRepository.GetById(p_id);
+                int result = this._colorRepository.Delete(objEntity);
 
-            int result = this._colorRepository.Delete(objEntity);
+                return result;
+            }
+            catch (Exception ex)
+            {
 
-            return result;
+                throw ex;
+            }
+           
         }
 
         public IEnumerable<ColorDTO> getColores()
         {
-            var result = this._colorRepository.Get()
+            try
+            {
+                var result = this._colorRepository.Get()
                 .Select(x => new ColorDTO
                 {
                     Id = x.Id,
@@ -60,20 +86,44 @@ namespace GestionVentas.Services.Services
                     Descripcion = x.Descripcion
                 });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
 
         public ColorDTO getColor(int p_id)
         {
-            Color objEntity = this._colorRepository.GetById(p_id);
-            ColorDTO objResult = new ColorDTO
+            try
             {
-                Id = objEntity.Id,
-                Codigo = objEntity.Codigo,
-                Descripcion = objEntity.Descripcion
-            };
+                Color objEntity = this._colorRepository.GetById(p_id);
+                if (objEntity != null)
+                {
+                    ColorDTO objResult = new ColorDTO
+                    {
+                        Id = objEntity.Id,
+                        Codigo = objEntity.Codigo,
+                        Descripcion = objEntity.Descripcion
+                    };
 
-            return objResult;
+                    return objResult;
+                }
+                else {
+
+                    throw new Exception("No se encontro el registro");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
     }
 }
