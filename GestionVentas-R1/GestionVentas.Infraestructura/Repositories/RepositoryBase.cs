@@ -27,38 +27,76 @@ namespace GestionVentas.Infraestructura.Repositories
 
         public virtual int Add(T p_entity)
         {
-            this._entity.Add(p_entity);
-            var result = this._applicationContext.SaveChanges();
+            try
+            {
+                this._entity.Add(p_entity);
+                var result = this._applicationContext.SaveChanges();
 
-            return result;
+                return result;
+            }
+            catch (DbUpdateException ex) {
+                throw ex;
+            }
+           
         }
         public virtual int Update(T p_entity)
         {
-            this._entity.Update(p_entity);
-            var result = this._applicationContext.SaveChanges();
+            try
+            {
+                this._entity.Update(p_entity);
+                var result = this._applicationContext.SaveChanges();
 
-            return result;
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
         }
         public virtual int Delete(T p_entity)
         {
-            this._entity.Remove(p_entity);
-            var result = this._applicationContext.SaveChanges();
+            try
+            {
+                this._entity.Remove(p_entity);
+                var result = this._applicationContext.SaveChanges();
 
-            return result;
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
         }
         public virtual IEnumerable<T> Get()
         {
+            try
+            {
+                IEnumerable<T> result = this._entity.ToList();
 
-            IEnumerable<T> result = this._entity.ToList();
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
 
-            return result;
         }
 
         public virtual T GetById(int p_id)
         {
-            T result = this._entity.FirstOrDefault(x => x.Id == p_id);
+            try
+            {
+                T result = this._entity.FirstOrDefault(x => x.Id == p_id);
 
-            return result;
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
         }
 
        

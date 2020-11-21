@@ -23,91 +23,150 @@ namespace GestionVentas.Web.Controllers
 
         public IActionResult Index()
         {
-
-            List<ColorViewModel> colorViewModels= this._colorService.getColores()
+            try
+            {
+                List<ColorViewModel> colorViewModels = this._colorService.getColores()
                 .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                return View(colorViewModels);
+            }
+            catch (Exception ex)
+            {
 
-            return View(colorViewModels);
+                ViewBag.error = ex.InnerException.Message;
+                return View();
+            }
+            
 
         }
 
         [HttpPost]
         public IActionResult Agregar(ColorViewModel p_colorVM)
         {
-            if (!ModelState.IsValid)
-                return View("error");
-            else
+            try
             {
-                ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
-                int result = this._colorService.AgregarColor(colorDTO);
-                if (result > 0)
-                    return RedirectToAction("index");
+                if (!ModelState.IsValid)
+                    throw new Exception("Error al validad datos.");
                 else
-                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+                {
+                    ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
+                    int result = this._colorService.AgregarColor(colorDTO);
+
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<ColorViewModel> colorViewModels = this._colorService.getColores()
+                    .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                    return View("index", colorViewModels);
+
+                }
             }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.AGREGAR;
+                return View("form", p_colorVM);
+            }
+           
         }
 
 
         public IActionResult Modificar(ColorViewModel p_colorVM)
         {
-            if (!ModelState.IsValid)
-                return View("error");
-            else
+            try
             {
-                ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
-                int result = this._colorService.ModificarColor(colorDTO);
-
-                if (result > 0)
-                    return RedirectToAction("index");
+                if (!ModelState.IsValid)
+                    throw new Exception("Error al validad datos.");
                 else
-                    return View("form");
+                {
+                    ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
+                    int result = this._colorService.ModificarColor(colorDTO);
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<ColorViewModel> colorViewModels = this._colorService.getColores()
+                    .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                    return View("index", colorViewModels);
+                }
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.MODIFICAR;
+                return View("form", p_colorVM);
+            }
+            
         }
 
         public IActionResult Detalle(int Id)
         {
-            ColorDTO colorDTO = this._colorService.getColor((int)Id);
-            if (colorDTO != null)
+            try
             {
+                ColorDTO colorDTO = this._colorService.getColor((int)Id);
+      
                 ColorViewModel colorViewModel = this._mapper.Map<ColorDTO, ColorViewModel>(colorDTO);
                 return View(colorViewModel);
+                
             }
-            else
+            catch (Exception ex)
             {
+                ViewBag.error = ex.Message;
                 return View("index"); //deberia mostrar un msg de notificacion
             }
+            
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
             //ver diferencias: contains vs like method
-            if (p_query != null)
+            try
             {
-                List<ColorViewModel> listColorViewModel = this._colorService.getColores()
-                .Where(x => x.Codigo.Contains(p_query) ||
-                    x.Descripcion.Contains(p_query))
-                .Select(x => this._mapper.Map<ColorViewModel>(x))
-                .ToList();
+                if (p_query != null)
+                {
+                    List<ColorViewModel> listColorViewModel = this._colorService.getColores()
+                    .Where(x => x.Codigo.Contains(p_query) ||
+                        x.Descripcion.Contains(p_query))
+                    .Select(x => this._mapper.Map<ColorViewModel>(x))
+                    .ToList();
 
-                return View("index", listColorViewModel);
+                    if (!listColorViewModel.Any())
+                        ViewBag.info = "No se encontraron registros";
+                    return View("index", listColorViewModel);
+                }
+                else
+                {
+                    List<ColorViewModel> listColorViewModel = this._colorService.getColores()
+                    .Select(x => this._mapper.Map<ColorViewModel>(x))
+                    .ToList();
+                    return View("index", listColorViewModel);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                List<ColorViewModel> listColorViewModel = this._colorService.getColores()
-                .Select(x => this._mapper.Map<ColorViewModel>(x))
-                .ToList();
-                return View("index", listColorViewModel);
+                ViewBag.error = ex.Message;
+                return View("index");
             }
+            
             
             
         }
 
         public IActionResult Eliminar(int Id)
         {
+            try
+            {
+                var result = this._colorService.EliminarColor(Id);
 
-            var result = this._colorService.EliminarColor(Id);
+                ViewBag.result = "Accion realizada con exito.";
 
-            return RedirectToAction("index");
+                List<ColorViewModel> colorViewModels = this._colorService.getColores()
+                .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                return View("index", colorViewModels);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return RedirectToAction("index");
+            }
+            
         }
 
         /// <summary>
@@ -120,22 +179,32 @@ namespace GestionVentas.Web.Controllers
         [Route("Color/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
         {
-            if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+            try
             {
-
-                ViewData["accionCRUD"] = accionCRUD;
-                if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
-                    return View();
-
-                if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    ColorDTO colorDTO = this._colorService.getColor((int)Id);
-                    ColorViewModel colorViewModel = this._mapper.Map<ColorViewModel>(colorDTO);
-                    return View(colorViewModel);
+
+                    ViewData["accionCRUD"] = accionCRUD;
+                    if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
+                        return View();
+
+                    if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                    {
+                        ColorDTO colorDTO = this._colorService.getColor((int)Id);
+                        ColorViewModel colorViewModel = this._mapper.Map<ColorViewModel>(colorDTO);
+                        return View(colorViewModel);
+                    }
+
                 }
 
+                throw new Exception("Ocurrio un error inesperado.");
             }
-            return RedirectToAction("ERROR", "HOME");
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View();
+            }
+            
         }
     }
 }
