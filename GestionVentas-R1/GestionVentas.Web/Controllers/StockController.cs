@@ -126,6 +126,11 @@ namespace GestionVentas.Web.Controllers
                 ViewData["accionCRUD"] = accionCRUD;
 
                 StockViewModel stockArticuloViewModel = new StockViewModel();
+
+
+                /*
+                 * obtiene los articulos sin asignacion de stock
+                 */
                 List<SelectListItem> articulosSinAsignacionStock = this._stockArticuloService.ObtenerArticulosSinAsignacionStock()
                     .Select(x => new SelectListItem
                     {

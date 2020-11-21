@@ -19,6 +19,7 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
         public int CategoriaId { get; set; }
         public string CategoriaDescripcion { get; set; }
         public decimal Precio { get; set; }
+        public decimal CantidadStock { get; set; }
 
 
     }

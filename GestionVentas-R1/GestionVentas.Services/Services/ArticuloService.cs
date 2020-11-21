@@ -1,5 +1,6 @@
 ﻿using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.DataAccess.Queries;
 using GestionVentas.Infraestructura.Repositories;
 using System;
 using System.Collections.Generic;
@@ -49,24 +50,8 @@ namespace GestionVentas.Services.Services
 
         public ArticuloDTO ObtenerArticuloPorCodigoBarras(string p_codigoBarras) {
 
-            Articulo eArticulo = this._articuloRepository.Get().Where(x => x.CodigoBarras == p_codigoBarras).FirstOrDefault();
-
-            ArticuloDTO articuloDto = new ArticuloDTO
-            {
-                Id = eArticulo.Id,
-                CodigoBarras = eArticulo.CodigoBarras,
-                Descripcion = eArticulo.Descripcion,
-                ModeloId = eArticulo.Modelo.Id,
-                ColorId = eArticulo.Color.Id,
-                MarcaId = eArticulo.Marca.Id,
-                CategoriaId = eArticulo.Categoria.Id,
-                ModeloDescripcion = $"{eArticulo.Modelo.Codigo} - {eArticulo.Modelo.Descripcion}",
-                ColorDescripcion = $"{eArticulo.Color.Codigo} - {eArticulo.Color.Descripcion}",
-                MarcaDescripcion = $"{eArticulo.Marca.Codigo} - {eArticulo.Marca.Descripcion}",
-                CategoriaDescripcion = $"{eArticulo.Categoria.Codigo} - {eArticulo.Categoria.Descripcion}",
-                Precio = eArticulo.Precio,
-
-            };
+            ArticuloDTO articuloDto = this._articuloRepository.ExecuteQuery(new ObtenerArticulosConAsignacionStock(p_codigoBarras));
+            
 
             return articuloDto;
 
