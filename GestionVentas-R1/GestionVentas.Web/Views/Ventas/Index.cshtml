@@ -6,32 +6,81 @@
 }
 
 <h3>Venta</h3>
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Exeption: </strong> @ViewBag.error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (ViewBag.info != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.info
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <div class="container border">
-    
+
     <form class="form-inline" asp-action="AgregarArticulo" asp-controller="Ventas" method="get">
-        <div class="row">
-            @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
-            @*<input class="form-control form-control-sm " placeholder="Buscar..." name="p_query">*@
-            <div class="col-8 form-group  ">
-                <div class="col-sm-10 d-flex">
-                    <i class="fa fa-barcode m-2" aria-hidden="true"></i>
-                    <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" />
-                    <spam class="text-danger"></spam>
-                </div>
-                <div class="col-sm-10 d-flex">
-                    <i class="fa fa-barcode m-2" aria-hidden="true"></i>
-                    <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1"/>
-                    <spam class="text-danger"></spam>
-                </div>
-            </div>
-            <div class="col-4 form-group  ">
-                <button class="btn btn-info " type="submit"><i class="fa fa-search" aria-hidden="true"></i>AGREGAR</button>
-            </div>
-            
+
+        @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
+        @*<input class="form-control form-control-sm " placeholder="Buscar..." name="p_query">*@
+
+        <div class="form-group">
+            <label class="col-form-label-sm col-sm-2 m-1">Codigo Barras:</label>
+            <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" />
+            <i class="fa fa-barcode m-2" aria-hidden="true"></i>
+            <spam class="text-danger"></spam>
         </div>
+
+        <div class="form-group">
+            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
+            <label class="col-form-label-sm col-sm-2 m-1">Cantidad:</label>
+            <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1" />
+            <spam class="text-danger"></spam>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary " type="submit"><i class="fa fa-cart-plus" aria-hidden="true"> </i> AGREGAR</button>
+        </div>
+
+
     </form>
-        
-   
+    <!--<form method="post" asp-action=@*accionCrud*@ asp-controller="marcas" id="formHTTP">
+        <div class="form-group">
+            <label asp-for="Id" style="display:none;"></label>
+            <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />-->
+    @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
+    <!--</div>
+        <div class="form-group row">
+            <label asp-for="Codigo" class="col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Codigo" class="form-control form-control-sm" placeholder="Codigo" />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label asp-for="Descripcion" class="col-form-label-sm col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="Descripcion" class="form-control form-control-sm" placeholder="Descripcion" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="form-group d-flex justify-content-end">
+            <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0  m-1">
+            <a asp-action="index" asp-controller="marcas" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
+        </div>
+    </form>-->
+
     <div class="container-fluid overflow-auto " style="max-height:300px;">
         <table class="table table-light table-hover  border-dark table-sm small">
             <thead class=" thead-dark">
@@ -48,7 +97,7 @@
                 @{
                     int contRegistros = 1;
                     decimal totalFinal = 0;
-                    if(Model.CarroArticulos!=null)
+                    if (Model.CarroArticulos != null)
                         foreach (var item in Model.CarroArticulos.Articulos)
                         {
                             <tr>
@@ -60,29 +109,29 @@
                                 <td>@item.Precio</td>
                                 <td>@item.CantidadUnidades</td>
                                 <td>@item.Total</td>
-                                
+
                             </tr>
 
                             totalFinal = totalFinal + item.Total;
                             contRegistros = contRegistros + 1;
                         }
 
-                        <tr>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white">TOTAL FINAL: $@totalFinal</th>
-                        </tr>
+                    <tr>
+                        <th class="bg-dark text-white"></th>
+                        <th class="bg-dark text-white"></th>
+                        <th class="bg-dark text-white"></th>
+                        <th class="bg-dark text-white"></th>
+                        <th class="bg-dark text-white"></th>
+                        <th class="bg-dark text-white">TOTAL FINAL: $@totalFinal</th>
+                    </tr>
 
                 }
             </tbody>
         </table>
         <div class="d-flex justify-content-end">
-            <a asp-action="venderArticulos" asp-controller="ventas"  class="bg-success p-1 border text-decoration-none text-white"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</a>
+            <a asp-action="venderArticulos" asp-controller="ventas" class="bg-success p-1 border text-decoration-none text-white"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</a>
         </div>
     </div>
-    
+
 </div>
 

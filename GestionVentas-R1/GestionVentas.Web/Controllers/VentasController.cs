@@ -37,52 +37,75 @@ namespace GestionVentas.Web.Controllers
         [HttpGet]
         public IActionResult AgregarArticulo([FromQuery]string p_codigoBarras, [FromQuery] int cantidadUnideades)
         {
-
-            //que pasaa si no existe, gestionar esto con un condicional.
-            ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
-
-
-            if (SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart") == null)
+            try
             {
-                CarroCompras cart = new CarroCompras();
-                cart.Articulos.Add(new CarroItemDTO
-                { 
-                   Id = articuloDTO.Id,
-                   Descripcion = articuloDTO.Descripcion,
-                   CategoriaDescripcion = articuloDTO.CategoriaDescripcion,
-                   ModeloDescripcion = articuloDTO.ModeloDescripcion,
-                   ColorDescripcion = articuloDTO.ColorDescripcion,
-                   Precio = articuloDTO.Precio,
-                   CantidadUnidades = cantidadUnideades,
-                   Total = cantidadUnideades * articuloDTO.Precio,
+                //debe traer el registro de un articulo el cual tiene asignado stock, sino retorna null
+                ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
 
-                });
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-            }
-            else
-            {
-                CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
-                int index = isExist(articuloDTO.Id);
-                if (index != -1)
+                if (articuloDTO != null)
                 {
-                    //cart.CarroArticulos[index].ca++;
+                    if (SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart") == null)
+                    {
+                        CarroCompras cart = new CarroCompras();
+                        cart.Articulos.Add(new CarroItemDTO
+                        {
+                            Id = articuloDTO.Id,
+                            Descripcion = articuloDTO.Descripcion,
+                            CategoriaDescripcion = articuloDTO.CategoriaDescripcion,
+                            ModeloDescripcion = articuloDTO.ModeloDescripcion,
+                            ColorDescripcion = articuloDTO.ColorDescripcion,
+                            Precio = articuloDTO.Precio,
+                            CantidadUnidades = cantidadUnideades,
+                            Total = cantidadUnideades * articuloDTO.Precio,
+
+                        });
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                    }
+                    else
+                    {
+                        CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+                        int index = isExist(articuloDTO.Id);
+                        if (index != -1)
+                        {
+                            //cart.CarroArticulos[index].ca++;
+                        }
+                        else
+                        {
+                            cart.Articulos.Add(new CarroItemDTO
+                            {
+                                Id = articuloDTO.Id,
+                                Descripcion = articuloDTO.Descripcion,
+                                ModeloDescripcion = articuloDTO.ModeloDescripcion,
+                                ColorDescripcion = articuloDTO.ColorDescripcion,
+                                Precio = articuloDTO.Precio,
+                                CantidadUnidades = cantidadUnideades,
+                                Total = cantidadUnideades * articuloDTO.Precio,
+                            });
+                        }
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                    }
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    cart.Articulos.Add(new CarroItemDTO
-                    { 
-                        Id = articuloDTO.Id, 
-                        Descripcion = articuloDTO.Descripcion,
-                        ModeloDescripcion = articuloDTO.ModeloDescripcion,
-                        ColorDescripcion = articuloDTO.ColorDescripcion,
-                        Precio = articuloDTO.Precio,
-                        CantidadUnidades = cantidadUnideades,
-                        Total = cantidadUnideades * articuloDTO.Precio,
-                    });
+                    ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
+                    var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+                    VentaViewModel ventaViewModel = new VentaViewModel();
+                    ventaViewModel.CarroArticulos = cart;
+
+                    return View("index",ventaViewModel);
                 }
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                
+                
             }
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.Message;
+                return RedirectToAction("Index");
+            }
+            
+            
         }
 
         public IActionResult EliminarArticulo([FromQuery]int IdArticulo)

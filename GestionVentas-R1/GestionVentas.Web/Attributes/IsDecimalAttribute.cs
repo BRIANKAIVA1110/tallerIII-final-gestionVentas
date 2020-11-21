@@ -17,7 +17,7 @@ namespace GestionVentas.Web.Attributes
             //este metodo se ejecuta cuando se hace post... no lo aplica en el cliente.. ver como hacerlo
             public override bool IsValid(object value)
             {
-                Regex regx = new Regex(@"\A[0-9]{1,9}[,][0-9]{2}\Z");
+                Regex regx = new Regex(@"\A([0-9]{1,9}\Z)|\A([0-9]{1,9}[,][0-9]{2})\Z");
                 bool result = regx.IsMatch((string)value);
 
                 return result;
