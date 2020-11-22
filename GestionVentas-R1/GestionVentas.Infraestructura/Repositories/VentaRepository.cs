@@ -6,6 +6,7 @@ using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Domain.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionVentas.Infraestructura.Repositories
 {
@@ -43,9 +44,18 @@ namespace GestionVentas.Infraestructura.Repositories
 
                     });
 
+                    
 
                     this._applicationContext.Set<DetalleVenta>().AddRange(objDetalleVenta);
                     var result2 = this._applicationContext.SaveChanges();
+
+                    foreach (var item in p_carroItems)
+                    {
+                        StockArticulo StockArticulo = this._applicationContext.Set<StockArticulo>().Include(x => x.Articulo).Where(x => x.Articulo.Id == item.Id).FirstOrDefault();
+                        StockArticulo.Cantidad -= (decimal)item.CantidadUnidades;
+                        this._applicationContext.Set<StockArticulo>().Update(StockArticulo);
+                        int result = this._applicationContext.SaveChanges();
+                    }
 
                     transaction.Commit();
                 }

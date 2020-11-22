@@ -39,10 +39,11 @@ namespace GestionVentas.Web.Controllers
         {
             try
             {
-                bool hayStoy;
+                bool hayStoy=false;
                 //debe traer el registro de un articulo el cual tiene asignado stock, sino retorna null
                 ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
-                hayStoy = (articuloDTO.CantidadStock - cantidadUnideades) >= 0;
+                if(articuloDTO!=null)
+                    hayStoy = (articuloDTO.CantidadStock - cantidadUnideades) >= 0;
 
                 if (articuloDTO != null && hayStoy)
                 {
@@ -92,9 +93,10 @@ namespace GestionVentas.Web.Controllers
                 {
                     if (!hayStoy)
                     {
-                        ViewBag.info = $"El articulo ingresado no tiene stock disponible para la cantidad ingresada. su stock disponible es de: {articuloDTO.CantidadStock}.";
+                        ViewBag.info = $"El articulo ingresado no tiene stock disponible para la cantidad ingresada. su stock disponible es de: {articuloDTO?.CantidadStock}.";
                     }
-                    else {
+                    if (!(articuloDTO!=null))
+                    {
                         ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
                     }
                     
