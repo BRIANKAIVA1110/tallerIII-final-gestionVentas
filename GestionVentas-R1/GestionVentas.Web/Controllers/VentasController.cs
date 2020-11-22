@@ -39,10 +39,12 @@ namespace GestionVentas.Web.Controllers
         {
             try
             {
+                bool hayStoy;
                 //debe traer el registro de un articulo el cual tiene asignado stock, sino retorna null
                 ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
+                hayStoy = (articuloDTO.CantidadStock - cantidadUnideades) >= 0;
 
-                if (articuloDTO != null)
+                if (articuloDTO != null && hayStoy)
                 {
                     if (SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart") == null)
                     {
@@ -88,7 +90,14 @@ namespace GestionVentas.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
+                    if (!hayStoy)
+                    {
+                        ViewBag.info = $"El articulo ingresado no tiene stock disponible para la cantidad ingresada. su stock disponible es de: {articuloDTO.CantidadStock}.";
+                    }
+                    else {
+                        ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
+                    }
+                    
                     var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
                     VentaViewModel ventaViewModel = new VentaViewModel();
                     ventaViewModel.CarroArticulos = cart;
