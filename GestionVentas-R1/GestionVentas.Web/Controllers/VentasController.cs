@@ -25,27 +25,32 @@ namespace GestionVentas.Web.Controllers
         }
 
 
-        public IActionResult Index() {
-            
+        public IActionResult Index(){
+
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
             int ventaId = (int)SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "ventaId");
-            
+
             VentaViewModel ventaViewModel = new VentaViewModel();
             ventaViewModel.CarroArticulos = cart;
             ventaViewModel.VentaId = ventaId;
+            ventaViewModel.InformacionCliente = clienteInfo;
 
             /*
              * si hubo una venta "reinicia" ventaId a "0", el cual indica que habra una nueva venta y no
              * imprimira un comprobante de venta
              * */
-            if (ventaId != 0)
+            if (ventaId != 0) {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", 0);
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "clienteInformacion", null);
+            }
+                
 
             return View(ventaViewModel);
         }
 
         [HttpGet]
-        public IActionResult AgregarArticulo([FromQuery] string p_codigoBarras, [FromQuery] int cantidadUnideades)
+        public IActionResult AgregarArticulo([FromQuery] string p_codigoBarras, [FromQuery] int cantidadUnideades, VentaViewModel ventaViewModel)
         {
             try
             {
@@ -73,6 +78,7 @@ namespace GestionVentas.Web.Controllers
 
                         });
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                        AlmacenarInformacionClienteSession(ventaViewModel);
                     }
                     else
                     {
@@ -96,6 +102,9 @@ namespace GestionVentas.Web.Controllers
                             });
                         }
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                        AlmacenarInformacionClienteSession(ventaViewModel);
+
+
                     }
                     return RedirectToAction("Index");
                 }
@@ -111,10 +120,11 @@ namespace GestionVentas.Web.Controllers
                     }
 
                     var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
-                    VentaViewModel ventaViewModel = new VentaViewModel();
-                    ventaViewModel.CarroArticulos = cart;
+                    var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
 
-                    return View("index", ventaViewModel);
+                    
+
+                    return RedirectToAction("index");
                 }
 
 
@@ -129,6 +139,18 @@ namespace GestionVentas.Web.Controllers
 
         }
 
+        private void AlmacenarInformacionClienteSession(VentaViewModel ventaViewModel) {
+            ClienteDTO objClienteDTO = new ClienteDTO();
+            ClienteDTO clienteSession = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
+
+            objClienteDTO.NombreCompleto = ventaViewModel.InformacionCliente?.NombreCompleto ?? clienteSession?.NombreCompleto;
+            objClienteDTO.Domicilio = ventaViewModel.InformacionCliente?.Domicilio ?? clienteSession?.Domicilio;
+            objClienteDTO.Localidad = ventaViewModel.InformacionCliente?.Localidad ?? clienteSession?.Localidad;
+            objClienteDTO.CodiPostal = ventaViewModel.InformacionCliente?.CodiPostal ?? clienteSession?.CodiPostal;
+            objClienteDTO.Telefono = ventaViewModel.InformacionCliente?.Telefono ?? clienteSession?.Telefono;
+
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "clienteInformacion", objClienteDTO);
+        }
         public IActionResult EliminarArticulo([FromQuery] int IdArticulo)
         {
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
@@ -138,25 +160,42 @@ namespace GestionVentas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public  IActionResult VenderArticulos() {
-
-            CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
-            if (cart.Articulos.Count != 0)
+        public  IActionResult VenderArticulos(VentaViewModel p_ventaViewModel) {
+            try
             {
-                int ventaId = this._ventaService.GenerarVenta(cart.Articulos);
-                if (ventaId != 0)
+                CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+                if (cart == null)
                 {
-                    cart = null;
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", ventaId.ToString());
-                    ViewBag.result = "Se realizo la venta con exito.";
+                    throw new Exception("Debe agregar articulos al carro de compras para generar una venta");
                 }
-                return RedirectToAction("index");
+                if (cart.Articulos?.Count != 0)
+                {
+                    int ventaId = this._ventaService.GenerarVenta(cart.Articulos, p_ventaViewModel.InformacionCliente);
+                    if (ventaId != 0)
+                    {
+                        cart = null;
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", null);//TODO: verificar si esto esta de mas
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "clienteInformacion", null);//TODO: verificar si esto esta de mas
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", ventaId.ToString());
+                        ViewBag.result = "Se realizo la venta con exito.";
+                    }
+                    return RedirectToAction("index");
+                }
+                else
+                {
+                    ViewBag.info = "Debe agregar articulos al carro de compras.";
+                    return RedirectToAction("index");
+                }
             }
-            else {
-                ViewBag.info = "Debe agregar articulos al carro de compras.";
-                return RedirectToAction("index");
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+
+                AlmacenarInformacionClienteSession(p_ventaViewModel);
+                 
+                return View("index", p_ventaViewModel);
             }
+            
         }
 
         

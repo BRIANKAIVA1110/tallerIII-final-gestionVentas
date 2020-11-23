@@ -10,5 +10,8 @@ namespace GestionVentas.Domain.Entities
         public int Id { get; set; }
         public decimal TotalFinal { get; set; }
         public DateTime FechaVenta { get; set; }
+        public string ClienteInformacion { get; set; }
+
+        
     }
 }

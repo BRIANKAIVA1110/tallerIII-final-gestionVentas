@@ -18,7 +18,7 @@ namespace GestionVentas.Infraestructura.Repositories
             this._applicationContext = applicationContext;
         }
 
-        public int ProcesarVenta (List<CarroItemDTO> p_carroItems) {
+        public int ProcesarVenta (List<CarroItemDTO> p_carroItems, ClienteDTO p_cliente) {
             //este no es la mejor manera de hacerlo, deberia ir en la capa de servicio la logica...
             //ver como implementar patron unitOfWork.
             int result = 0;
@@ -31,7 +31,8 @@ namespace GestionVentas.Infraestructura.Repositories
                     Venta objVenta = new Venta
                     {
                         FechaVenta = DateTime.Now,
-                        TotalFinal = p_carroItems.Sum(x => x.Precio * x.CantidadUnidades)
+                        TotalFinal = p_carroItems.Sum(x => x.Precio * x.CantidadUnidades),
+                        ClienteInformacion = $"{p_cliente.NombreCompleto};{p_cliente.Domicilio};{p_cliente.Localidad};{p_cliente.CodiPostal};{p_cliente.Telefono}",
                     };
 
                     //se hace registro de la venta
@@ -63,6 +64,8 @@ namespace GestionVentas.Infraestructura.Repositories
                     }
 
                     transaction.Commit();
+
+                    return objVenta.Id;
                 }
                 catch (Exception ex)
                 {
@@ -73,9 +76,23 @@ namespace GestionVentas.Infraestructura.Repositories
             }
                
 
-            return result;
+            return 0;
         }
 
+        public override Venta GetById(int p_id)
+        {
 
+            Venta entity = this._entity.FirstOrDefault(x=> x.Id == p_id);
+
+            return entity;
+        }
+
+        public IEnumerable<DetalleVenta> ObtenerDetalleVenta(int p_ventaId) {
+
+            IEnumerable<DetalleVenta> detallesVenta = this._applicationContext.Set<DetalleVenta>().Include(x => x.Articulo).Include(x => x.Venta)
+                .Where(x => x.Venta.Id == p_ventaId).ToList();
+
+            return detallesVenta;
+        }
     }
 }

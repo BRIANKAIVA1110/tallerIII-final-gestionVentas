@@ -9,6 +9,7 @@ namespace GestionVentas.Infraestructura.Repositories
 {
     public interface IVentaRepository: IRepositoryBase<Venta>
     {
-        int ProcesarVenta(List<CarroItemDTO> p_carroItems);
+        int ProcesarVenta(List<CarroItemDTO> p_carroItems, ClienteDTO p_cliente);
+        IEnumerable<DetalleVenta> ObtenerDetalleVenta(int p_ventaId);
     }
 }

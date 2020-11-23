@@ -15,6 +15,8 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.TotalFinal).IsRequired();
             builder.Property(x => x.FechaVenta).IsRequired();
+            builder.Property(x => x.ClienteInformacion).IsRequired();
+            
         }
     }
 }
