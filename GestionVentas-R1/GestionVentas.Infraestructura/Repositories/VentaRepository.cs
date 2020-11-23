@@ -21,6 +21,7 @@ namespace GestionVentas.Infraestructura.Repositories
         public int ProcesarVenta (List<CarroItemDTO> p_carroItems) {
             //este no es la mejor manera de hacerlo, deberia ir en la capa de servicio la logica...
             //ver como implementar patron unitOfWork.
+            int result = 0;
             using (IDbContextTransaction transaction = this._applicationContext.Database.BeginTransaction()) {
                 try
                 {
@@ -32,10 +33,13 @@ namespace GestionVentas.Infraestructura.Repositories
                         FechaVenta = DateTime.Now,
                         TotalFinal = p_carroItems.Sum(x => x.Precio * x.CantidadUnidades)
                     };
+
+                    //se hace registro de la venta
                     this._applicationContext.Set<Venta>().Add(objVenta);
-                    var result1 = this._applicationContext.SaveChanges();
+                    result = this._applicationContext.SaveChanges();
 
 
+                    //se generan objetos del tipo detalleVenta
                     IEnumerable<DetalleVenta> objDetalleVenta = p_carroItems.Select(x => new DetalleVenta
                     {
                         Articulo = this._applicationContext.Set<Articulo>().Where(z => z.Id == x.Id).FirstOrDefault(),
@@ -45,16 +49,17 @@ namespace GestionVentas.Infraestructura.Repositories
                     });
 
                     
-
+                    //se hace registro de los detalles de la venta
                     this._applicationContext.Set<DetalleVenta>().AddRange(objDetalleVenta);
-                    var result2 = this._applicationContext.SaveChanges();
+                    result = this._applicationContext.SaveChanges();
 
+                    //se descuenta el estock de los articulos del carro de compras
                     foreach (var item in p_carroItems)
                     {
                         StockArticulo StockArticulo = this._applicationContext.Set<StockArticulo>().Include(x => x.Articulo).Where(x => x.Articulo.Id == item.Id).FirstOrDefault();
                         StockArticulo.Cantidad -= (decimal)item.CantidadUnidades;
                         this._applicationContext.Set<StockArticulo>().Update(StockArticulo);
-                        int result = this._applicationContext.SaveChanges();
+                        result = this._applicationContext.SaveChanges();
                     }
 
                     transaction.Commit();
@@ -68,7 +73,7 @@ namespace GestionVentas.Infraestructura.Repositories
             }
                
 
-            return 1;
+            return result;
         }
 
 
