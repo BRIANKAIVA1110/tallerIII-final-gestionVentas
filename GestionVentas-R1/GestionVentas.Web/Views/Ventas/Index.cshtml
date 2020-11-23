@@ -25,6 +25,15 @@
         </button>
     </div>
 }
+@if (ViewBag.result != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.result
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <div class="container border">
 
     <form class="form-inline" asp-action="AgregarArticulo" asp-controller="Ventas" method="get">
@@ -52,34 +61,7 @@
 
 
     </form>
-    <!--<form method="post" asp-action=@*accionCrud*@ asp-controller="marcas" id="formHTTP">
-        <div class="form-group">
-            <label asp-for="Id" style="display:none;"></label>
-            <input asp-for="Id" class="form-control" placeholder="" style="display:none;" />-->
-    @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
-    <!--</div>
-        <div class="form-group row">
-            <label asp-for="Codigo" class="col-form-label-sm col-sm-2"></label>
-            <div class="col-sm-10">
-                <input asp-for="Codigo" class="form-control form-control-sm" placeholder="Codigo" />
-                <span asp-validation-for="Codigo" class="text-danger"></span>
-            </div>
 
-        </div>
-        <div class="form-group row">
-            <label asp-for="Descripcion" class="col-form-label-sm col-sm-2"></label>
-            <div class="col-sm-10">
-                <input asp-for="Descripcion" class="form-control form-control-sm" placeholder="Descripcion" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-
-        </div>
-
-        <div class="form-group d-flex justify-content-end">
-            <input type="submit" value="Agregar" class="btn btn-success form-control-sm border-0  m-1">
-            <a asp-action="index" asp-controller="marcas" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
-        </div>
-    </form>-->
 
     <div class="container-fluid overflow-auto " style="max-height:300px;">
         <table class="table table-light table-hover  border-dark table-sm small">
@@ -130,8 +112,25 @@
         </table>
         <div class="d-flex justify-content-end">
             <a asp-action="venderArticulos" asp-controller="ventas" class="bg-success p-1 border text-decoration-none text-white"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</a>
+            <a id="btnDownload" asp-action="DescargarComprobanteVenta" asp-controller="ventas" asp-route-ventaId=@Model.VentaId style="display:none;" class="bg-success p-1 border text-decoration-none text-white"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</a>
         </div>
     </div>
 
 </div>
+
+@if (Model.VentaId!=0)
+{
+    @section scripts{
+
+        <script>
+            //
+            /*se ejecuta evento click de btnDownload, este ejecuta el action "DescargarComprobanteVenta"
+             * de controller "ventas"
+             * 
+             */
+            document.getElementById("btnDownload").click();
+        </script>
+
+    }
+}
 

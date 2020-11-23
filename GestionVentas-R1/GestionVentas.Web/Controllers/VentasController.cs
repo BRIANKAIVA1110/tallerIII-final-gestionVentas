@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Controllers
 {
-    public class VentasController: Controller
+    public class VentasController : Controller
     {
 
         private readonly IArticuloService _articuloService;
         private readonly IVentaService _ventaService;
         private readonly IMapper _mapper;
-        public VentasController( IMapper mapper, IArticuloService articuloService, IVentaService ventaService) {
+        public VentasController(IMapper mapper, IArticuloService articuloService, IVentaService ventaService) {
 
             this._mapper = mapper;
             this._articuloService = articuloService;
@@ -26,23 +26,33 @@ namespace GestionVentas.Web.Controllers
 
 
         public IActionResult Index() {
-            var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            
+            CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            int ventaId = (int)SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "ventaId");
+            
             VentaViewModel ventaViewModel = new VentaViewModel();
             ventaViewModel.CarroArticulos = cart;
-            //ViewBag.cart = cart;
-            //ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            ventaViewModel.VentaId = ventaId;
+
+            /*
+             * si hubo una venta "reinicia" ventaId a "0", el cual indica que habra una nueva venta y no
+             * imprimira un comprobante de venta
+             * */
+            if (ventaId != 0)
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", 0);
+
             return View(ventaViewModel);
         }
 
         [HttpGet]
-        public IActionResult AgregarArticulo([FromQuery]string p_codigoBarras, [FromQuery] int cantidadUnideades)
+        public IActionResult AgregarArticulo([FromQuery] string p_codigoBarras, [FromQuery] int cantidadUnideades)
         {
             try
             {
-                bool hayStoy=false;
+                bool hayStoy = false;
                 //debe traer el registro de un articulo el cual tiene asignado stock, sino retorna null
                 ArticuloDTO articuloDTO = this._articuloService.ObtenerArticuloPorCodigoBarras(p_codigoBarras);
-                if(articuloDTO!=null)
+                if (articuloDTO != null)
                     hayStoy = (articuloDTO.CantidadStock - cantidadUnideades) >= 0;
 
                 if (articuloDTO != null && hayStoy)
@@ -95,19 +105,19 @@ namespace GestionVentas.Web.Controllers
                     {
                         ViewBag.info = $"El articulo ingresado no tiene stock disponible para la cantidad ingresada. su stock disponible es de: {articuloDTO?.CantidadStock}.";
                     }
-                    if (!(articuloDTO!=null))
+                    if (!(articuloDTO != null))
                     {
                         ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
                     }
-                    
+
                     var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
                     VentaViewModel ventaViewModel = new VentaViewModel();
                     ventaViewModel.CarroArticulos = cart;
 
-                    return View("index",ventaViewModel);
+                    return View("index", ventaViewModel);
                 }
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -115,11 +125,11 @@ namespace GestionVentas.Web.Controllers
                 ViewBag.error = ex.Message;
                 return RedirectToAction("Index");
             }
-            
-            
+
+
         }
 
-        public IActionResult EliminarArticulo([FromQuery]int IdArticulo)
+        public IActionResult EliminarArticulo([FromQuery] int IdArticulo)
         {
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
             int index = isExist(IdArticulo);
@@ -128,28 +138,35 @@ namespace GestionVentas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult venderArticulos() {
+        public  IActionResult VenderArticulos() {
 
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
             if (cart.Articulos.Count != 0)
             {
-                var result = this._ventaService.GenerarVenta(cart.Articulos);
-                if (result > 0)
+                int ventaId = this._ventaService.GenerarVenta(cart.Articulos);
+                if (ventaId != 0)
                 {
                     cart = null;
                     SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-                    return RedirectToAction("index");
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", ventaId.ToString());
+                    ViewBag.result = "Se realizo la venta con exito.";
                 }
-                else {
-                    return RedirectToAction("index");
-                }
-            }
-            else {
                 return RedirectToAction("index");
             }
-            
+            else {
+                ViewBag.info = "Debe agregar articulos al carro de compras.";
+                return RedirectToAction("index");
+            }
         }
 
+        
+        public IActionResult DescargarComprobanteVenta(int ventaId) {
+
+            byte[] result = this._ventaService.GenerarComprobante(ventaId);
+            FileContentResult file = new FileContentResult(result, "text/plain");
+            file.FileDownloadName = $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}-comprobanteDeVenta.txt";
+            return file;
+        }
         private int isExist(int IdArticulo)
         {
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");

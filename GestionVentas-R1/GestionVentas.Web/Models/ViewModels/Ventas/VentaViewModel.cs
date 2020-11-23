@@ -9,6 +9,7 @@ namespace GestionVentas.Web.Models.ViewModels.Ventas
     public class VentaViewModel
     {
         public CarroCompras CarroArticulos { get; set; }
+        public int VentaId { get; set; }
     }
 
 

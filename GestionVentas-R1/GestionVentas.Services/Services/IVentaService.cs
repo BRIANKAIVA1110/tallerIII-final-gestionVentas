@@ -8,6 +8,7 @@ namespace GestionVentas.Services.Services
     public interface IVentaService
     {
         int GenerarVenta(List<CarroItemDTO> itemsVenta);
+        byte[] GenerarComprobante(int p_ventaId);
         int ModificarVenta(VentaDTO p_colorDTO);
         int EliminarVenta(int p_id);
         VentaDTO getVenta(int p_id);
