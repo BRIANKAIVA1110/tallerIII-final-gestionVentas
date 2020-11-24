@@ -9,6 +9,36 @@
 }
 
 <h3>@tituloVista</h3>
+
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Exeption: </strong> @ViewBag.error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (ViewBag.result != null)
+{
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.result
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (ViewBag.info != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.info
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
 <div class="container-fluid">
     <div class="container-fluid">
         <div class="row justify-content-between">
@@ -18,7 +48,7 @@
                         <a class="nav-link  btn-success" asp-area="" asp-controller="Marcas" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR><i class="fa fa-plus" aria-hidden="true"></i>Agregar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn-dark" href="#"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
+                        <a class="nav-link btn-dark" asp-action="ExportarRegistros" asp-controller="marcas"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
                     </li>
                 </ul>
             </div>
@@ -52,7 +82,7 @@
                         {
                             <tr>
                                 <th>
-                                    <a asp-action="eliminar" asp-controller="Marcas" asp-route-id=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                    <a asp-action="eliminar" asp-controller="Marcas" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
                                     <a asp-action="form" asp-controller="Marcas" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
                                     <a asp-action="detalle" asp-controller="Marcas" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
                                 </th>
@@ -69,7 +99,42 @@
                 </tbody>
             </table>
         </div>
-       
+
     </div>
 </div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirmar Accion</h4>
+            </div>
+            <div class="modal-body">
+                Esta por eliminar un registro, ¿desea continuar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-dark" data-dismiss="modal">Close</button>
+                <a id="btnmodalEliminar" class="btn btn-danger text-decoration-none">Aceptar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+
+        let Id = 0;
+        let action = "eliminar";
+        let controller = "Marcas";
+        const generarRuta = (p_id, event) => {
+            //let pepe = document.getElementById('btnEliminar').dataset.id;
+            //console.log("valor Id delete"+event.target.dataset.id);
+            Id = p_id;
+            document.getElementById("btnmodalEliminar").setAttribute("href", `/${controller}/${action}/${Id}`);
+        };
+
+    </script>
+}
 

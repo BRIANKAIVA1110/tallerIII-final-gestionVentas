@@ -168,8 +168,10 @@ namespace GestionVentas.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.error = ex.Message;
-                return View("index");
+                ViewBag.error = $"{ex.Message} El registro no debe estar referenciado con otro para su eliminacion.";
+                List<ColorViewModel> colorViewModels = this._colorService.getColores()
+                .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                return View("index", colorViewModels);
             }
             
         }
@@ -210,6 +212,30 @@ namespace GestionVentas.Web.Controllers
                 return View("index");
             }
             
+        }
+
+
+        public IActionResult ExportarRegistros()
+        {
+            try
+            {
+                byte[] file = this._colorService.GenerarExportacionRegistros();
+
+                FileContentResult File = new FileContentResult(file, "application/CSV")
+                {
+                    FileDownloadName = $"colores_export_{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}.csv",
+                };
+                return File;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+
         }
     }
 }
