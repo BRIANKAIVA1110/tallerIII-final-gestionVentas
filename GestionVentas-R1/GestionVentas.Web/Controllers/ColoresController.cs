@@ -45,7 +45,7 @@ namespace GestionVentas.Web.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    throw new Exception("Error al validad datos.");
+                    throw new Exception("Error al validar datos.");
                 else
                 {
                     ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
@@ -74,7 +74,7 @@ namespace GestionVentas.Web.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    throw new Exception("Error al validad datos.");
+                    throw new Exception("Error al validar datos.");
                 else
                 {
                     ColorDTO colorDTO = this._mapper.Map<ColorDTO>(p_colorVM);
@@ -101,10 +101,15 @@ namespace GestionVentas.Web.Controllers
             try
             {
                 ColorDTO colorDTO = this._colorService.getColor((int)Id);
-      
-                ColorViewModel colorViewModel = this._mapper.Map<ColorDTO, ColorViewModel>(colorDTO);
-                return View(colorViewModel);
-                
+                if (colorDTO != null)
+                {
+                    ColorViewModel colorViewModel = this._mapper.Map<ColorDTO, ColorViewModel>(colorDTO);
+                    return View(colorViewModel);
+                }
+                else {
+                    ViewBag.error = "Ocurrio un erro al intentar obtener el registro solicitado.";
+                    return View("index"); //deberia mostrar un msg de notificacion
+                }
             }
             catch (Exception ex)
             {
@@ -164,7 +169,7 @@ namespace GestionVentas.Web.Controllers
             catch (Exception ex)
             {
                 ViewBag.error = ex.Message;
-                return RedirectToAction("index");
+                return View("index");
             }
             
         }
@@ -202,7 +207,7 @@ namespace GestionVentas.Web.Controllers
             catch (Exception ex)
             {
                 ViewBag.error = ex.Message;
-                return View();
+                return View("index");
             }
             
         }

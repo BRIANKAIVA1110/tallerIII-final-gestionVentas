@@ -10,6 +10,35 @@
 }
 
 <h3>@tituloVista</h3>
+
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Exeption: </strong> @ViewBag.error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (ViewBag.result != null)
+{
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.result
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (ViewBag.info != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.info
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <div class="container-fluid">
     <div class="container-fluid">
         <div class="row justify-content-between">
@@ -19,7 +48,7 @@
                         <a class="nav-link  btn-success" asp-area="" asp-controller="Modelos" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR><i class="fa fa-plus" aria-hidden="true"></i>Agregar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn-dark" href="#"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
+                        <a class="nav-link btn-dark" asp-action="ExportarRegistros" asp-controller="Modelos"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
                     </li>
                 </ul>
             </div>
@@ -27,7 +56,7 @@
                 <form class="form-inline" asp-action="buscar" asp-controller="modelos" method="get">
 
                     @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
-                    <input class="form-control form-control-sm" placeholder="Buscar..." name="p_query" >
+                    <input class="form-control form-control-sm" placeholder="Buscar..." name="p_query">
                     <button class="form-control form-control-sm btn btn-info " type="submit"><i class="fa fa-search" aria-hidden="true"></i>Buscar</button>
                 </form>
             </div>
@@ -48,37 +77,42 @@
                 </thead>
                 <tbody class="table-bordered">
                     @{
-                        int contRegistros = 1;
-                        foreach (var item in Model)
+
+                        if (Model != null)
                         {
-                            <tr>
-                                <th>
-                                    <a asp-action="eliminar" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
-                                    <a asp-action="form" asp-controller="modelos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
-                                    <a asp-action="detalle" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
-                                </th>
-                                <th>@contRegistros</th>
-                                <td>@item.Codigo</td>
-                                <td>@item.Descripcion</td>
-                            </tr>
+                            int contRegistros = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <th>
+                                        <a asp-action="eliminar" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                        <a asp-action="form" asp-controller="modelos" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
+                                        <a asp-action="detalle" asp-controller="modelos" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
+                                    </th>
+                                    <th>@contRegistros</th>
+                                    <td>@item.Codigo</td>
+                                    <td>@item.Descripcion</td>
+                                </tr>
 
 
-                            contRegistros = contRegistros + 1;
+                                contRegistros = contRegistros + 1;
+                            }
                         }
+
 
                     }
                 </tbody>
             </table>
         </div>
         @*<div class="container d-flex justify-content-center">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </div>*@
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </div>*@
     </div>
 </div>
 
