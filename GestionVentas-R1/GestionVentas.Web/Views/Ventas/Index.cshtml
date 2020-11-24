@@ -1,11 +1,15 @@
 ﻿
-@model GestionVentas.Web.Models.ViewModels.Ventas.VentaViewModel
 
 @{
-    ViewData["Title"] = "Index";
+
+    string tituloVista = "Ventas";
+    //string p_query = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h3>Venta</h3>
+<h3>@tituloVista</h3>
+
 @if (ViewBag.error != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -15,7 +19,16 @@
         </button>
     </div>
 }
+@if (ViewBag.result != null)
+{
 
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Resultado: </strong> @ViewBag.result
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 @if (ViewBag.info != null)
 {
     <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -25,203 +38,96 @@
         </button>
     </div>
 }
-@if (ViewBag.result != null)
-{
-    <div class="alert alert-info alert-dismissible fade show" role="alert">
-        <strong>Resultado: </strong> @ViewBag.result
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
-<div class="container border">
-
-    <form asp-action="AgregarArticulo" asp-controller="Ventas" method="get">
-
-        @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
-        @*<input class="form-control form-control-sm " placeholder="Buscar..." name="p_query">*@
-        <div class="form-inline">
-            <div class="form-group">
-                <label class="col-form-label-sm col-sm-2 m-1">Codigo Barras:</label>
-                <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" />
-                <i class="fa fa-barcode m-2" aria-hidden="true"></i>
-                <spam class="text-danger"></spam>
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+            <div class="col-lg-7 col-md-7 col-sm-12">
+                <ul class="nav ">
+                    <li class="nav-item ">
+                        <a class="nav-link  btn-success" asp-area="" asp-controller="colores" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR><i class="fa fa-plus" aria-hidden="true"></i>Agregar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-dark" href="#"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
+                    </li>
+                </ul>
             </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 d-lg-inline-flex d-md-inline-flex justify-content-end ">
+                <form class="form-inline" asp-action="buscar" asp-controller="colores" method="get">
 
-            <div class="form-group">
-                @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-                <label class="col-form-label-sm col-sm-2 m-1">Cantidad:</label>
-                <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1" />
-                <spam class="text-danger"></spam>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-primary " type="submit"><i class="fa fa-cart-plus" aria-hidden="true"> </i> AGREGAR</button>
+                    @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
+                    <input class="form-control form-control-sm" placeholder="Buscar..." name="p_query">
+                    <button class="form-control form-control-sm btn btn-info " type="submit"><i class="fa fa-search" aria-hidden="true"></i>Buscar</button>
+                </form>
             </div>
         </div>
-
-
-        <hr />
-        <input id="txtNombreCompleto" style="display:none;" asp-for="InformacionCliente.NombreCompleto" value="" />
-        <input id="txtDomicilio" style="display:none;" asp-for="InformacionCliente.Domicilio" value="" />
-        <input id="txtLocalidad" style="display:none;" asp-for="InformacionCliente.Localidad" value="" />
-        <input id="txtCodiPostal" style="display:none;" asp-for="InformacionCliente.CodiPostal" value="" />
-        <input id="txtTelefono" style="display:none;" asp-for="InformacionCliente.Telefono" value="" />
-
-
-
-
-    </form>
-
-    <hr />
-    <p>Articulo añadidos:</p>
-    <div class="container-fluid overflow-auto " style="max-height:300px;">
-        <table class="table table-light table-hover  border-dark table-sm small">
-            <thead class=" thead-dark">
-                <tr>
-                    <th>Acciones</th>
-                    <th>#</th>
-                    <th>Articulo</th>
-                    <th>Precio</th>
-                    <th>Unidades</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody class="table-bordered">
-                @{
-                    int contRegistros = 1;
-                    decimal totalFinal = 0;
-                    if(Model!=null)
-                        if (Model.CarroArticulos != null)
-                            foreach (var item in Model.CarroArticulos.Articulos)
+    </div>
+    <div class="container-fluid">
+        <h6 class="m-2">Registros: </h6>
+        <div class="container-fluid overflow-auto " style="max-height:300px;">
+            <table class="table table-light table-hover  border-dark table-sm small">
+                <thead class=" thead-dark">
+                    <tr>
+                        <th>Acciones</th>
+                        <th>#</th>
+                        <th>Codigo</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody class="table-bordered">
+                    @{
+                        if (Model != null)
+                        {
+                            int contRegistros = 1;
+                            foreach (var item in Model)
                             {
                                 <tr>
                                     <th>
-                                        <a asp-action="EliminarArticulo" asp-controller="ventas" asp-route-IdArticulo=@item.Id class="text-decoration-none text-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                        <a asp-action="eliminar" asp-controller="colores" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                        <a asp-action="form" asp-controller="colores" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
+                                        <a asp-action="detalle" asp-controller="colores" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
                                     </th>
                                     <th>@contRegistros</th>
-                                    <td>@item.ModeloDescripcion</td>
-                                    <td>@item.Precio</td>
-                                    <td>@item.CantidadUnidades</td>
-                                    <td>@item.Total</td>
-
+                                    <td>@item.Codigo</td>
+                                    <td>@item.Descripcion</td>
                                 </tr>
 
-                                totalFinal = totalFinal + item.Total;
+
                                 contRegistros = contRegistros + 1;
                             }
-
-                        <tr>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white"></th>
-                            <th class="bg-dark text-white">TOTAL FINAL: $@totalFinal</th>
-                        </tr>
-
+                        }
                     }
-            </tbody>
-        </table>
-
-
-
-
-        <a id="btnDownload" asp-action="DescargarComprobanteVenta" asp-controller="ventas" asp-route-ventaId=@Model?.VentaId style="display:none;"></a>
-
+                </tbody>
+            </table>
+        </div>
+        
     </div>
-    <hr />
-    @*despues de terminar de añadir articulos se debe completar como ultimo paso para conservar*@
-    <p>Informacion de Cliente:</p>
-    <form class="form-inline" asp-action="VenderArticulos" asp-controller="Ventas" method="post">
-        <div class="form-group">
-            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Nombre Completo:</label>
-            <input id="NombreCompleto" asp-for="InformacionCliente.NombreCompleto" class="form-control  m-1" placeholder="Nombre Completo" value=@Model.InformacionCliente?.NombreCompleto required />
-            <spam class="text-danger"></spam>
-        </div>
-        <div class="form-group">
-            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Domicilio:</label>
-            <input id="Domicilio" asp-for="InformacionCliente.Domicilio" class="form-control  m-1" placeholder="Domicilio" value=@Model.InformacionCliente?.Domicilio required />
-            <spam class="text-danger"></spam>
-        </div>
-        <div class="form-group">
-            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Domicilio:</label>
-            <input id="Localidad" asp-for="InformacionCliente.Localidad" class="form-control  m-1" placeholder="Localidad" value=@Model.InformacionCliente?.Localidad required />
-            <spam class="text-danger"></spam>
-        </div>
-        <div class="form-group">
-            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Codigo Postal:</label>
-            <input id="CodiPostal" asp-for="InformacionCliente.CodiPostal" class="form-control  m-1" placeholder="Codigo Postal" value=@Model.InformacionCliente?.CodiPostal required />
-            <spam class="text-danger"></spam>
-        </div>
-        <div class="form-group">
-            @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Telefono:</label>
-            <input id="Telefono" asp-for="InformacionCliente.Telefono" class="form-control  m-1" placeholder="Telefono" value=@Model.InformacionCliente?.Telefono required />
-            <spam class="text-danger"></spam>
-        </div>
-        <div>
-            <button class="btn btn-success " type="submit"><i class="fa fa-money fa-2x" aria-hidden="true"> </i> VENDER</button>
-        </div>
-    </form>
-
 </div>
 
-@if (Model.VentaId == 0)
-{
-    @section scripts{
-
-        <script>
-            let telefono = document.getElementById("Telefono");
-            let codiPostal = document.getElementById("CodiPostal");
-            let localidad = document.getElementById("Localidad");
-            let domicilio = document.getElementById("Domicilio");
-            let nombreCompleto = document.getElementById("NombreCompleto");
-            
-            telefono.addEventListener("keyup", () => {
-                document.getElementById("txtTelefono").value = telefono.value;
-                //console.log(telefono.value);
-            })
-            codiPostal.addEventListener("keyup", () => {
-                document.getElementById("txtCodiPostal").value = codiPostal.value;
-                //console.log(codiPostal.value);
-            })
-            localidad.addEventListener("keyup", () => {
-                document.getElementById("txtLocalidad").value = localidad.value;
-                //console.log(localidad.value);
-            })
-            domicilio.addEventListener("keyup", () => {
-                document.getElementById("txtDomicilio").value = domicilio.value;
-                //console.log(domicilio.value);
-            })
-            nombreCompleto.addEventListener("keyup", () => {
-                document.getElementById("txtNombreCompleto").value = nombreCompleto.value;
-                //console.log(nombreCompleto.value);
-            })
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirmar Accion</h4>
+            </div>
+            <div class="modal-body">
+                Esta por eliminar un registro, ¿desea continuar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-dark" data-dismiss="modal">Close</button>
+                <a id="btnmodalEliminar" class="btn btn-danger text-decoration-none">Aceptar</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-            
-        </script>
 
-    }
-}
-@if (Model.VentaId != 0)
-{
-    @section scripts{
 
-        <script>
-            //
-            /*se ejecuta evento click de btnDownload, este ejecuta el action "DescargarComprobanteVenta"
-             * de controller "ventas"
-             *
-             */
-            document.getElementById("btnDownload").click();
-        </script>
 
-    }
-}
+
+
+
+
+
+
 

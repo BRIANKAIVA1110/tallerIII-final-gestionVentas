@@ -23,9 +23,12 @@ namespace GestionVentas.Web.Controllers
             this._articuloService = articuloService;
             this._ventaService = ventaService;
         }
+        public IActionResult Index() {
 
-
-        public IActionResult Index(){
+            return View();
+        }
+        //TODO: modificar nombre "index" por punto de venta
+        public IActionResult PuntoVenta(){
 
             CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
             var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
@@ -106,7 +109,7 @@ namespace GestionVentas.Web.Controllers
 
 
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("PuntoVenta");
                 }
                 else
                 {
@@ -124,7 +127,7 @@ namespace GestionVentas.Web.Controllers
 
                     
 
-                    return RedirectToAction("index");
+                    return RedirectToAction("PuntoVenta");
                 }
 
 
@@ -133,7 +136,7 @@ namespace GestionVentas.Web.Controllers
             {
 
                 ViewBag.error = ex.Message;
-                return RedirectToAction("Index");
+                return RedirectToAction("PuntoVenta");
             }
 
 
@@ -157,7 +160,7 @@ namespace GestionVentas.Web.Controllers
             int index = isExist(IdArticulo);
             cart.Articulos.RemoveAt(index);
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-            return RedirectToAction("Index");
+            return RedirectToAction("PuntoVenta");
         }
 
         public  IActionResult VenderArticulos(VentaViewModel p_ventaViewModel) {
@@ -179,12 +182,12 @@ namespace GestionVentas.Web.Controllers
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", ventaId.ToString());
                         ViewBag.result = "Se realizo la venta con exito.";
                     }
-                    return RedirectToAction("index");
+                    return RedirectToAction("PuntoVenta");
                 }
                 else
                 {
                     ViewBag.info = "Debe agregar articulos al carro de compras.";
-                    return RedirectToAction("index");
+                    return RedirectToAction("PuntoVenta");
                 }
             }
             catch (Exception e)
@@ -193,7 +196,7 @@ namespace GestionVentas.Web.Controllers
 
                 AlmacenarInformacionClienteSession(p_ventaViewModel);
                  
-                return View("index", p_ventaViewModel);
+                return View("PuntoVenta", p_ventaViewModel);
             }
             
         }
