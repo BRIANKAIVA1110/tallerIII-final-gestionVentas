@@ -214,5 +214,29 @@ namespace GestionVentas.Web.Controllers
             }
             
         }
+
+
+        public IActionResult ExportarRegistros()
+        {
+            try
+            {
+                byte[] file = this._colorService.GenerarExportacionRegistros();
+
+                FileContentResult File = new FileContentResult(file, "application/CSV")
+                {
+                    FileDownloadName = $"colores_export_{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}.csv",
+                };
+                return File;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+
+        }
     }
 }

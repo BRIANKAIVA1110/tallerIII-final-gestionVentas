@@ -12,5 +12,6 @@ namespace GestionVentas.Services.Services
         int EliminarColor(int p_id);
         ColorDTO getColor(int p_id);
         IEnumerable<ColorDTO> getColores();
+        byte[] GenerarExportacionRegistros();
     }
 }
