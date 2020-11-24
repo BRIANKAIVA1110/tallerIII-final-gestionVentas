@@ -23,90 +23,158 @@ namespace GestionVentas.Web.Controllers
 
         public IActionResult Index()
         {
-
-            List<MarcaViewModel> marcaViewModel = this._marcaService.getMarcas()
+            try
+            {
+                List<MarcaViewModel> marcaViewModel = this._marcaService.getMarcas()
                 .Select(x => this._mapper.Map<MarcaViewModel>(x)).ToList();
 
-            return View(marcaViewModel);
+                return View(marcaViewModel);
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.InnerException.Message;
+                return View();
+            }
+            
 
         }
 
         [HttpPost]
         public IActionResult Agregar(MarcaViewModel p_marcaVM)
         {
-            if (!ModelState.IsValid)
-                return View("error");
-            else
+            try
             {
-                MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
-                int result = this._marcaService.AgregarMarca(marcaDTO);
-                if (result > 0)
-                    return RedirectToAction("index");
+                if (!ModelState.IsValid)
+                    throw new Exception("Error al validar datos.");
                 else
-                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+                {
+                    MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
+                    int result = this._marcaService.AgregarMarca(marcaDTO);
+
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<MarcaViewModel> marcaViewModel = this._marcaService.getMarcas()
+                     .Select(x => this._mapper.Map<MarcaViewModel>(x)).ToList();
+
+                    return View("index",marcaViewModel);
+                }
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.AGREGAR;
+                return View("form", p_marcaVM);
+            }
+            
         }
 
 
         public IActionResult Modificar(MarcaViewModel p_marcaVM)
         {
-            if (!ModelState.IsValid)
-                return View("error");
-            else
+            try
             {
-                MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
-                int result = this._marcaService.ModificarMarca(marcaDTO);
-
-                if (result > 0)
-                    return RedirectToAction("index");
+                if (!ModelState.IsValid)
+                    throw new Exception("Error al validar datos.");
                 else
-                    return View("form");
+                {
+                    MarcaDTO marcaDTO = this._mapper.Map<MarcaDTO>(p_marcaVM);
+                    int result = this._marcaService.ModificarMarca(marcaDTO);
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<MarcaViewModel> marcaViewModel = this._marcaService.getMarcas()
+                     .Select(x => this._mapper.Map<MarcaViewModel>(x)).ToList();
+                    return View("index",marcaViewModel);
+                }
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.MODIFICAR;
+                return View("form", p_marcaVM);
+            }
+            
         }
 
         public IActionResult Detalle(int Id)
         {
-            MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
-            if (marcaDTO != null)
+            try
             {
-                MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
-                return View(marcaViewModel);
+                MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
+                if (marcaDTO != null)
+                {
+                    MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
+                    return View(marcaViewModel);
+                }
+                else
+                {
+                    ViewBag.error = "Ocurrio un erro al intentar obtener el registro solicitado.";
+                    return View("index"); 
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return View("index"); //deberia mostrar un msg de notificacion
+                ViewBag.error = ex.Message;
+                return View("index"); 
             }
+
         }
 
         public IActionResult Buscar([FromQuery] string p_query)
         {
-            //ver diferencias: contains vs like method
-            if (p_query != null)
+            try
             {
-                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
-                .Where(x => x.Codigo.Contains(p_query) ||
-                    x.Descripcion.Contains(p_query))
-                .Select(x => this._mapper.Map<MarcaViewModel>(x))
-                .ToList();
+                if (p_query != null)
+                {
+                    List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
+                    .Where(x => x.Codigo.Contains(p_query) ||
+                        x.Descripcion.Contains(p_query))
+                    .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                    .ToList();
 
-                return View("index", listmarcaViewModel);
+                    if (!listmarcaViewModel.Any())
+                        ViewBag.info = "No se encontraron registros";
+                    return View("index", listmarcaViewModel);
+                }
+                else
+                {
+                    List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
+                    .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                    .ToList();
+                    return View("index", listmarcaViewModel);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
-                .Select(x => this._mapper.Map<MarcaViewModel>(x))
-                .ToList();
-                return View("index", listmarcaViewModel);
+                ViewBag.error = ex.Message;
+                return View("index");
             }
 
         }
 
         public IActionResult Eliminar(int Id)
         {
+            try
+            {
+                var result = this._marcaService.EliminarMarca(Id);
 
-            var result = this._marcaService.getMarca(Id);
+                ViewBag.result = "Accion realizada con exito.";
+                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
+                    .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                    .ToList();
+                return View("index", listmarcaViewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = $"{ex.Message} El registro no debe estar referenciado con otro para su eliminacion.";
+                List<MarcaViewModel> listmarcaViewModel = this._marcaService.getMarcas()
+                    .Select(x => this._mapper.Map<MarcaViewModel>(x))
+                    .ToList();
+                return View("index", listmarcaViewModel);
+            }
 
-            return RedirectToAction("index");
         }
 
         /// <summary>
@@ -119,22 +187,56 @@ namespace GestionVentas.Web.Controllers
         [Route("marca/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
         {
-            if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+            try
             {
-
-                ViewData["accionCRUD"] = accionCRUD;
-                if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
-                    return View();
-
-                if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
-                    MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
-                    MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
-                    return View(marcaViewModel);
+
+                    ViewData["accionCRUD"] = accionCRUD;
+                    if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
+                        return View();
+
+                    if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                    {
+                        MarcaDTO marcaDTO = this._marcaService.getMarca((int)Id);
+                        MarcaViewModel marcaViewModel = this._mapper.Map<MarcaViewModel>(marcaDTO);
+                        return View(marcaViewModel);
+                    }
+
                 }
 
+                throw new Exception("Ocurrio un error inesperado.");
             }
-            return RedirectToAction("ERROR", "HOME");
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+        }
+
+
+        public IActionResult ExportarRegistros()
+        {
+            try
+            {
+                byte[] file = this._marcaService.GenerarExportacionRegistros();
+
+                FileContentResult File = new FileContentResult(file, "application/CSV")
+                {
+                    FileDownloadName = $"marxas_export_{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}.csv",
+                };
+                return File;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+
         }
     }
 }

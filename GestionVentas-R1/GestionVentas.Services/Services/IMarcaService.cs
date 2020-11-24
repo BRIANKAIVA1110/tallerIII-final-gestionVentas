@@ -12,5 +12,7 @@ namespace GestionVentas.Services.Services
         int EliminarMarca(int p_id);
         MarcaDTO getMarca(int p_id);
         IEnumerable<MarcaDTO> getMarcas();
+
+        byte[] GenerarExportacionRegistros();
     }
 }

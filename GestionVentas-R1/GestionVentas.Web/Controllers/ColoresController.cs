@@ -172,7 +172,6 @@ namespace GestionVentas.Web.Controllers
                 List<ColorViewModel> colorViewModels = this._colorService.getColores()
                 .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
                 return View("index", colorViewModels);
-                return View("index");
             }
             
         }

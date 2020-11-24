@@ -5,12 +5,19 @@
 @{
     //ViewData["Title"] = "Agregar";
     string accionCrud = ViewData["accionCRUD"].ToString();
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
 
 
 <h1>Marcas > @accionCrud.ToLower()</h1>
 
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Exeption: </strong> @ViewBag.error
+    </div>
+}
 <div class="container">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="marcas" id="formHTTP">
@@ -41,7 +48,7 @@
             <a asp-action="index" asp-controller="marcas" class="btn form-control-sm btn-primary text-decoration-none text-center m-1">Cancelar</a>
         </div>
     </form>
-    
+
 
 
 </div>
