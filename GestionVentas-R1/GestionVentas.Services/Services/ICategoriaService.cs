@@ -10,5 +10,6 @@ namespace GestionVentas.Services.Services
         CategoriaDTO getCategoria(int p_id);
         IEnumerable<CategoriaDTO> getCategorias();
         int ModificarCategoria(CategoriaDTO p_CategoriaDTO);
+        byte[] GenerarExportacionRegistros();
     }
 }
