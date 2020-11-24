@@ -168,7 +168,10 @@ namespace GestionVentas.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.error = ex.Message;
+                ViewBag.error = $"{ex.Message} El registro no debe estar referenciado con otro para su eliminacion.";
+                List<ColorViewModel> colorViewModels = this._colorService.getColores()
+                .Select(x => this._mapper.Map<ColorViewModel>(x)).ToList();
+                return View("index", colorViewModels);
                 return View("index");
             }
             

@@ -171,7 +171,7 @@ namespace GestionVentas.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.error = $"{ex.Message}. El registro debe tener una referencia con otro.";
+                ViewBag.error = $"{ex.Message} El registro no debe estar referenciado con otro para su eliminacion.";
                 List<ModeloViewModel> listmodeloViewModel = this._modeloService.getModelos()
                     .Select(x => this._mapper.Map<ModeloDTO, ModeloViewModel>(x))
                     .ToList();
