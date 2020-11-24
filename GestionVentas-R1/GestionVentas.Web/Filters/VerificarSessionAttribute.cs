@@ -15,8 +15,8 @@ namespace GestionVentas.Web.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             
-            int? objUsuario = (int?)SessionHelper.GetObjectFromJson<int>(context.HttpContext.Session, "usuario");
-            if (objUsuario == 0) {
+            dynamic objUsuario = SessionHelper.GetObjectFromJson<dynamic>(context.HttpContext.Session, "usuario");
+            if (objUsuario == null) {
                 if (context.ActionDescriptor.RouteValues["action"]!= "VerificarCredenciales")
                     if (!(context.Controller is AutenticacionController))
                         context.HttpContext.Response.Redirect("/autenticacion/IniciarSesion");

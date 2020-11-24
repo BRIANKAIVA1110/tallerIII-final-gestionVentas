@@ -92,7 +92,16 @@ namespace GestionVentas.Services.Services
 
         public IEnumerable<VentaDTO> getVentas()
         {
-            throw new NotImplementedException();
+            var result = this._ventaRepository.Get().Select(x=> new VentaDTO { 
+            
+                Id = x.Id,
+                FechaVenta = x.FechaVenta,
+                NroComporbante = $"00001-{x.Id.ToString().PadLeft(8,'0')}",
+                TotalFinal = x.TotalFinal,
+            });
+
+            
+            return result;
         }
 
         public int ModificarVenta(VentaDTO p_colorDTO)

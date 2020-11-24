@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+@using GestionVentas.Web.Helper
+
+@{
+    dynamic usuario = SessionHelper.GetObjectFromJson<dynamic>(this.Context.Session, "usuario");
+}
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -8,8 +15,8 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
-    <header >
+<body >
+    <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark text-white border-bottom box-shadow mb-3 ">
             <div class="container-fluid d-flex justify-content-between">
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GestionVentas.Web</a>
@@ -17,6 +24,7 @@
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>*@
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1 text-white">
                         <li>
@@ -25,7 +33,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Articulos</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index"><i class="fa fa-pencil" aria-hidden="true"></i>Modelos</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index">Modelos</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Colores" asp-action="Index">Colores</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Marcas" asp-action="Index">Marcas</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
@@ -42,7 +50,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Ventas</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Ventas</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Ventas</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="PuntoVenta">Punto de Venta</a>
                             </div>
                         </li>
@@ -64,18 +72,20 @@
                     </ul>
 
                 </div>
-
-                <div class="btn btn-primary btn-sm h-25">
-                    <ul class="navbar-nav flex-grow-1 text-white" >
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#"><i class="fa fa-user"> </i> Usuario</a>
-                            <div class="dropdown-menu position-absolute" style="left:-75px;">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Autenticacion" asp-action="CerrarSession">Cerrar Sesion</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Clientes</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                @if (usuario != null) { 
+                    <div class="btn btn-primary btn-sm h-25">
+                        <ul class="navbar-nav flex-grow-1 text-white">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#"><i class="fa fa-user "> </i> @usuario?.NombreUsuario</a>
+                                <div class="dropdown-menu position-absolute" style="left:-75px;">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Autenticacion" asp-action="CerrarSession">Cerrar Sesion <i class="fa fa-sign-out"></i></a>
+                                    
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                
             </div>
         </nav>
     </header>
@@ -87,7 +97,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - GestionVentas.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - GestionVentas.Web - Ferreteria PEPE S.A
         </div>
     </footer>
     @section scripts{

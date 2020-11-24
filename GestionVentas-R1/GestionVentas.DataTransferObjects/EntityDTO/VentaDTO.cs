@@ -9,5 +9,7 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
         public int Id { get; set; }
         public decimal TotalFinal { get; set; }
         public DateTime FechaVenta { get; set; }
+
+        public string NroComporbante { get; set; }
     }
 }

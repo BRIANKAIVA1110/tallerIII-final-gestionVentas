@@ -25,7 +25,11 @@ namespace GestionVentas.Web.Controllers
         }
         public IActionResult Index() {
 
-            return View();
+            List<VentaViewModel> listVentaViewModel = this._ventaService.getVentas()
+                    .Select(x => this._mapper.Map<VentaViewModel>(x)).OrderByDescending(x=> x.FechaVenta)
+                    .ToList();
+
+            return View(listVentaViewModel);
         }
         //TODO: modificar nombre "index" por punto de venta
         public IActionResult PuntoVenta(){
@@ -34,10 +38,10 @@ namespace GestionVentas.Web.Controllers
             var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
             int ventaId = (int)SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "ventaId");
 
-            VentaViewModel ventaViewModel = new VentaViewModel();
-            ventaViewModel.CarroArticulos = cart;
-            ventaViewModel.VentaId = ventaId;
-            ventaViewModel.InformacionCliente = clienteInfo;
+            PuntoVentaViewModel puntoVentaViewModel = new PuntoVentaViewModel();
+            puntoVentaViewModel.CarroArticulos = cart;
+            puntoVentaViewModel.VentaId = ventaId;
+            puntoVentaViewModel.InformacionCliente = clienteInfo;
 
             /*
              * si hubo una venta "reinicia" ventaId a "0", el cual indica que habra una nueva venta y no
@@ -49,11 +53,11 @@ namespace GestionVentas.Web.Controllers
             }
                 
 
-            return View(ventaViewModel);
+            return View(puntoVentaViewModel);
         }
 
         [HttpGet]
-        public IActionResult AgregarArticulo([FromQuery] string p_codigoBarras, [FromQuery] int cantidadUnideades, VentaViewModel ventaViewModel)
+        public IActionResult AgregarArticulo([FromQuery] string p_codigoBarras, [FromQuery] int cantidadUnideades, PuntoVentaViewModel puntoVentaViewModel)
         {
             try
             {
@@ -81,7 +85,7 @@ namespace GestionVentas.Web.Controllers
 
                         });
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-                        AlmacenarInformacionClienteSession(ventaViewModel);
+                        AlmacenarInformacionClienteSession(puntoVentaViewModel);
                     }
                     else
                     {
@@ -105,7 +109,7 @@ namespace GestionVentas.Web.Controllers
                             });
                         }
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-                        AlmacenarInformacionClienteSession(ventaViewModel);
+                        AlmacenarInformacionClienteSession(puntoVentaViewModel);
 
 
                     }
@@ -142,7 +146,7 @@ namespace GestionVentas.Web.Controllers
 
         }
 
-        private void AlmacenarInformacionClienteSession(VentaViewModel ventaViewModel) {
+        private void AlmacenarInformacionClienteSession(PuntoVentaViewModel ventaViewModel) {
             ClienteDTO objClienteDTO = new ClienteDTO();
             ClienteDTO clienteSession = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
 
@@ -163,7 +167,7 @@ namespace GestionVentas.Web.Controllers
             return RedirectToAction("PuntoVenta");
         }
 
-        public  IActionResult VenderArticulos(VentaViewModel p_ventaViewModel) {
+        public  IActionResult VenderArticulos(PuntoVentaViewModel p_puntoVentaViewModel) {
             try
             {
                 CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
@@ -173,7 +177,7 @@ namespace GestionVentas.Web.Controllers
                 }
                 if (cart.Articulos?.Count != 0)
                 {
-                    int ventaId = this._ventaService.GenerarVenta(cart.Articulos, p_ventaViewModel.InformacionCliente);
+                    int ventaId = this._ventaService.GenerarVenta(cart.Articulos, p_puntoVentaViewModel.InformacionCliente);
                     if (ventaId != 0)
                     {
                         cart = null;
@@ -194,9 +198,9 @@ namespace GestionVentas.Web.Controllers
             {
                 ViewBag.error = e.Message;
 
-                AlmacenarInformacionClienteSession(p_ventaViewModel);
+                AlmacenarInformacionClienteSession(p_puntoVentaViewModel);
                  
-                return View("PuntoVenta", p_ventaViewModel);
+                return View("PuntoVenta", p_puntoVentaViewModel);
             }
             
         }
@@ -220,6 +224,42 @@ namespace GestionVentas.Web.Controllers
                 }
             }
             return -1;
+        }
+
+
+        public IActionResult Buscar([FromQuery] string p_query)
+        {
+            //TODO: ver diferencia entre like y contains
+            try
+            {
+                if (p_query != null)
+                {
+                    List<VentaViewModel> listVentaViewModel = this._ventaService.getVentas()
+                    .Where(x => x.NroComporbante.Contains(p_query) ||
+                        x.FechaVenta.ToString().Contains(p_query))
+                    .Select(x => this._mapper.Map<VentaViewModel>(x))
+                    .ToList();
+
+                    if (!listVentaViewModel.Any())
+                        ViewBag.info = "No se encontraron registros";
+                    return View("index", listVentaViewModel);
+                }
+                else
+                {
+                    List<VentaViewModel> listVentaViewModel = this._ventaService.getVentas()
+                    .Select(x => this._mapper.Map<VentaViewModel>(x))
+                    .ToList();
+                    return View("index", listVentaViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+
         }
     }
 }
