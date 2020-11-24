@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GestionVentas.Infraestructura.Extensions;
 using GestionVentas.Services.Extensions;
+using GestionVentas.Web.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,12 +29,16 @@ namespace GestionVentas.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews(x=> 
+                    x.Filters.Add(new VerificarSessionAttribute())
+                ).AddRazorRuntimeCompilation();
             services.AddCustomEFConfiguration();
             services.AddCustomRepositoryConfiguration();
             services.AddCustomServiceConfiguration();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddSession();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

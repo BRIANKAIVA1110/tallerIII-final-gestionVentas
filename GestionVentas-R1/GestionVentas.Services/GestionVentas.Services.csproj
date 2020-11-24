@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GestionVentas.Common\GestionVentas.Common.csproj" />
     <ProjectReference Include="..\GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj" />
     <ProjectReference Include="..\GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj" />
   </ItemGroup>

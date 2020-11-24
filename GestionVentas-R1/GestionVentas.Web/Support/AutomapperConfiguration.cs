@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Web.Models.ViewModels.Articulos;
+using GestionVentas.Web.Models.ViewModels.Autenticacion;
 using GestionVentas.Web.Models.ViewModels.Stock;
 
 namespace GestionVentas.Web.Support
@@ -15,6 +16,7 @@ namespace GestionVentas.Web.Support
         public AutomapperConfiguration() {
             ModuloArticuloConfiguracion();
             ModuloStockConfiguration();
+            ModuloSeguridadConfiguration();
         }
 
         public void ModuloArticuloConfiguracion() {
@@ -27,6 +29,10 @@ namespace GestionVentas.Web.Support
         }
         public void ModuloStockConfiguration() {
             CreateMap<StockViewModel, StockArticuloDTO>().ReverseMap();
+        }
+        public void ModuloSeguridadConfiguration()
+        {
+            CreateMap<AutenticacionViewModel, UsuarioDTO>().ReverseMap();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace GestionVentas.Services.Extensions
             services.AddTransient<IMarcaService, MarcaService>();
             services.AddTransient<ICategoriaService, CategoriaService>();
             services.AddTransient<IVentaService, VentaService>();
+            services.AddTransient<ISeguridadService, SeguridadService>();
         }
     }
 }

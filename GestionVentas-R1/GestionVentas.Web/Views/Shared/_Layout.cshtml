@@ -9,27 +9,21 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+    <header >
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark text-white border-bottom box-shadow mb-3 ">
+            <div class="container-fluid d-flex justify-content-between">
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GestionVentas.Web</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>*@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        @*<li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Articulos" asp-action="Index">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>*@
+                    <ul class="navbar-nav flex-grow-1 text-white">
                         <li>
-                            <a class="nav-item nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home " aria-hidden="true"></i>Home</a>
+                            <a class="nav-item nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home " aria-hidden="true"></i>Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Articulos</a>
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Articulos</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index"><i class="fa fa-pencil" aria-hidden="true"></i>Modelos</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Colores" asp-action="Index">Colores</a>
@@ -39,29 +33,21 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Clientes</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark text-sm-right" asp-area="" asp-controller="Modelos" asp-action="Index">Gestion Clientes</a>
-
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Stock</a>
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Stock</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Stock Articulos</a>
 
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Ventas</a>
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Ventas</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Pedidos</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Facturas</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Venta</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Ventas</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Punto de Venta</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Reportes</a>
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Reportes</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Articulos</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Clientes</a>
@@ -70,7 +56,7 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Seguridad</a>
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Seguridad</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Articulos</a>
                                 <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Clientes</a>
@@ -80,6 +66,18 @@
                         </li>
                     </ul>
 
+                </div>
+
+                <div class="btn btn-primary btn-sm h-25">
+                    <ul class="navbar-nav flex-grow-1 text-white" >
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#"><i class="fa fa-user"> </i> Usuario</a>
+                            <div class="dropdown-menu position-absolute" style="left:-75px;">
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Autenticacion" asp-action="CerrarSession">Cerrar Sesion</a>
+                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Reportes Clientes</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
