@@ -7,13 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Web", "Gestio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.DataTransferObjects", "GestionVentas.DataTransferObjects\GestionVentas.DataTransferObjects.csproj", "{4FEF06E0-1568-4D05-B133-DDDA78E2D07D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Infraestructura", "GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj", "{15B64E5C-CC77-4479-BE76-907A3A3028A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Infraestructura", "GestionVentas.Infraestructura\GestionVentas.Infraestructura.csproj", "{15B64E5C-CC77-4479-BE76-907A3A3028A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Domain", "GestionVentas.Domain\GestionVentas.Domain.csproj", "{F406A73C-3324-4C6D-9DB0-26D8E22982C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Domain", "GestionVentas.Domain\GestionVentas.Domain.csproj", "{F406A73C-3324-4C6D-9DB0-26D8E22982C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Services", "GestionVentas.Services\GestionVentas.Services.csproj", "{8F556022-A233-4E6B-9349-840D87A1AB11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Services", "GestionVentas.Services\GestionVentas.Services.csproj", "{8F556022-A233-4E6B-9349-840D87A1AB11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Test", "GestionVentas.Test\GestionVentas.Test.csproj", "{EBA0E858-2628-4DF5-8B51-41E372D7D82D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionVentas.Test", "GestionVentas.Test\GestionVentas.Test.csproj", "{EBA0E858-2628-4DF5-8B51-41E372D7D82D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionVentas.Common", "GestionVentas.Common\GestionVentas.Common.csproj", "{35283887-6705-430C-A344-94E8121756C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBA0E858-2628-4DF5-8B51-41E372D7D82D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35283887-6705-430C-A344-94E8121756C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35283887-6705-430C-A344-94E8121756C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35283887-6705-430C-A344-94E8121756C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35283887-6705-430C-A344-94E8121756C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
