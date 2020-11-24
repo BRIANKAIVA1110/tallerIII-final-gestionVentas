@@ -28,7 +28,7 @@ namespace GestionVentas.Web.Controllers
         }
         public IActionResult CerrarSession()
         {
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "usuario", 0);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "usuario", null);
             return RedirectToAction("IniciarSesion");
         }
         [HttpPost]
@@ -37,7 +37,7 @@ namespace GestionVentas.Web.Controllers
             UsuarioDTO objUsuarioDTO = this._mapper.Map<UsuarioDTO>(p_autenticacionViewModel);
             int userId = this._seguridadService.VerificarCredenciales(objUsuarioDTO);
             if (userId != 0) {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "usuario", userId.ToString());
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "usuario", new { UserId=userId, NombreUsuario= objUsuarioDTO.UserName});
                 return RedirectToAction("Index", "home");
             }else{
                 ViewBag.error = "Usuario o contraseña invalido";
