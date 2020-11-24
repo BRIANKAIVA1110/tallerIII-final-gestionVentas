@@ -5,15 +5,23 @@
 @{
     //ViewData["Title"] = "Agregar";
     string accionCrud = ViewData["accionCRUD"].ToString();
-    
+
 }
 
 @{
-/*
-    POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
-*/
+    /*
+        POR VIEWBAG PODRIAMOS PASAR ACCION AGREGAR O MODIFICAR Y ESTE USARLO EN EL <H1>
+    */
 }
+
 <h1>Modelos > @accionCrud.ToLower()</h1>
+
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Exeption: </strong> @ViewBag.error
+    </div>
+}
 
 <div class="container">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
@@ -29,7 +37,7 @@
                 <input asp-for="Codigo" class="form-control form-control-sm" placeholder="Codigo" />
                 <span asp-validation-for="Codigo" class="text-danger"></span>
             </div>
-            
+
         </div>
         <div class="form-group row">
             <label asp-for="Descripcion" class="col-form-label-sm col-sm-2"></label>
@@ -37,7 +45,7 @@
                 <input asp-for="Descripcion" class="form-control form-control-sm" placeholder="Descripcion" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
-            
+
         </div>
 
         <div class="form-group d-flex justify-content-end">
@@ -46,7 +54,7 @@
         </div>
     </form>
     @*<button asp-action="index" asp-controller="modelos" class=" form-control btn-primary">Cancelar</button>*@
-    
+
 
 </div>
 

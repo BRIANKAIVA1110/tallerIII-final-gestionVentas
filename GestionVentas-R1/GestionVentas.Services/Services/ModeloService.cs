@@ -75,5 +75,28 @@ namespace GestionVentas.Services.Services
 
             return objResult;
         }
+
+        public byte[] GenerarExportacionRegistros() {
+            var result = this._modeloRepository.Get()
+                .Select(x => new ModeloDTO
+                {
+                    Id = x.Id,
+                    Codigo = x.Codigo,
+                    Descripcion = x.Descripcion
+                });
+            if (result.Any()) {
+                StringBuilder sb = new StringBuilder();
+                string separador = ";";
+                foreach (var item in result)
+                {
+                    sb.AppendLine($"{item.Codigo}{separador}{item.Descripcion}");
+                }
+                byte[] byteFile = Encoding.UTF8.GetBytes(sb.ToString());
+
+                return byteFile;
+            }
+
+            return new byte[1];
+        }
     }
 }

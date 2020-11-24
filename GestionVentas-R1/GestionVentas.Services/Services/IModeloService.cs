@@ -10,5 +10,6 @@ namespace GestionVentas.Services.Services
         int EliminarModelo(int p_id);
         ModeloDTO getModelo(int p_id);
         IEnumerable<ModeloDTO> getModelos();
+        byte[] GenerarExportacionRegistros();
     }
 }
