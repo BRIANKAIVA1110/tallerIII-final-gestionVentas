@@ -23,7 +23,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Queries
             StringBuilder sb = new StringBuilder();
             //recaudacion de venta por articulo vendidos.
             sb.AppendLine("SELECT");
-            sb.AppendLine("concat(art.codigobarras,' - ',art.descripcion,' - ', md.descripcion,' - ', colres.descripcion,' - ',mar.descripcion,' - ',cat.descripcion) as ArticuloDescripcion, ");
+            sb.AppendLine("concat(art.codigobarras,' - ',art.descripcion,' - ', md.descripcion,' - ', colres.descripcion) as ArticuloDescripcion, ");
             sb.AppendLine("count(art.Id) as CantidadVendida,");
             sb.AppendLine("sum(v.totalfinal) as TotalRecaudado");
             sb.AppendLine("from ventas as v ");
@@ -33,7 +33,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Queries
             sb.AppendLine("inner join colores as colres on art.colorId = colres.id");
             sb.AppendLine("inner join marcas as mar on art.colorId = mar.id");
             sb.AppendLine("inner join categorias as cat on art.colorId = cat.id");
-            sb.AppendLine($"where cast(FechaVenta as date) between {this.FechaDesde} and {this.FechaHasta}");
+            sb.AppendLine($"where cast(FechaVenta as date) between '{this.FechaDesde}' and '{this.FechaHasta}'");
             sb.AppendLine("group by   ArticuloDescripcion");
             sb.AppendLine("order by CantidadVendida desc;");
 
