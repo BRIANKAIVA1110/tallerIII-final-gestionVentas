@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h3>Venta</h3>
+<h3>Punto de Venta</h3>
 @if (ViewBag.error != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -43,7 +43,7 @@
         <div class="form-inline">
             <div class="form-group">
                 <label class="col-form-label-sm col-sm-2 m-1">Codigo Barras:</label>
-                <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" />
+                <input class="form-control  m-1" placeholder="Codigo barras" name="p_codigoBarras" required />
                 <i class="fa fa-barcode m-2" aria-hidden="true"></i>
                 <spam class="text-danger"></spam>
             </div>
@@ -51,7 +51,7 @@
             <div class="form-group">
                 @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
                 <label class="col-form-label-sm col-sm-2 m-1">Cantidad:</label>
-                <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1" />
+                <input class="form-control  m-1" placeholder="Cantiddad Unidadesde" name="cantidadUnideades" value="1" required />
                 <spam class="text-danger"></spam>
             </div>
 
@@ -62,11 +62,11 @@
 
 
         <hr />
-        <input id="txtNombreCompleto" style="display:none;" asp-for="InformacionCliente.NombreCompleto" value="" />
-        <input id="txtDomicilio" style="display:none;" asp-for="InformacionCliente.Domicilio" value="" />
-        <input id="txtLocalidad" style="display:none;" asp-for="InformacionCliente.Localidad" value="" />
-        <input id="txtCodiPostal" style="display:none;" asp-for="InformacionCliente.CodiPostal" value="" />
-        <input id="txtTelefono" style="display:none;" asp-for="InformacionCliente.Telefono" value="" />
+        <input id="txtNombreCompleto"  asp-for="InformacionCliente.NombreCompleto" value=@Model.InformacionCliente?.NombreCompleto  style="display:none;"/>
+        <input id="txtDomicilio" asp-for="InformacionCliente.Domicilio" value=@Model.InformacionCliente?.Domicilio style="display:none;"/>
+        <input id="txtLocalidad" asp-for="InformacionCliente.Localidad" value=@Model.InformacionCliente?.Localidad  style="display:none;"/>
+        <input id="txtCodiPostal"  asp-for="InformacionCliente.CodiPostal" value=@Model.InformacionCliente?.CodiPostal style="display:none;"/>
+        <input id="txtTelefono"  asp-for="InformacionCliente.Telefono" value=@Model.InformacionCliente?.Telefono  style="display:none;"/>
 
 
 
@@ -148,7 +148,7 @@
         </div>
         <div class="form-group">
             @*<i class="fa fa-plus-circle m-2" aria-hidden="true"></i>*@
-            <label class="col-form-label-sm col-sm-2 m-1">Domicilio:</label>
+            <label class="col-form-label-sm col-sm-2 m-1">Localidad:</label>
             <input id="Localidad" asp-for="InformacionCliente.Localidad" class="form-control  m-1" placeholder="Localidad" value=@Model.InformacionCliente?.Localidad required />
             <spam class="text-danger"></spam>
         </div>

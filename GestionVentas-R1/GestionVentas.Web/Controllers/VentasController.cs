@@ -113,7 +113,8 @@ namespace GestionVentas.Web.Controllers
 
 
                     }
-                    return RedirectToAction("PuntoVenta");
+                    var puntoDeVentaVM = ConstruirPuntoVentaViewModel();
+                    return View("PuntoVenta", puntoDeVentaVM);
                 }
                 else
                 {
@@ -121,17 +122,17 @@ namespace GestionVentas.Web.Controllers
                     {
                         ViewBag.info = $"El articulo ingresado no tiene stock disponible para la cantidad ingresada. su stock disponible es de: {articuloDTO?.CantidadStock}.";
                     }
-                    if (!(articuloDTO != null))
+                    if (articuloDTO == null)
                     {
-                        ViewBag.info = "El articulo no tiene stock asignado, solo se puede agregar articulos con stock asignado.";
+                        ViewBag.info = "El articulo no tiene stock asignado o no existe, solo se puede agregar articulos con stock asignado.";
                     }
-
+                    
                     var cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
                     var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
 
-                    
 
-                    return RedirectToAction("PuntoVenta");
+                    var puntoDeVentaVM = ConstruirPuntoVentaViewModel();
+                    return View("PuntoVenta", puntoDeVentaVM);
                 }
 
 
@@ -140,11 +141,37 @@ namespace GestionVentas.Web.Controllers
             {
 
                 ViewBag.error = ex.Message;
-                return RedirectToAction("PuntoVenta");
+                var puntoDeVentaVM = ConstruirPuntoVentaViewModel();
+                return View("PuntoVenta", puntoDeVentaVM);
             }
 
 
         }
+
+        private PuntoVentaViewModel ConstruirPuntoVentaViewModel() {
+
+            CarroCompras cart = SessionHelper.GetObjectFromJson<CarroCompras>(HttpContext.Session, "cart");
+            var clienteInfo = SessionHelper.GetObjectFromJson<ClienteDTO>(HttpContext.Session, "clienteInformacion");
+            int ventaId = (int)SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "ventaId");
+
+            PuntoVentaViewModel puntoVentaViewModel = new PuntoVentaViewModel();
+            puntoVentaViewModel.CarroArticulos = cart;
+            puntoVentaViewModel.VentaId = ventaId;
+            puntoVentaViewModel.InformacionCliente = clienteInfo;
+
+            /*
+             * si hubo una venta "reinicia" ventaId a "0", el cual indica que habra una nueva venta y no
+             * imprimira un comprobante de venta
+             * */
+            if (ventaId != 0)
+            {
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "ventaId", 0);
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "clienteInformacion", null);
+            }
+
+            return puntoVentaViewModel;
+        }
+
 
         private void AlmacenarInformacionClienteSession(PuntoVentaViewModel ventaViewModel) {
             ClienteDTO objClienteDTO = new ClienteDTO();
