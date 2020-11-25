@@ -13,5 +13,6 @@ namespace GestionVentas.Services.Services
         IEnumerable<StockArticuloDTO> getStockArticulos();
 
         IEnumerable<ArticuloDTO> ObtenerArticulosSinAsignacionStock();
+        byte[] GenerarExportacionRegistros();
     }
 }
