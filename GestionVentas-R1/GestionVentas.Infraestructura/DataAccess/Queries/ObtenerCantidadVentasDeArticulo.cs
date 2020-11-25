@@ -23,9 +23,9 @@ namespace GestionVentas.Infraestructura.DataAccess.Queries
             StringBuilder sb = new StringBuilder();
             //cantidad de articulos vendidos por fecha
             sb.AppendLine("SELECT");
-            sb.AppendLine("concat(art.codigobarras,' - ',art.descripcion,' - ', md.descripcion,' - ', colres.descripcion,' - ',mar.descripcion,' - ',cat.descripcion) as ArticuloDescripcion, ");
+            sb.AppendLine("concat(art.codigobarras,' - ',art.descripcion,' - ', md.descripcion,' - ', colres.descripcion) as ArticuloDescripcion, ");
             sb.AppendLine("date_format(v.fechaventa,'%Y-%m-%d') as FechaVenta,");
-            sb.AppendLine("count(art.Id) as CantidadVendida,");
+            sb.AppendLine("count(art.Id) as CantidadVendida");
             sb.AppendLine("from ventas as v ");
             sb.AppendLine("inner join detalleventas as dv on v.id = dv.ventaid");
             sb.AppendLine("inner join articulos as art on dv.articuloId = art.id");
@@ -33,7 +33,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Queries
             sb.AppendLine("inner join colores as colres on art.colorId = colres.id");
             sb.AppendLine("inner join marcas as mar on art.colorId = mar.id");
             sb.AppendLine("inner join categorias as cat on art.colorId = cat.id");
-            sb.AppendLine($"where cast(FechaVenta as date) between {this.FechaDesde} and {this.FechaHasta}");
+            sb.AppendLine($"where cast(FechaVenta as date) between '{this.FechaDesde}' and '{this.FechaHasta}'");
             sb.AppendLine("group by   ArticuloDescripcion, date_format(v.fechaventa,'%Y-%m-%d')");
             sb.AppendLine("order by CantidadVendida desc;");
 
