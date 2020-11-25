@@ -18,12 +18,12 @@ namespace GestionVentas.Web.Filters
             dynamic objUsuario = SessionHelper.GetObjectFromJson<dynamic>(context.HttpContext.Session, "usuario");
             if (objUsuario == null) {
                 if (context.ActionDescriptor.RouteValues["action"]!= "VerificarCredenciales")
-                    if (!(context.Controller is AutenticacionController))
-                        context.HttpContext.Response.Redirect("/autenticacion/IniciarSesion");
+                    if (!(context.Controller is SeguridadController))
+                        context.HttpContext.Response.Redirect("/Seguridad/IniciarSesion");
             }
             else
             {
-                if ((context.Controller is AutenticacionController))
+                if ((context.Controller is SeguridadController))
                     context.HttpContext.Response.Redirect("/home/index");
             }
         }
