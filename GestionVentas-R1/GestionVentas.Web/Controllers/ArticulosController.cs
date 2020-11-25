@@ -32,113 +32,85 @@ namespace GestionVentas.Web.Controllers
 
         public IActionResult Index()
         {
+            try
+            {
+                List<ArticuloViewModel> listArticuloViewModels = this._articuloService.getArticulos()
+                .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
 
-            List<ArticuloViewModel> listArticuloViewModels = this._articuloService.getArticulos()
-                .Select(x=> this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
+                return View(listArticuloViewModels);
+            }
+            catch (Exception ex)
+            {
 
-            return View(listArticuloViewModels);
+                ViewBag.error = ex.InnerException.Message;
+                return View();
+            }
+
         }
 
         [HttpPost]
         public IActionResult Agregar(ArticuloViewModel p_articuloVM)
         {
-            //this._articuloService.AgregarArticulo(p_articuloDTO);
-            if (!ModelState.IsValid)
-                return View("error");
-            else {
-                var articuloDTO = this._mapper.Map<ArticuloViewModel,ArticuloDTO>(p_articuloVM);
-                int result = this._articuloService.AgregarArticulo(articuloDTO);
-                if(result>0)
-                    return RedirectToAction("index");
+            try
+            {
+                //this._articuloService.AgregarArticulo(p_articuloDTO);
+                if (!ModelState.IsValid)
+                    return View("error");
                 else
-                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
+                {
+                    var articuloDTO = this._mapper.Map<ArticuloViewModel, ArticuloDTO>(p_articuloVM);
+                    int result = this._articuloService.AgregarArticulo(articuloDTO);
+
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<ArticuloViewModel> listArticuloViewModels = this._articuloService.getArticulos()
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
+
+                    return View("index",listArticuloViewModels);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.AGREGAR;
+                return View("form", p_articuloVM);
             }
 
-            
+
+
         }
         public IActionResult Modificar(ArticuloViewModel p_articuloVM)
         {
-            if (!ModelState.IsValid)
-                return View("error");
-            else
+            try
             {
-                ArticuloDTO articuloDTO = this._mapper.Map<ArticuloViewModel, ArticuloDTO>(p_articuloVM);
-                int result = this._articuloService.ModificarArticulo(articuloDTO);
-                if (result > 0)
-                    return RedirectToAction("index");
+                if (!ModelState.IsValid)
+                    return View("error");
                 else
-                    return RedirectToAction("FORM");//deberia mostrar un error Y PASAMOS DATOS POR VIEWBAG O DATA
-            }
-        }
-        public IActionResult Detalle(int Id)
-        {
+                {
+                    ArticuloDTO articuloDTO = this._mapper.Map<ArticuloViewModel, ArticuloDTO>(p_articuloVM);
+                    int result = this._articuloService.ModificarArticulo(articuloDTO);
 
-            ArticuloDTO articuloDTO  = this._articuloService.getArticulo((int)Id);
-            if (articuloDTO != null)
+                    ViewBag.result = "Accion realizada con exito.";
+
+                    List<ArticuloViewModel> listArticuloViewModels = this._articuloService.getArticulos()
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x)).ToList();
+
+                    return View("index", listArticuloViewModels);
+                }
+            }
+            catch (Exception ex)
             {
-                ArticuloViewModel articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
-                return View(articuloViewModel);
-            }
-            else{
-                return View("index");//deberia mostrar un msg de exepcion.. "no se encontro registro, etc"
-            }
-        }
 
-        public IActionResult Buscar([FromQuery] string p_query)
-        {
-            //ver diferencias: contains vs like method
-            if (p_query != null)
-            {
-                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
-                .Where(x => x.CodigoBarras.Contains(p_query) || 
-                    x.Descripcion.Contains(p_query) ||
-                    x.ModeloDescripcion.Contains(p_query) || 
-                    x.ColorDescripcion.Contains(p_query))
-                .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
-                .ToList();
-
-                return View("index", listArticuloViewModel);
-            }
-            else {
-                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
-                .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
-                .ToList();
-                return View("index", listArticuloViewModel);
-            }
-            
-        }
-
-        public IActionResult Eliminar(int Id)
-        {
-
-            var result = this._articuloService.EliminarArticulo(Id);
-
-            return RedirectToAction("index");
-        }
-
-        /// <summary>
-        /// action renderiza formulario para las acciones agregar || modificar, "reutilizacion"
-        /// </summary>
-        /// <param name="accionCRUD"> AGREGAR || MODIFICAR </param>
-        /// <param name="Id"> null || Id </param>
-        /// <returns></returns>
-        //[Route("Articulos/Form")]
-        [Route("Articulos/Form/{Id?}")]
-        public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
-        {
-
-            if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
-            {
-                ViewData["accionCRUD"] = accionCRUD;
-
-                ArticuloViewModel articuloViewModel = new ArticuloViewModel();
+                ViewBag.error = ex.InnerException.Message;
+                ViewData["accionCRUD"] = AccionesCRUD.MODIFICAR;
 
                 List<SelectListItem> modelos = this._modeloService.getModelos()
-                .Select(x => new SelectListItem
-                {
-                    Value = x.Id.ToString(),
-                    Text = $"{x.Codigo} - {x.Descripcion}"
-                }).ToList();
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Codigo} - {x.Descripcion}"
+                    }).ToList();
 
                 List<SelectListItem> colores = this._colorService.getColores()
                     .Select(x => new SelectListItem
@@ -160,29 +132,203 @@ namespace GestionVentas.Web.Controllers
                         Value = x.Id.ToString(),
                         Text = $"{x.Codigo} - {x.Descripcion}"
                     }).ToList();
+                p_articuloVM.Modelos= modelos;
+                p_articuloVM.Colores = colores;
+                p_articuloVM.Marcas= marcas;
+                p_articuloVM.Categorias= categorias;
+                return View("form", p_articuloVM);
+            }
 
-                if (accionCRUD.Equals(AccionesCRUD.AGREGAR)) {
-
-                    articuloViewModel.Colores = colores;
-                    articuloViewModel.Modelos = modelos;
-                    articuloViewModel.Marcas = marcas;
-                    articuloViewModel.Categorias = categorias;
-
-                    return View(articuloViewModel);
-                }
-                if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+        }
+        public IActionResult Detalle(int Id)
+        {
+            try
+            {
+                ArticuloDTO articuloDTO = this._articuloService.getArticulo((int)Id);
+                if (articuloDTO != null)
                 {
-                    ArticuloDTO articuloDTO = this._articuloService.getArticulo((int)Id);
-                    articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
-                    articuloViewModel.Colores = colores;
-                    articuloViewModel.Modelos = modelos;
-                    articuloViewModel.Marcas = marcas;
-                    articuloViewModel.Categorias = categorias;
+                    ArticuloViewModel articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
                     return View(articuloViewModel);
                 }
+                else
+                {
+                    ViewBag.error = "Ocurrio un erro al intentar obtener el registro solicitado.";
+                    return View("index"); //deberia mostrar un msg de notificacion
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+        }
+
+        public IActionResult Buscar([FromQuery] string p_query)
+        {
+
+            try
+            {
+                //ver diferencias: contains vs like method
+                if (p_query != null)
+                {
+                    List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                    .Where(x => x.CodigoBarras.Contains(p_query) ||
+                        x.Descripcion.Contains(p_query) ||
+                        x.ModeloDescripcion.Contains(p_query) ||
+                        x.ColorDescripcion.Contains(p_query) ||
+                        x.CategoriaDescripcion.Contains(p_query) ||
+                        x.MarcaDescripcion.Contains(p_query))
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
+                    .ToList();
+
+                    if (!listArticuloViewModel.Any())
+                        ViewBag.info = "No se encontraron registros";
+
+                    return View("index", listArticuloViewModel);
+                }
+                else
+                {
+                    List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
+                    .ToList();
+                    return View("index", listArticuloViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+        }
+
+        public IActionResult Eliminar(int Id)
+        {
+            try
+            {
+                var result = this._articuloService.EliminarArticulo(Id);
+
+                ViewBag.result = "Accion realizada con exito.";
+
+                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
+                    .ToList();
+                return View("index", listArticuloViewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = $"{ex.Message} El registro no debe estar referenciado con otro para su eliminacion.";
+                List<ArticuloViewModel> listArticuloViewModel = this._articuloService.getArticulos()
+                    .Select(x => this._mapper.Map<ArticuloDTO, ArticuloViewModel>(x))
+                    .ToList();
+                return View("index", listArticuloViewModel);
 
             }
-            return RedirectToAction("ERROR", "HOME");
+            
+        }
+
+        /// <summary>
+        /// action renderiza formulario para las acciones agregar || modificar, "reutilizacion"
+        /// </summary>
+        /// <param name="accionCRUD"> AGREGAR || MODIFICAR </param>
+        /// <param name="Id"> null || Id </param>
+        /// <returns></returns>
+        //[Route("Articulos/Form")]
+        [Route("Articulos/Form/{Id?}")]
+        public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
+        {
+            try
+            {
+                if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                {
+                    ViewData["accionCRUD"] = accionCRUD;
+
+                    ArticuloViewModel articuloViewModel = new ArticuloViewModel();
+
+                    List<SelectListItem> modelos = this._modeloService.getModelos()
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Codigo} - {x.Descripcion}"
+                    }).ToList();
+
+                    List<SelectListItem> colores = this._colorService.getColores()
+                        .Select(x => new SelectListItem
+                        {
+                            Value = x.Id.ToString(),
+                            Text = $"{x.Codigo} - {x.Descripcion}"
+                        }).ToList();
+
+                    List<SelectListItem> marcas = this._marcaService.getMarcas()
+                        .Select(x => new SelectListItem
+                        {
+                            Value = x.Id.ToString(),
+                            Text = $"{x.Codigo} - {x.Descripcion}"
+                        }).ToList();
+
+                    List<SelectListItem> categorias = this._categoriaService.getCategorias()
+                        .Select(x => new SelectListItem
+                        {
+                            Value = x.Id.ToString(),
+                            Text = $"{x.Codigo} - {x.Descripcion}"
+                        }).ToList();
+
+                    if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
+                    {
+
+                        articuloViewModel.Colores = colores;
+                        articuloViewModel.Modelos = modelos;
+                        articuloViewModel.Marcas = marcas;
+                        articuloViewModel.Categorias = categorias;
+
+                        return View(articuloViewModel);
+                    }
+                    if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
+                    {
+                        ArticuloDTO articuloDTO = this._articuloService.getArticulo((int)Id);
+                        articuloViewModel = this._mapper.Map<ArticuloDTO, ArticuloViewModel>(articuloDTO);
+                        articuloViewModel.Colores = colores;
+                        articuloViewModel.Modelos = modelos;
+                        articuloViewModel.Marcas = marcas;
+                        articuloViewModel.Categorias = categorias;
+                        return View(articuloViewModel);
+                    }
+
+                }
+
+                throw new Exception("Ocurrio un error inesperado.");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error = ex.Message;
+                return View();
+            }
+
+        }
+
+        public IActionResult ExportarRegistros()
+        {
+            try
+            {
+                byte[] file = this._articuloService.GenerarExportacionRegistros();
+
+                FileContentResult File = new FileContentResult(file, "application/CSV")
+                {
+                    FileDownloadName = $"articulos_export_{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}.csv",
+                };
+                return File;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ex.Message;
+                return View("index");
+            }
+
+
+
         }
     }
 }

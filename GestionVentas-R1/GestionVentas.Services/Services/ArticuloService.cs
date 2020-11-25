@@ -135,5 +135,37 @@ namespace GestionVentas.Services.Services
 
             return articuloDto;
         }
+
+        public byte[] GenerarExportacionRegistros()
+        {
+            var result = this._articuloRepository.Get()
+                .Select(x => new ArticuloDTO
+                {
+                    Id = x.Id,
+                    CodigoBarras = x.CodigoBarras,
+                    Descripcion = x.Descripcion,
+                    ModeloDescripcion = $"{x.Modelo?.Codigo} - {x.Modelo?.Descripcion}",
+                    ColorDescripcion = $"{x.Color?.Codigo} - {x.Color?.Descripcion}",
+                    MarcaDescripcion = $"{x.Marca?.Codigo} - {x.Marca?.Descripcion}",
+                    CategoriaDescripcion = $"{x.Categoria?.Codigo} - {x.Categoria?.Descripcion}",
+                    Precio = x.Precio,
+                });
+            if (result.Any())
+            {
+                StringBuilder sb = new StringBuilder();
+                string separador = ";";
+                foreach (var item in result)
+                {
+                    sb.AppendLine($"{item.CodigoBarras}{separador}{item.Descripcion}{separador}" +
+                        $"{item.ModeloDescripcion}{separador}{item.ColorDescripcion}{separador}" +
+                        $"{item.MarcaDescripcion}{separador}{item.CategoriaDescripcion}{separador}{item.Precio}");
+                }
+                byte[] byteFile = Encoding.UTF8.GetBytes(sb.ToString());
+
+                return byteFile;
+            }
+
+            return new byte[1];
+        }
     }
 }
