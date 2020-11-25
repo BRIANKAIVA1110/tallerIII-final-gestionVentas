@@ -13,8 +13,8 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
         {
             builder.ToTable("modulosxperfiles");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.HasOne(x => x.Perfil).WithMany(x => x.ModulosxPerfil).HasForeignKey("PerfilId");
-            builder.HasOne(x => x.Modulo).WithMany(x => x.ModulosxPerfil).HasForeignKey("ModuloId");
+            builder.HasOne(x => x.Perfil).WithMany(x => x.ModulosxPerfil).HasForeignKey("PerfilId").IsRequired();
+            builder.HasOne(x => x.Modulo).WithMany(x => x.ModulosxPerfil).HasForeignKey("ModuloId").IsRequired();
         }
     }
 }

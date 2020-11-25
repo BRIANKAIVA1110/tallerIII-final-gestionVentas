@@ -9,8 +9,11 @@ namespace GestionVentas.Web.Models.ViewModels.Usuarios
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Perfil { get; set; }
-        public string PermisosModulos { get; set; }
+
+        public int PerfilId { get; set; }
+        public string PerfilDescripcion { get; set; }
+        
+        public string ModuloDescripcion { get; set; }
 
     }
 }

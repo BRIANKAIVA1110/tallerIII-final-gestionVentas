@@ -10,20 +10,21 @@ namespace GestionVentas.Infraestructura.Repositories
 {
     public class UsuarioRepository : RepositoryBase<Usuario>, IUsuarioRepository
     {
+        private readonly ApplicationContext _applicationContext;
         public UsuarioRepository(ApplicationContext applicationContext, IDbConnection dbConnection):base(applicationContext,dbConnection)
         {
-
+            this._applicationContext = applicationContext;
         }
         public override IEnumerable<Usuario> Get()
         {
-            IEnumerable<Usuario> listUsuario = this._entity.Include(x=> x.Perfil).ToList();
-
-
+            IEnumerable<Usuario> listUsuario = this._entity.Include(x => x.Perfil);
+                
+            
             return listUsuario;
         }
         public override Usuario GetById(int p_id)
         {
-            Usuario entity = this._entity.Include(x=> x.Perfil).FirstOrDefault(x => x.Id == p_id);
+            Usuario entity = this._entity.Include(x=> x.Perfil).ThenInclude(x=> x.ModulosxPerfil).FirstOrDefault(x => x.Id == p_id);
 
             return entity;
         }

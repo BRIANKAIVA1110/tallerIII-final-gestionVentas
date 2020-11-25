@@ -1,4 +1,6 @@
 ﻿using GestionVentas.DataTransferObjects.EntityDTO;
+using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.DataAccess.Queries;
 using GestionVentas.Infraestructura.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,25 +13,55 @@ namespace GestionVentas.Services.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPerfilRepository _perfilRepository;
-        public UsuarioService(IUsuarioRepository usuarioRepository, IPerfilRepository perfilRepository)
+        private readonly IModuloRepository _moduloRepository;
+       
+        public UsuarioService(IUsuarioRepository usuarioRepository, IPerfilRepository perfilRepository, IModuloRepository moduloRepository)
         {
             this._usuarioRepository = usuarioRepository;
             this._perfilRepository = perfilRepository;
+            this._moduloRepository = moduloRepository;
+       
         }
 
 
         public IEnumerable<UsuarioDTO> ObtenerUsuarios()
         {
-            var result = this._usuarioRepository.Get().ToList();
-            List<UsuarioDTO> listUsuarioDTO = result.Select(x => new UsuarioDTO
+            try
             {
-                Id = x.Id,
-                UserName = x.UserName,
-                PerfilId = x.Perfil.Id,
-                PerfilDescripcion = "asdaskdjaskldjaslkd",
-            }).ToList();
+                List<Usuario> listUsuarios = this._usuarioRepository.Get().ToList();
 
-            return listUsuarioDTO;
+
+                //TODO: ver como traer todo por entityFramework... many to many
+                foreach (var item in listUsuarios)
+                {
+                    item.Modulos = this._usuarioRepository.ExecuteQuery(new ObtenerModulosXPerfilId(item.Perfil.Id))
+                        .Select(x=> new Modulo { 
+                            Id = x.Id,
+                            Descripcion = x.Descripcion
+                        })
+                        .ToList();
+                }
+
+                if (listUsuarios != null) {
+                    List<UsuarioDTO> listUsuarioDTO = listUsuarios.Select(x => new UsuarioDTO
+                    {
+                        Id = x.Id,
+                        UserName = x.UserName,
+                        PerfilId = x.Perfil.Id,
+                        PerfilDescripcion = x.Perfil.Descripcion,
+                        ModuloDescripcion = string.Join(" - ", x.Modulos.Select(x => x.Descripcion).ToList<string>())
+                    }).ToList();
+
+                    return listUsuarioDTO;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
         public UsuarioDTO ObtenerUsuarioPorId(int p_id) {
             var result = this._usuarioRepository.GetById(p_id);
