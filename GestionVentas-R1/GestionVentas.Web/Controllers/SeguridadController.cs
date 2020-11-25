@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Controllers
 {
-    public class AutenticacionController:Controller
+    public class SeguridadController:Controller
     {
         private readonly ISeguridadService _seguridadService;
         private readonly IMapper _mapper;
-        public AutenticacionController(ISeguridadService seguridadService, IMapper mapper) {
+        public SeguridadController(ISeguridadService seguridadService, IMapper mapper) {
             this._seguridadService = seguridadService;
             this._mapper = mapper;
 
