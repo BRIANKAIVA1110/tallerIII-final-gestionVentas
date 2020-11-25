@@ -13,6 +13,8 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
         public int PerfilId { get; set; }
         public string PerfilDescripcion { get; set; }
 
+        public string ModuloDescripcion { get; set; }
+
 
     }
 }

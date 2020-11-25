@@ -1,4 +1,8 @@
-﻿
+﻿@using GestionVentas.Web.Enum
+
+
+@model List<GestionVentas.Web.Models.ViewModels.Usuarios.UsuarioViewModel>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -67,9 +71,9 @@
                     <tr>
                         <th>Acciones</th>
                         <th>#</th>
-                        <th>Articulo Descripcion</th>
-                        <th>Cantidad stock </th>
-
+                        <th>Nombre de Usuario</th>
+                        <th>Perfil Descripcion</th>
+                        <th>Modulos Descripcion</th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
@@ -79,16 +83,17 @@
                             int contRegistros = 1;
                             foreach (var item in Model)
                             {
-                                <tr>
-                                    <th>
-                                        <a asp-action="eliminar" asp-controller="stock" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
-                                        @*<a asp-action="form" asp-controller="stock" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>*@
-                                        <a asp-action="detalle" asp-controller="stock" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
-                                    </th>
-                                    <th>@contRegistros</th>
-                                    <td>@item.ArticuloDescripcion</td>
-                                    <td>@item.Cantidad</td>
-                                </tr>
+                                        <tr>
+                                            <th>
+                                                <a asp-action="eliminar" asp-controller="stock" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                                <a asp-action="form" asp-controller="stock" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
+                                                <a asp-action="detalle" asp-controller="stock" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
+                                            </th>
+                                            <th>@contRegistros</th>
+                                            <td>@item.UserName</td>
+                                            <td>@item.PerfilDescripcion</td>
+                                            <td>@item.ModuloDescripcion</td>
+                                        </tr>
 
 
                                 contRegistros = contRegistros + 1;
