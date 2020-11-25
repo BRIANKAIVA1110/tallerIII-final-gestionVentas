@@ -16,6 +16,13 @@
 }
 <h1>Categorias > @accionCrud.ToLower()</h1>
 
+@if (ViewBag.error != null)
+{
+    <div class="alert alert-danger">
+        <strong>Exeption: </strong> @ViewBag.error
+    </div>
+}
+
 <div class="container">
     @* asp-action = AccionesCRUD.AGREGAR || AccionesCRUD.MODIFICAR *@
     <form method="post" asp-action=@accionCrud asp-controller="categorias" id="formHTTP">

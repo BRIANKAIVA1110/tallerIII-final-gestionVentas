@@ -13,5 +13,6 @@ namespace GestionVentas.Services.Services
         ArticuloDTO getArticulo(int p_id);
         IEnumerable<ArticuloDTO> getArticulos();
         ArticuloDTO ObtenerArticuloPorCodigoBarras(string p_codigoBarras);
+        byte[] GenerarExportacionRegistros();
     }
 }
