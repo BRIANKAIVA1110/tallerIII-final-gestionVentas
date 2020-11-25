@@ -20,6 +20,9 @@ namespace GestionVentas.Services.Extensions
             services.AddTransient<IVentaService, VentaService>();
             services.AddTransient<ISeguridadService, SeguridadService>();
             services.AddTransient<IReporteService, ReporteService>();
+            services.AddTransient<IPerfilService, PerfilService>();
+            services.AddTransient<IModuloService, ModuloService>();
+            services.AddTransient<IUsuarioService, UsuarioService>();
         }
     }
 }

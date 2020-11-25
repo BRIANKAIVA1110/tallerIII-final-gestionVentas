@@ -5,11 +5,12 @@ using System.Text;
 
 namespace GestionVentas.Domain.Entities
 {
-    public class Usuario : IEntity
+    public class Perfil:IEntity
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public Perfil Perfil { get; set; }
+        public string Descripcion { get; set; }
+        public ICollection<ModulosXPerfil> ModulosxPerfil { get; set; }
+
+
     }
 }
