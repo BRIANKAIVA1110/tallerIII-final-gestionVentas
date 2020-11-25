@@ -60,9 +60,11 @@ namespace GestionVentas.Services.Services
                         Id = x.Id,
                         ArticuloId = x.Articulo.Id,
 
-                        ArticuloDescripcion = $"{x.Articulo.Descripcion} - " +
+                        ArticuloDescripcion = $"{x.Articulo.CodigoBarras} - {x.Articulo.Descripcion} - " +
                         $"{x.Articulo.Modelo.Descripcion} - " +
-                        $"{x.Articulo.Color.Descripcion}",
+                        $"{x.Articulo.Color.Descripcion} - " +
+                        $"{x.Articulo.Marca.Descripcion} - " +
+                        $"{x.Articulo.Categoria.Descripcion}",
 
                         Cantidad = x.Cantidad
                     });
@@ -96,6 +98,33 @@ namespace GestionVentas.Services.Services
             IEnumerable<ArticuloDTO> result = this._stockArticuloRepository.ExecuteQuery(new ObtenerArticulosSinAsignacionStock());
 
             return result;
+        }
+
+        public byte[] GenerarExportacionRegistros()
+        {
+            var result = this._stockArticuloRepository.Get()
+                .Select(x => new StockArticuloDTO
+                {
+                    Id = x.Id,
+                    ArticuloDescripcion = $"{x.Articulo.CodigoBarras} - {x.Articulo.Descripcion} - " +
+                    $"{x.Articulo.Modelo.Descripcion} - {x.Articulo.Color.Descripcion} - " +
+                    $"{x.Articulo.Marca.Descripcion} - {x.Articulo.Categoria.Descripcion}",
+                    Cantidad = x.Cantidad,
+                });
+            if (result.Any())
+            {
+                StringBuilder sb = new StringBuilder();
+                string separador = ";";
+                foreach (var item in result)
+                {
+                    sb.AppendLine($"{item.Id}{item.ArticuloDescripcion}{separador}{item.Cantidad}");
+                }
+                byte[] byteFile = Encoding.UTF8.GetBytes(sb.ToString());
+
+                return byteFile;
+            }
+
+            return new byte[1];
         }
     }
 }

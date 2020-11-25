@@ -30,7 +30,9 @@ namespace GestionVentas.Infraestructura.Repositories
         {
             IEnumerable<StockArticulo> listStockArticulo = this._entity.Include(x => x.Articulo)
                 .Include(x => x.Articulo.Color)
-                .Include(x => x.Articulo.Modelo);
+                .Include(x => x.Articulo.Modelo)
+                .Include(x => x.Articulo.Marca)
+                .Include(x => x.Articulo.Categoria);
 
             return listStockArticulo;
         }
