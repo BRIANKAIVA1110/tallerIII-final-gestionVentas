@@ -264,7 +264,7 @@ namespace GestionVentas.Web.Controllers
                     List<VentaViewModel> listVentaViewModel = this._ventaService.getVentas()
                     .Where(x => x.NroComporbante.Contains(p_query) ||
                         x.FechaVenta.ToString().Contains(p_query))
-                    .Select(x => this._mapper.Map<VentaViewModel>(x))
+                    .Select(x => this._mapper.Map<VentaViewModel>(x)).OrderByDescending(x=> x.FechaVenta)
                     .ToList();
 
                     if (!listVentaViewModel.Any())
@@ -274,7 +274,7 @@ namespace GestionVentas.Web.Controllers
                 else
                 {
                     List<VentaViewModel> listVentaViewModel = this._ventaService.getVentas()
-                    .Select(x => this._mapper.Map<VentaViewModel>(x))
+                    .Select(x => this._mapper.Map<VentaViewModel>(x)).OrderByDescending(x => x.FechaVenta)
                     .ToList();
                     return View("index", listVentaViewModel);
                 }

@@ -1,4 +1,5 @@
-﻿using GestionVentas.Services.Services;
+﻿using GestionVentas.Infraestructura.Repositories;
+using GestionVentas.Services.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace GestionVentas.Services.Extensions
             services.AddTransient<ICategoriaService, CategoriaService>();
             services.AddTransient<IVentaService, VentaService>();
             services.AddTransient<ISeguridadService, SeguridadService>();
+            services.AddTransient<IReporteRepository, ReporteRepository>();
         }
     }
 }

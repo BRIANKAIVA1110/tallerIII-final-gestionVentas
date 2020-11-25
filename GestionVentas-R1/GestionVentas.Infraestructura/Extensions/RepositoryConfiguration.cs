@@ -20,6 +20,7 @@ namespace GestionVentas.Infraestructura.Extensions
             services.AddTransient<IVentaRepository, VentaRepository>();
             services.AddTransient<IEmpresaRepository, EmpresaRepository>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IReporteRepository, ReporteRepository>();
         }
     }
 }
