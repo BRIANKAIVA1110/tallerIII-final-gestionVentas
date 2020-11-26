@@ -1,5 +1,7 @@
 ﻿using GestionVentas.Infraestructura.Repositories;
 using GestionVentas.Services.Services;
+using GestionVentas.Web.Enum;
+using GestionVentas.Web.Filters;
 using GestionVentas.Web.Models.ViewModels.Reportes;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Controllers
 {
+    [VerificarAutorizacionModulo(ModulosAplicacionEnum.reportes)]
     public class ReporteController :Controller
     {
         private readonly IReporteService _reporteService;
