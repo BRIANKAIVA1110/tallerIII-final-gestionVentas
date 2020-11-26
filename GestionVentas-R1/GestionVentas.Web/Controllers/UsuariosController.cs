@@ -4,6 +4,7 @@ using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
 using GestionVentas.Web.Models.ViewModels.Usuarios;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,13 @@ namespace GestionVentas.Web.Controllers
     public class UsuariosController:Controller
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IPerfilService _perfilService;
         private readonly IMapper _mapper;
-        public UsuariosController(IUsuarioService usuarioService, IMapper mapper)
+        public UsuariosController(IUsuarioService usuarioService, IMapper mapper, IPerfilService perfilService)
         {
             this._usuarioService = usuarioService;
             this._mapper = mapper;
+            this._perfilService = perfilService;
 
         }
 
@@ -46,9 +49,17 @@ namespace GestionVentas.Web.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    throw new Exception("Error al validar datos.");
+                    throw new Exception("Error al validar datos.");               
                 else
                 {
+                    if (p_UsuarioVM.Password != p_UsuarioVM.ConfirmacionPassword)
+                        throw new Exception("No coinciden las contraseñas ingresadas, asegurese de que sean identicos.");
+
+                    if (p_UsuarioVM.UserName.Trim().Contains(" "))
+                        throw new Exception("El nombre de usuario de debe contener espacios en blando.");
+                    if (p_UsuarioVM.PerfilId==0)
+                        throw new Exception("Debe seleccionar un perfil para el usuario.");
+
                     UsuarioDTO usuarioDTO = this._mapper.Map<UsuarioDTO>(p_UsuarioVM);
                     int result = this._usuarioService.AgregarUsuario(usuarioDTO);
 
@@ -62,7 +73,7 @@ namespace GestionVentas.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.error = ex.InnerException.Message;
+                ViewBag.error = ex.Message;
                 ViewData["accionCRUD"] = AccionesCRUD.AGREGAR;
                 return View("form", p_UsuarioVM);
             }
@@ -185,22 +196,33 @@ namespace GestionVentas.Web.Controllers
         /// <param name="Id"> null || Id </param>
         /// <returns></returns>
         //[Route("Color/Form")]
-        [Route("Color/Form/{Id?}")]
+        [Route("Usuarios/Form/{Id?}")]
         public IActionResult Form([FromQuery] AccionesCRUD accionCRUD, int? Id)
         {
             try
             {
                 if (accionCRUD.Equals(AccionesCRUD.AGREGAR) || accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                 {
+                    List<SelectListItem> Perfiles = this._perfilService.getPerfiles().Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = $"{x.Descripcion} - [{x.ModulosDescripcion}]"
+                    }).ToList();
+
 
                     ViewData["accionCRUD"] = accionCRUD;
-                    if (accionCRUD.Equals(AccionesCRUD.AGREGAR))
-                        return View();
+                    if (accionCRUD.Equals(AccionesCRUD.AGREGAR)) {
+                        UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
+                        usuarioViewModel.Perfiles = Perfiles;
+                        return View(usuarioViewModel);
+                    }
 
                     if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                     {
                         UsuarioDTO usuarioDTO = this._usuarioService.getUsuario((int)Id);
                         UsuarioViewModel usuarioViewModel = this._mapper.Map<UsuarioViewModel>(usuarioDTO);
+                        usuarioViewModel.Perfiles = Perfiles;
+
                         return View(usuarioViewModel);
                     }
 
