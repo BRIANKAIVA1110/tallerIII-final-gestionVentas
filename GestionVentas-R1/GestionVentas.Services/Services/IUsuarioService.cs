@@ -10,6 +10,7 @@ namespace GestionVentas.Services.Services
         int EliminarUsuario(int p_id);
         UsuarioDTO getUsuario(int p_id);
         IEnumerable<UsuarioDTO> getUsuarios();
+        List<ModulosApplicacionDTO> ObtenerModulosApplicacionSegunPerfilUsuario(int p_userId);
         //byte[] GenerarExportacionRegistros();
     }
 }

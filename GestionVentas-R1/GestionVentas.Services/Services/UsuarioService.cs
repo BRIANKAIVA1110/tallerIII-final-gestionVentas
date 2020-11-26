@@ -143,7 +143,14 @@ namespace GestionVentas.Services.Services
 
         }
 
-      
+        public List<ModulosApplicacionDTO> ObtenerModulosApplicacionSegunPerfilUsuario(int p_userId) {
+            
+            Usuario entityUsuario = this._usuarioRepository.GetById(p_userId);
+
+            List<ModulosApplicacionDTO> modulos = this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(entityUsuario.Perfil.Id)).ToList();
+
+            return modulos;
+        }
 
         //public byte[] GenerarExportacionRegistros()
         //{
