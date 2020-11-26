@@ -12,6 +12,6 @@ namespace GestionVentas.Domain.Entities
         public string Password { get; set; }
         public Perfil Perfil { get; set; }
 
-        public ICollection<Modulo> Modulos { get; set; }
+        public ICollection<ModulosApplicacion> Modulos { get; set; }
     }
 }

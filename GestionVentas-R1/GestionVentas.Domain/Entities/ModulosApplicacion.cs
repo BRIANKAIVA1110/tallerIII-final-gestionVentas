@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GestionVentas.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GestionVentas.DataTransferObjects.EntityDTO
+namespace GestionVentas.Domain.Entities
 {
-    public class ModuloDTO
+    public class ModulosApplicacion:IEntity
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }

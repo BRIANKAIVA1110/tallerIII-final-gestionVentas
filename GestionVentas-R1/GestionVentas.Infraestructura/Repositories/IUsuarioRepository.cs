@@ -7,5 +7,6 @@ namespace GestionVentas.Infraestructura.Repositories
 {
     public interface IUsuarioRepository:IRepositoryBase<Usuario>
     {
+        IEnumerable<ModulosApplicacion> pepe();
     }
 }

@@ -1,15 +1,17 @@
-﻿@using GestionVentas.Web.Enum
+﻿
+@using GestionVentas.Web.Enum;
 
-
-@model List<GestionVentas.Web.Models.ViewModels.Usuarios.UsuarioViewModel>
+@model List<GestionVentas.Web.Models.ViewModels.Usuarios.PerfilViewModel>
 
 @{
     ViewData["Title"] = "Index";
+    string tituloVista = "Perfiles";
+    string p_query = "";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h1>Usuario</h1>
-
+<h3>@tituloVista</h3>
 
 @if (ViewBag.error != null)
 {
@@ -39,22 +41,21 @@
         </button>
     </div>
 }
-
 <div class="container-fluid">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <div class="col-lg-7 col-md-7 col-sm-12">
                 <ul class="nav ">
                     <li class="nav-item ">
-                        @*<a class="nav-link  btn-success" asp-area="" asp-controller="stock" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR><i class="fa fa-plus" aria-hidden="true"></i>Agregar</a>*@
+                        <a class="nav-link  btn-success" asp-area="" asp-controller="perfiles" asp-action="form" asp-route-accionCRUD=@AccionesCRUD.AGREGAR><i class="fa fa-plus" aria-hidden="true"></i>Agregar</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-dark" asp-action="ExportarRegistros" asp-controller="stock"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
-                    </li>
+                    @*<li class="nav-item">
+                        <a class="nav-link btn-dark" asp-action="ExportarRegistros" asp-controller="perfiles"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Exportar</a>
+                    </li>*@
                 </ul>
             </div>
             <div class="col-lg-5 col-md-5 col-sm-12 d-lg-inline-flex d-md-inline-flex justify-content-end ">
-                <form class="form-inline" asp-action="buscar" asp-controller="stock" method="get">
+                <form class="form-inline" asp-action="buscar" asp-controller="perfiles" method="get">
 
                     @* name=[nameParameter from method] --> modelos/buscar?p_query= [valueInput]   *@
                     <input class="form-control form-control-sm" placeholder="Buscar..." name="p_query">
@@ -71,9 +72,8 @@
                     <tr>
                         <th>Acciones</th>
                         <th>#</th>
-                        <th>Nombre de Usuario</th>
-                        <th>Perfil Descripcion</th>
-                        <th>Modulos Autorizados</th>
+                        <th>Descripcion</th>
+                        <th>Modulos autorizados</th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
@@ -85,29 +85,34 @@
                             {
                                         <tr>
                                             <th>
-                                                <a asp-action="eliminar" asp-controller="stock" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
-                                                <a asp-action="form" asp-controller="stock" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
-                                                <a asp-action="detalle" asp-controller="stock" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
+                                                <a asp-action="eliminar" asp-controller="perfiles" asp-route-id=@item.Id onclick="generarRuta(@item.Id,event)" class="text-decoration-none text-danger" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                                                <a asp-action="form" asp-controller="perfiles" asp-route-accionCRUD=@AccionesCRUD.MODIFICAR asp-route-id=@item.Id class="text-decoration-none"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></a>
+                                                <a asp-action="detalle" asp-controller="perfiles" asp-route-id=@item.Id class="text-decoration-none text-dark"><i class="fa fa-info fa-2x" aria-hidden="true"></i></a>
                                             </th>
                                             <th>@contRegistros</th>
-                                            <td>@item.UserName</td>
-                                            <td>@item.PerfilDescripcion</td>
-                                            <td>@item.ModuloDescripcion</td>
+                                            <td>@item.Descripcion</td>
+                                            <td>@item.Descripcion</td>
                                         </tr>
 
 
                                 contRegistros = contRegistros + 1;
                             }
                         }
-
                     }
                 </tbody>
             </table>
         </div>
-
+        @*<div class="container d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </div>*@
     </div>
 </div>
-
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -132,7 +137,7 @@
 
         let Id = 0;
         let action = "eliminar";
-        let controller = "usuarios";
+        let controller = "perfiles";
         const generarRuta = (p_id, event) => {
             //let pepe = document.getElementById('btnEliminar').dataset.id;
             //console.log("valor Id delete"+event.target.dataset.id);
@@ -142,4 +147,11 @@
 
     </script>
 }
+
+
+
+
+
+
+
 

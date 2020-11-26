@@ -24,9 +24,16 @@ namespace GestionVentas.Infraestructura.Repositories
         }
         public override Usuario GetById(int p_id)
         {
-            Usuario entity = this._entity.Include(x=> x.Perfil).ThenInclude(x=> x.ModulosxPerfil).FirstOrDefault(x => x.Id == p_id);
+            Usuario entity = this._entity.Include(x=> x.Perfil).FirstOrDefault(x => x.Id == p_id);
 
             return entity;
+        }
+
+
+        public IEnumerable<ModulosApplicacion> pepe() {
+
+            List<ModulosApplicacion> result = this._applicationContext.Set<ModulosApplicacion>().ToList();
+            return result;
         }
     }
 }

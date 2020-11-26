@@ -5,7 +5,7 @@ namespace GestionVentas.Services.Services
 {
     public interface IModuloService
     {
-        IEnumerable<ModuloDTO> ObtenerModulos();
-        ModuloDTO ObtenerModuloPorId(int p_id);
+        IEnumerable<ModulosApplicacionDTO> ObtenerModulos();
+        ModulosApplicacionDTO ObtenerModuloPorId(int p_id);
     }
 }

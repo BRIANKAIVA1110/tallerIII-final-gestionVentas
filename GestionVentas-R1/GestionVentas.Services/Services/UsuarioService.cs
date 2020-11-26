@@ -13,13 +13,13 @@ namespace GestionVentas.Services.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPerfilRepository _perfilRepository;
-        private readonly IModuloRepository _moduloRepository;
+        
        
-        public UsuarioService(IUsuarioRepository usuarioRepository, IPerfilRepository perfilRepository, IModuloRepository moduloRepository)
+        public UsuarioService(IUsuarioRepository usuarioRepository, IPerfilRepository perfilRepository)
         {
             this._usuarioRepository = usuarioRepository;
             this._perfilRepository = perfilRepository;
-            this._moduloRepository = moduloRepository;
+            
        
         }
 
@@ -35,7 +35,7 @@ namespace GestionVentas.Services.Services
                 foreach (var item in listUsuarios)
                 {
                     item.Modulos = this._usuarioRepository.ExecuteQuery(new ObtenerModulosXPerfilId(item.Perfil.Id))
-                        .Select(x=> new Modulo { 
+                        .Select(x=> new ModulosApplicacion { 
                             Id = x.Id,
                             Descripcion = x.Descripcion
                         })

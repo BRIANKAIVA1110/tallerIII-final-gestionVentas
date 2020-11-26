@@ -1,4 +1,5 @@
-﻿using GestionVentas.Infraestructura.Repositories;
+﻿using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace GestionVentas.Infraestructura.Extensions
             services.AddTransient<IReporteRepository, ReporteRepository>();
             services.AddTransient<IPerfilRepository, PerfilRepository>();
             services.AddTransient<IModuloRepository, ModuloRepository>();
+
+
         }
     }
 }

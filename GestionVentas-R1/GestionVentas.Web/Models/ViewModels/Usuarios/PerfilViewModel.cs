@@ -1,19 +1,23 @@
-﻿using System;
+﻿using GestionVentas.DataTransferObjects.EntityDTO;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace GestionVentas.DataTransferObjects.EntityDTO
+namespace GestionVentas.Web.Models.ViewModels.Usuarios
 {
-    public class PerfilDTO
+    public class PerfilViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Descripcion { get; set; }
-
 
         public bool IsCheckArticulos { get; set; }
         public bool IsCheckStock { get; set; }
         public bool IsCheckVentas { get; set; }
         public bool IsCheckReportes { get; set; }
         public bool IsCheckSeguridad { get; set; }
+
     }
+
+    
 }
