@@ -135,6 +135,7 @@ namespace GestionVentas.Web.Controllers
 
 
                     var puntoDeVentaVM = ConstruirPuntoVentaViewModel();
+                    puntoDeVentaVM.InformacionCliente = clienteInfo;
                     return View("PuntoVenta", puntoDeVentaVM);
                 }
 
