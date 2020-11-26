@@ -37,6 +37,7 @@ namespace GestionVentas.Web.Support
         {
             CreateMap<AutenticacionViewModel, UsuarioDTO>().ReverseMap();
             CreateMap<PerfilViewModel, PerfilDTO>().ReverseMap();
+            CreateMap<UsuarioViewModel, UsuarioDTO>().ReverseMap();
         }
         public void ModuloVentasConfiguracion() {
             CreateMap<VentaViewModel, VentaDTO>().ReverseMap();

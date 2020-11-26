@@ -1,0 +1,30 @@
+﻿
+
+@using GestionVentas.Web.Enum
+
+@model GestionVentas.Web.Models.ViewModels.Usuarios.UsuarioViewModel
+
+@{
+    ViewData["Title"] = "Detalle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Usuario > Detalle</h1>
+
+<b><label asp-for="UserName" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.UserName)
+<br />
+<b><label asp-for="PerfilDescripcion" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.PerfilDescripcion)
+<br />
+<b><label asp-for="ModuloDescripcion" class="control-label"></label>:</b>
+@Html.DisplayFor(x => x.ModuloDescripcion)
+
+<hr />
+<a asp-action="index" asp-controller="usuarios" class="btn btn-dark form-control-sm ">Volver </a>
+<a asp-action="form" asp-controller="usuarios" asp-route-Id=@Model.Id asp-route-accionCRUD=@AccionesCRUD.MODIFICAR class="btn btn-primary form-control-sm ">Modificar</a>
+<a asp-action="eliminar" asp-controller="usuarios" asp-route-Id=@Model.Id class="btn btn-danger form-control-sm ">Eliminar</a>
+
+
+
+
