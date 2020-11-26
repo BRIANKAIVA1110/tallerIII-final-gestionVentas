@@ -90,7 +90,7 @@ namespace GestionVentas.Web.Controllers
             catch (Exception ex)
             {
 
-                ViewBag.error = ex.InnerException.Message;
+                ViewBag.error = ex.InnerException?.Message;
                 ViewData["accionCRUD"] = AccionesCRUD.MODIFICAR;
                 return View("form", p_perfilVM);
             }

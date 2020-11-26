@@ -10,6 +10,7 @@ namespace GestionVentas.Web.Models.ViewModels.Usuarios
     {
         public int? Id { get; set; }
         public string Descripcion { get; set; }
+        public string ModulosDescripcion { get; set; }
 
         public bool IsCheckArticulos { get; set; }
         public bool IsCheckStock { get; set; }

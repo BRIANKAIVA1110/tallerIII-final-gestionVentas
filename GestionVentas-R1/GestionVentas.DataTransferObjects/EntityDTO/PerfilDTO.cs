@@ -8,6 +8,8 @@ namespace GestionVentas.DataTransferObjects.EntityDTO
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
+        public string ModulosDescripcion { get; set; }
+
 
 
         public bool IsCheckArticulos { get; set; }

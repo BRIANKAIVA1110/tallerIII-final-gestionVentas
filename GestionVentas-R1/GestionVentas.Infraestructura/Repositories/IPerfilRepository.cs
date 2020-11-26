@@ -7,5 +7,6 @@ namespace GestionVentas.Infraestructura.Repositories
     public interface IPerfilRepository : IRepositoryBase<Perfil>
     {
         int AgregarPerfilConModulos(PerfilDTO p_perfilDTO);
+        int ModificarPerfilConModulos(PerfilDTO p_perfilDTO);
     }
 }

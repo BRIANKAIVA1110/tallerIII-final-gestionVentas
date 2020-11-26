@@ -45,11 +45,7 @@ namespace GestionVentas.Services.Services
         {
             try
             {
-                Perfil objEntity = this._perfilRepository.GetById(p_perfilDTO.Id);
-
-                objEntity.Descripcion = p_perfilDTO.Descripcion;
-
-                int result = this._perfilRepository.Update(objEntity);
+                int result = this._perfilRepository.ModificarPerfilConModulos(p_perfilDTO);
 
                 return result;
             }
@@ -83,11 +79,15 @@ namespace GestionVentas.Services.Services
         {
             try
             {
+                string[] aux = new string[1];
+                aux[0] = "";
                 var result = this._perfilRepository.Get()
                 .Select(x => new PerfilDTO
                 {
                     Id = x.Id,
-                    Descripcion = x.Descripcion
+                    Descripcion = x.Descripcion,
+                    ModulosDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).ToList()).Any()? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).Select(x=> x.Descripcion).ToList(): new List<string> { })
+
                 });
 
                 return result;
@@ -105,6 +105,8 @@ namespace GestionVentas.Services.Services
             try
             {
                 Perfil objEntity = this._perfilRepository.GetById(p_id);
+                List<ModulosApplicacionDTO> listModulosApplicacionDTO = this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id));
+
                 if (objEntity != null)
                 {
                     PerfilDTO objResult = new PerfilDTO
@@ -112,6 +114,12 @@ namespace GestionVentas.Services.Services
                         Id = objEntity.Id,
                         Descripcion = objEntity.Descripcion
                     };
+
+                    objResult.IsCheckArticulos = ConteaintMudulo(listModulosApplicacionDTO, "articulos");
+                    objResult.IsCheckStock = ConteaintMudulo(listModulosApplicacionDTO, "stock"); ;
+                    objResult.IsCheckVentas = ConteaintMudulo(listModulosApplicacionDTO, "ventas");
+                    objResult.IsCheckReportes = ConteaintMudulo(listModulosApplicacionDTO, "reportes");
+                    objResult.IsCheckSeguridad = ConteaintMudulo(listModulosApplicacionDTO, "seguridad");
 
                     return objResult;
                 }
@@ -130,6 +138,12 @@ namespace GestionVentas.Services.Services
 
         }
 
+
+        private bool ConteaintMudulo(List<ModulosApplicacionDTO> listModulosApplicacionDTO, string value) {
+            bool result = listModulosApplicacionDTO.Where(x => x.Descripcion == value).FirstOrDefault()!=null? true:false;
+
+            return result;
+        }
         public byte[] GenerarExportacionRegistros()
         {
             var result = this._perfilRepository.Get()
