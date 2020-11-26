@@ -2,6 +2,7 @@
 using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
 using GestionVentas.Web.Enum;
+using GestionVentas.Web.Filters;
 using GestionVentas.Web.Models.ViewModels.Articulos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Controllers
 {
+    [VerificarAutorizacionModulo(ModulosAplicacionEnum.articulos)]
     public class ArticulosController:Controller
     {
         private readonly IArticuloService _articuloService;

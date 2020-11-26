@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Services.Services;
+using GestionVentas.Web.Enum;
+using GestionVentas.Web.Filters;
 using GestionVentas.Web.Helper;
 using GestionVentas.Web.Models.ViewModels.Ventas;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace GestionVentas.Web.Controllers
 {
+    [VerificarAutorizacionModulo(ModulosAplicacionEnum.ventas)]
     public class VentasController : Controller
     {
 
@@ -132,6 +135,7 @@ namespace GestionVentas.Web.Controllers
 
 
                     var puntoDeVentaVM = ConstruirPuntoVentaViewModel();
+                    puntoDeVentaVM.InformacionCliente = clienteInfo;
                     return View("PuntoVenta", puntoDeVentaVM);
                 }
 
