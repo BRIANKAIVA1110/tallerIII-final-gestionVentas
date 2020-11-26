@@ -1,4 +1,5 @@
-﻿using GestionVentas.DataTransferObjects.EntityDTO;
+﻿using GestionVentas.Common.Encriptacion;
+using GestionVentas.DataTransferObjects.EntityDTO;
 using GestionVentas.Domain.Entities;
 using GestionVentas.Infraestructura.DataAccess.Queries;
 using GestionVentas.Infraestructura.Repositories;
@@ -23,55 +24,149 @@ namespace GestionVentas.Services.Services
        
         }
 
-
-        public IEnumerable<UsuarioDTO> ObtenerUsuarios()
+        public int AgregarUsuario(UsuarioDTO p_UsuarioDTO)
         {
             try
             {
-                List<Usuario> listUsuarios = this._usuarioRepository.Get().ToList();
-
-
-                //TODO: ver como traer todo por entityFramework... many to many
-                foreach (var item in listUsuarios)
+                Perfil entityPerfil = this._perfilRepository.GetById(p_UsuarioDTO.PerfilId);
+                int result = this._usuarioRepository.Add(new Usuario
                 {
-                    item.Modulos = this._usuarioRepository.ExecuteQuery(new ObtenerModulosXPerfilId(item.Perfil.Id))
-                        .Select(x=> new ModulosApplicacion { 
-                            Id = x.Id,
-                            Descripcion = x.Descripcion
-                        })
-                        .ToList();
-                }
+                    UserName = p_UsuarioDTO.UserName,
+                    Password = Encriptador.Encriptar(p_UsuarioDTO.Password),
+                    Perfil = entityPerfil
+                });
 
-                if (listUsuarios != null) {
-                    List<UsuarioDTO> listUsuarioDTO = listUsuarios.Select(x => new UsuarioDTO
-                    {
-                        Id = x.Id,
-                        UserName = x.UserName,
-                        PerfilId = x.Perfil.Id,
-                        PerfilDescripcion = x.Perfil.Descripcion,
-                        ModuloDescripcion = string.Join(" - ", x.Modulos.Select(x => x.Descripcion).ToList<string>())
-                    }).ToList();
-
-                    return listUsuarioDTO;
-                }
-                return null;
+                return result;
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-            
-        }
-        public UsuarioDTO ObtenerUsuarioPorId(int p_id) {
-            var result = this._usuarioRepository.GetById(p_id);
-
-            UsuarioDTO objUsuarioDTO = new UsuarioDTO {
-                Id = result.Id,
-                UserName = result.UserName
-            };
-            return objUsuarioDTO;
 
         }
+
+        public int ModificarUsuario(UsuarioDTO p_UsuarioDTO)
+        {
+            try
+            {
+                Usuario entityUsuario = this._usuarioRepository.GetById(p_UsuarioDTO.Id);
+                Perfil entityPerfil = this._perfilRepository.GetById(p_UsuarioDTO.PerfilId);
+
+                entityUsuario.UserName = p_UsuarioDTO.UserName;
+                entityUsuario.Password = Encriptador.Encriptar(p_UsuarioDTO.Password);
+                entityUsuario.Perfil = entityPerfil;
+
+                int result = this._usuarioRepository.Update(entityUsuario);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+        public int EliminarUsuario(int p_id)
+        {
+            try
+            {
+                Usuario objEntity = this._usuarioRepository.GetById(p_id);
+
+                int result = this._usuarioRepository.Delete(objEntity);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+        public IEnumerable<UsuarioDTO> getUsuarios()
+        {
+            try
+            {
+                var result = this._usuarioRepository.Get()
+                .Select(x => new UsuarioDTO
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    PerfilDescripcion = x.Perfil.Descripcion,
+                    ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
+                });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+        public UsuarioDTO getUsuario(int p_id)
+        {
+            try
+            {
+                Usuario objEntity = this._usuarioRepository.GetById(p_id);
+                if (objEntity != null)
+                {
+                    UsuarioDTO objResult = new UsuarioDTO
+                    {
+                        Id = objEntity.Id,
+                        UserName = objEntity.UserName,
+                        PerfilDescripcion = objEntity.Perfil.Descripcion,
+                        ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
+                    };
+
+                    return objResult;
+                }
+                else
+                {
+
+                    throw new Exception("No se encontro el registro");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+      
+
+        //public byte[] GenerarExportacionRegistros()
+        //{
+        //    var result = this._colorRepository.Get()
+        //        .Select(x => new UsuarioDTO
+        //        {
+        //            Id = x.Id,
+        //            Codigo = x.Codigo,
+        //            Descripcion = x.Descripcion
+        //        });
+        //    if (result.Any())
+        //    {
+        //        StringBuilder sb = new StringBuilder();
+        //        string separador = ";";
+        //        foreach (var item in result)
+        //        {
+        //            sb.AppendLine($"{item.Codigo}{separador}{item.Descripcion}");
+        //        }
+        //        byte[] byteFile = Encoding.UTF8.GetBytes(sb.ToString());
+
+        //        return byteFile;
+        //    }
+
+        //    return new byte[1];
+        //}
     }
 }

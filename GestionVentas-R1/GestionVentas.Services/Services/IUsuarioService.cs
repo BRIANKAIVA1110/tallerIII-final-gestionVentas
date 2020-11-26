@@ -5,7 +5,11 @@ namespace GestionVentas.Services.Services
 {
     public interface IUsuarioService
     {
-        IEnumerable<UsuarioDTO> ObtenerUsuarios();
-        UsuarioDTO ObtenerUsuarioPorId(int p_id);
+        int AgregarUsuario(UsuarioDTO p_UsuarioDTO);
+        int ModificarUsuario(UsuarioDTO p_UsuarioDTO);
+        int EliminarUsuario(int p_id);
+        UsuarioDTO getUsuario(int p_id);
+        IEnumerable<UsuarioDTO> getUsuarios();
+        //byte[] GenerarExportacionRegistros();
     }
 }
