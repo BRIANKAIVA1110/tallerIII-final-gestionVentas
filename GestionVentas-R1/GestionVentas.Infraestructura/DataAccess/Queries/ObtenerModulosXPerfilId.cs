@@ -26,7 +26,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Queries
             sb.AppendLine("per.Id as PerfilId,");
             sb.AppendLine("mdl.descripcion as Descripcion");
             sb.AppendLine("from perfiles as per left join modulosxperfiles as mxp on per.id = mxp.perfilid");
-            sb.AppendLine("inner join modulos as mdl on mxp.moduloId = mdl.id");
+            sb.AppendLine("inner join modulosapplicacion as mdl on mxp.moduloId = mdl.id");
             sb.AppendLine($"where per.id = {this.PerfilId};");
 
             var result = connection.Query<ModulosApplicacionDTO>(sb.ToString()).ToList();
