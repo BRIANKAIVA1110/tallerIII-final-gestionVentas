@@ -1,5 +1,5 @@
 # tallerIII-final-gestionVentas
 
-Inicio de sesion admin:
-Nombre de Usuario: admin
-Contraseña: admin
+Inicio de sesion admin: \n
+Nombre de Usuario: admin \n
+Contraseña: admin  \n
