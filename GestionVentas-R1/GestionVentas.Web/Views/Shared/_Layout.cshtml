@@ -1,8 +1,10 @@
 ﻿
 @using GestionVentas.Web.Helper
+@using GestionVentas.Web.Enum
 
 @{
     dynamic usuario = SessionHelper.GetObjectFromJson<dynamic>(this.Context.Session, "usuario");
+    string modulosAutorizado = usuario?.ModulosAutorizado??"";
 }
 
 <!DOCTYPE html>
@@ -30,44 +32,62 @@
                         <li>
                             <a class="nav-item nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home " aria-hidden="true"></i>Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Articulos</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index">Modelos</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Colores" asp-action="Index">Colores</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Marcas" asp-action="Index">Marcas</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Articulos" asp-action="Index">Articulos</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Stock</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Stock Articulos</a>
+                        @if (modulosAutorizado.Contains(ModulosAplicacionEnum.articulos.ToString()))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Articulos</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Modelos" asp-action="Index">Modelos</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Colores" asp-action="Index">Colores</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Marcas" asp-action="Index">Marcas</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Articulos" asp-action="Index">Articulos</a>
+                                </div>
+                            </li>
+                        }
 
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Ventas</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Ventas</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="PuntoVenta">Punto de Venta</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Reportes</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="reporte" asp-action="ReporteRecaudacionArticulosVendidos">Recaudacion Articulos Vendidos</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="reporte" asp-action="ReporteCantidadArticuloVendidosPordia">Cantidad Articulo Vendidos Por dia</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Seguridad</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="usuarios" asp-action="Index">Usuarios</a>
-                                <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="perfiles" asp-action="Index">Perfiles</a>
-                            </div>
-                        </li>
+                        @if (modulosAutorizado.Contains(ModulosAplicacionEnum.stock.ToString()))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Stock</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index">Stock Articulos</a>
+
+                                </div>
+                            </li>
+                        }
+                        @if (modulosAutorizado.Contains(ModulosAplicacionEnum.ventas.ToString()))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Ventas</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Ventas</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="PuntoVenta">Punto de Venta</a>
+                                </div>
+                            </li>
+
+                        }
+                        @if (modulosAutorizado.Contains(ModulosAplicacionEnum.reportes.ToString()))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Reportes</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="reporte" asp-action="ReporteRecaudacionArticulosVendidos">Recaudacion Articulos Vendidos</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="reporte" asp-action="ReporteCantidadArticuloVendidosPordia">Cantidad Articulo Vendidos Por dia</a>
+                                </div>
+                            </li>
+                        }
+
+                        @if (modulosAutorizado.Contains(ModulosAplicacionEnum.seguridad.ToString())) { 
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#">Seguridad</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="usuarios" asp-action="Index">Usuarios</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="perfiles" asp-action="Index">Perfiles</a>
+                                </div>
+                            </li>
+                        }
+                            
                     </ul>
 
                 </div>
