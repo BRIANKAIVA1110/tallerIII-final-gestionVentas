@@ -141,7 +141,8 @@ namespace GestionVentas.Web.Controllers
                 {
                     List<UsuarioViewModel> listUsuarioViewModel = this._usuarioService.getUsuarios()
                     .Where(x => x.PerfilDescripcion.Contains(p_query) ||
-                        x.ModuloDescripcion.Contains(p_query))
+                        x.ModuloDescripcion.Contains(p_query)||
+                        x.UserName.Contains(p_query))
                     .Select(x => this._mapper.Map<UsuarioViewModel>(x))
                     .ToList();
 
@@ -220,7 +221,9 @@ namespace GestionVentas.Web.Controllers
                     if (accionCRUD.Equals(AccionesCRUD.MODIFICAR))
                     {
                         UsuarioDTO usuarioDTO = this._usuarioService.getUsuario((int)Id);
+                        PerfilDTO perfilDTO = this._perfilService.getPerfil(usuarioDTO.PerfilId);
                         UsuarioViewModel usuarioViewModel = this._mapper.Map<UsuarioViewModel>(usuarioDTO);
+                        usuarioViewModel.PerfilDescripcion = $"{perfilDTO.Descripcion} - [{perfilDTO.ModulosDescripcion}]";
                         usuarioViewModel.Perfiles = Perfiles;
 
                         return View(usuarioViewModel);

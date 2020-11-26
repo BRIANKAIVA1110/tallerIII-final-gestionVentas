@@ -40,20 +40,24 @@
                 @*<span asp-validation-for="UserName" class="text-danger"></span>*@
             </div>
         </div>
-        <div class="form-group row">
-            <label asp-for="Password" class="col-form-label col-form-label-sm col-sm-2">Password:</label>
-            <div class="col-sm-10">
-                <input asp-for="Password" type="password" class="form-control form-control-sm" placeholder="Password" required />
-                @*<span asp-validation-for="Password" class="text-danger"></span>*@
+        @if (!accionCrud.ToUpper().Equals("MODIFICAR"))
+        {
+            <div class="form-group row">
+                <label asp-for="Password" class="col-form-label col-form-label-sm col-sm-2">Password:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Password" type="password" class="form-control form-control-sm" placeholder="Password" required />
+                    @*<span asp-validation-for="Password" class="text-danger"></span>*@
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label asp-for="ConfirmacionPassword" class="col-form-label col-form-label-sm col-sm-2">Confirmar Password:</label>
-            <div class="col-sm-10">
-                <input asp-for="ConfirmacionPassword" type="password" class="form-control form-control-sm" placeholder="Confirmar Password" required />
-                @*<span asp-validation-for="ConfirmacionPassword" class="text-danger"></span>*@
+            <div class="form-group row">
+                <label asp-for="ConfirmacionPassword" class="col-form-label col-form-label-sm col-sm-2">Confirmar Password:</label>
+                <div class="col-sm-10">
+                    <input asp-for="ConfirmacionPassword" type="password" class="form-control form-control-sm" placeholder="Confirmar Password" required />
+                    @*<span asp-validation-for="ConfirmacionPassword" class="text-danger"></span>*@
+                </div>
             </div>
-        </div>
+        }
+
 
         <!-- #region AlternativaDropDown -->
         <!--<div class="form-group row">
@@ -76,7 +80,7 @@
                     }
                     else
                     {
-                        <option selected value=@Model.PerfilId>@Model.Perfiles</option>
+                        <option selected value=@Model.PerfilId>@Model.PerfilDescripcion</option>
                     }
                 </select>
             </div>

@@ -54,7 +54,7 @@ namespace GestionVentas.Services.Services
                 Perfil entityPerfil = this._perfilRepository.GetById(p_UsuarioDTO.PerfilId);
 
                 entityUsuario.UserName = p_UsuarioDTO.UserName;
-                entityUsuario.Password = Encriptador.Encriptar(p_UsuarioDTO.Password);
+                //entityUsuario.Password = Encriptador.Encriptar(p_UsuarioDTO.Password);
                 entityUsuario.Perfil = entityPerfil;
 
                 int result = this._usuarioRepository.Update(entityUsuario);
@@ -97,7 +97,7 @@ namespace GestionVentas.Services.Services
                     Id = x.Id,
                     UserName = x.UserName,
                     PerfilDescripcion = x.Perfil.Descripcion,
-                    ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
+                    ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Perfil.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(x.Perfil.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
                 });
 
                 return result;
@@ -121,8 +121,9 @@ namespace GestionVentas.Services.Services
                     {
                         Id = objEntity.Id,
                         UserName = objEntity.UserName,
+                        PerfilId = objEntity.Perfil.Id,
                         PerfilDescripcion = objEntity.Perfil.Descripcion,
-                        ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
+                        ModuloDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Perfil.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Perfil.Id)).Select(x => x.Descripcion).ToList() : new List<string> { })
                     };
 
                     return objResult;
