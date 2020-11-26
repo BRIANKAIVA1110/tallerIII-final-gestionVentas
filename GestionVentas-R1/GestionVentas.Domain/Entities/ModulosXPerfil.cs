@@ -8,7 +8,7 @@ namespace GestionVentas.Domain.Entities
     public class ModulosXPerfil: IEntity
     {
         public int Id{ get; set; }
-        public Perfil Perfil{ get; set; }
-        public Modulo Modulo{ get; set; }
+        public int PerfilId{ get; set; }
+        public int ModuloId{ get; set; }
     }
 }

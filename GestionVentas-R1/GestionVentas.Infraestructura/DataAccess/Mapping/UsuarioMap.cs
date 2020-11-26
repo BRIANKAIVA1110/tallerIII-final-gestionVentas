@@ -14,7 +14,7 @@ namespace GestionVentas.Infraestructura.DataAccess.Mapping
             builder.ToTable("Usuarios");
             builder.Property(x => x.UserName).IsRequired();
             builder.Property(x => x.Password).IsRequired();
-            builder.HasOne(x => x.Perfil).WithMany().HasForeignKey("perfilId");
+            builder.HasOne(x => x.Perfil).WithMany(x=> x.Usuarios).HasForeignKey("PerfilId");
 
         }
     }

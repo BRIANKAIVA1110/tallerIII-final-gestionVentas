@@ -7,11 +7,11 @@ using System.Text;
 
 namespace GestionVentas.Infraestructura.DataAccess.Mapping
 {
-    public class ModuloMap : IEntityTypeConfiguration<Modulo>
+    public class ModulosApplicacionMap : IEntityTypeConfiguration<ModulosApplicacion>
     {
-        public void Configure(EntityTypeBuilder<Modulo> builder)
+        public void Configure(EntityTypeBuilder<ModulosApplicacion> builder)
         {
-            builder.ToTable("Modulos");
+            builder.ToTable("ModulosApplicacion");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Descripcion).IsRequired();
         }

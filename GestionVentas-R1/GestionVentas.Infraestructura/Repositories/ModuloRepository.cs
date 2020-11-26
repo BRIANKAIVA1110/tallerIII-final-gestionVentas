@@ -1,34 +1,107 @@
 ﻿using GestionVentas.Domain.Entities;
+using GestionVentas.Infraestructura.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
 
 namespace GestionVentas.Infraestructura.Repositories
 {
-    public class ModuloRepository : RepositoryBase<Modulo>, IModuloRepository
+    public class ModuloRepository: IModuloRepository
     {
-        public ModuloRepository(ApplicationContext applicationContext, IDbConnection dbconnection) : base(applicationContext, dbconnection)
+        private readonly ApplicationContext _applicationContext;
+        public readonly DbSet<ModulosApplicacion> _entity;
+        private readonly IDbConnection _connection;
+        public ModuloRepository(ApplicationContext applicationContext, IDbConnection connection)
         {
+            this._applicationContext = applicationContext;
+            this._entity = applicationContext.Set<ModulosApplicacion>();
+            this._connection = connection;
+        }
+
+
+        public virtual int Add(ModulosApplicacion p_entity)
+        {
+            try
+            {
+                this._entity.Add(p_entity);
+                var result = this._applicationContext.SaveChanges();
+
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
+        }
+        public virtual int Update(ModulosApplicacion p_entity)
+        {
+            try
+            {
+                this._entity.Update(p_entity);
+                var result = this._applicationContext.SaveChanges();
+
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
+        }
+        public virtual int Delete(ModulosApplicacion p_entity)
+        {
+            try
+            {
+                this._entity.Remove(p_entity);
+                var result = this._applicationContext.SaveChanges();
+
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
+        }
+        public virtual IEnumerable<ModulosApplicacion> Get()
+        {
+            try
+            {
+                IEnumerable<ModulosApplicacion> result = this._entity.ToList();
+
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public virtual ModulosApplicacion GetById(int p_id)
+        {
+            try
+            {
+                ModulosApplicacion result = this._entity.FirstOrDefault(x => x.Id == p_id);
+
+                return result;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
 
         }
 
 
-        public override IEnumerable<Modulo> Get()
+
+        public W ExecuteQuery<W>(IQuery<W> p_query) where W : class
         {
-            var result = this._entity.Include(x => x.ModulosxPerfil).ToList();
-
-            return result;
-        }
-
-        public override Modulo GetById(int p_id)
-        {
-            var result = this._entity.Include(x => x.ModulosxPerfil).FirstOrDefault(x => x.Id == p_id);
-
-            return result;
+            return p_query.Execute(this._connection);
         }
     }
 }

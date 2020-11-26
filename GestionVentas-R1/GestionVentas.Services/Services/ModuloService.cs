@@ -15,10 +15,10 @@ namespace GestionVentas.Services.Services
             this._moduloRepository = moduloRepository;
         }
 
-        public IEnumerable<ModuloDTO> ObtenerModulos()
+        public IEnumerable<ModulosApplicacionDTO> ObtenerModulos()
         {
             var result = this._moduloRepository.Get().ToList();
-            List<ModuloDTO> listUsuarioDTO = result.Select(x => new ModuloDTO
+            List<ModulosApplicacionDTO> listUsuarioDTO = result.Select(x => new ModulosApplicacionDTO
             {
                 Id = x.Id,
                 Descripcion = x.Descripcion
@@ -26,11 +26,11 @@ namespace GestionVentas.Services.Services
 
             return listUsuarioDTO;
         }
-        public ModuloDTO ObtenerModuloPorId(int p_id)
+        public ModulosApplicacionDTO ObtenerModuloPorId(int p_id)
         {
             var result = this._moduloRepository.GetById(p_id);
 
-            ModuloDTO objUsuarioDTO = new ModuloDTO
+            ModulosApplicacionDTO objUsuarioDTO = new ModulosApplicacionDTO
             {
                 Id = result.Id,
                 Descripcion = result.Descripcion
