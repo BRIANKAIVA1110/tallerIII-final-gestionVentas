@@ -129,7 +129,8 @@ namespace GestionVentas.Web.Controllers
                 if (p_query != null)
                 {
                     List<PerfilViewModel> listperfilViewModel = this._perfilService.getPerfiles()
-                    .Where(x=> x.Descripcion.Contains(p_query))
+                    .Where(x=> x.Descripcion.Contains(p_query)||
+                         x.ModulosDescripcion.Contains(p_query))
                     .Select(x => this._mapper.Map<PerfilViewModel>(x))
                     .ToList();
 

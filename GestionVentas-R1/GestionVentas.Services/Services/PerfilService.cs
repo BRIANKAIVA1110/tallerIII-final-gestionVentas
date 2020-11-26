@@ -112,7 +112,8 @@ namespace GestionVentas.Services.Services
                     PerfilDTO objResult = new PerfilDTO
                     {
                         Id = objEntity.Id,
-                        Descripcion = objEntity.Descripcion
+                        Descripcion = objEntity.Descripcion,
+                        ModulosDescripcion = string.Join(" - ", (this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).ToList()).Any() ? this._perfilRepository.ExecuteQuery(new ObtenerModulosXPerfilId(objEntity.Id)).Select(x => x.Descripcion).ToList() : new List<string> { }),
                     };
 
                     objResult.IsCheckArticulos = ConteaintMudulo(listModulosApplicacionDTO, "articulos");
